@@ -6,11 +6,13 @@ function toLower(v) {
 }
 
 const UserSchema = new Schema({
-    name:{type: String},
-    role:{type: String},
+    name:{type: String, immutable: true},
+    role:{type: String, enum: {
+        values: ['student', 'teacher'],
+        message: 'Role {VALUE} is not supported'
+    }},
     date_of_birth: {type: Date},
     email: { type: String, set: toLower },
     vnu_id: {type: String, index: { unique: true }, dropDups: true},
   });
-
   module.exports = UserSchema

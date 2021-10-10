@@ -3,7 +3,7 @@ const Configs = require('./../../configs/Constants')
 const jwt = require('jsonwebtoken');
 const hash = require('sha256')
 function register(req, res) {
-    global.DBConnection.LoginInfo.findOne({"username": req.body.username}, (err, instance) => {
+    global.DBConnection.LoginInfo.findOne({"username": req.body.username},async (err, instance) => {
         if (instance != null) {
             console.log(req.body.username);
             res.status(409);
@@ -17,9 +17,7 @@ function register(req, res) {
                     email: req.body.email,
                     date_of_birth: req.body.dateOfBirth
                 })
-                newUserLoginInfo.save().exec((err, instance) => {
-                    if (err) throw err
-                });
+                await newUserLoginInfo.save()
                 let newToken = jwt.sign({vnu_id: newUserLoginInfo.vnu_id, createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: 3600});
                 console.log("new token: ", newToken);
                 let loginInfo = new global.DBConnection.LoginInfo({
@@ -29,13 +27,11 @@ function register(req, res) {
                     current_token: newToken
                 });
                 
-                loginInfo.save().exec((err, instance) => {
-                    if (err) throw err;
-                });
+                await loginInfo.save()
                 res.json({"status": "Success", "message":{"token" : loginInfo.current_token}})
             } catch (e) {
                 res.status(400);
-                res.json({"Status":"Error", "message": JSON.stringify(e)})
+                res.json({"Status":"Error", "message": JSON.stringify(e.message)})
                 return;
             }          
         }

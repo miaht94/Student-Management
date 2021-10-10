@@ -6,7 +6,7 @@ function toLower(v) {
 }
 
 const UserSchema = new Schema({
-    name:{type: String, immutable: true},
+    name:{type: String},
     role:{type: String, enum: {
         values: ['student', 'teacher'],
         message: 'Role {VALUE} is not supported'

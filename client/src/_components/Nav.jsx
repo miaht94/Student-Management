@@ -25,7 +25,7 @@ function Nav() {
                 <NavLink exact to="/profile" className="nav-item">Hồ sơ cá nhân</NavLink>
                 <NavLink to="/users" className="nav-item">QL Tài khoản</NavLink>
 
-                <a onClick={userActions.logout} className="nav-item">Logout</a>
+                <a onClick={userActions.logout} className="nav-item">Đăng xuất</a>
             </div>
         </nav>
     );

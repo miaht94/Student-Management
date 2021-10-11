@@ -32,7 +32,7 @@ function validateEditProfileArgument(req, res, next) {
 function editProfileById(req, res) {
     if (req.params.profileId == "me")
         req.params.profileId = req.senderVNUId;
-    global.DBConnection.User.findOneAndUpdate({"vnu_id": req.params.profileId}, req.body, {runValidators: true,
+    global.DBConnection.User.findOneAndUpdate({"vnu_id": req.params.profileId}, req.body, {new: true, runValidators: true,
         context: 'query'}).exec((err, instance) => {
         if (err) {
             res.status(400)

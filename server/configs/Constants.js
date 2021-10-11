@@ -1,5 +1,10 @@
 const API_PATH = {
-    REG_ACC : "/api/reg",
+    REG_ACC : "/reg",
+    LOGIN: "/auth/login",
+    PROFILE_BY_ID: "/api/profile/:profileId",
+    SET_PROFILE_BY_ID: "/api/profile/edit/:profileId",
+    CREATE_CLASS: "/api/classes/create",
+    ADD_MEMBER_CLASS: "/api/classes/:classId/members/add"
 };
 
 const AUTH_STATE = {

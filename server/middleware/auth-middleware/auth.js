@@ -1,6 +1,8 @@
 const Configs = require('./../../configs/Constants')
 const jwt = require('jsonwebtoken');
 const hash = require('sha256')
+/* Xác định trạng thái của token có hợp lệ chưa
+    req.authState được truyền vào req cùng senderVNUId */
 function validateToken(req, res, next) {
     if (req.cookies.token) {
         let token = req.cookies.token;

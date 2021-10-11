@@ -8,6 +8,7 @@ app.use(cookieParser());
 const authRouter = require('./routers/auth');
 const userRouter = require('./routers/user');
 const registerRouter = require('./routers/register');
+const classRouter = require('./routers/class')
 const DBConnection = require('./module/DBModule/DBConnection');
 app.use((req, res, next) => {
   var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
 app.use(userRouter);
 app.use(authRouter);
 app.use(registerRouter);
+app.use(classRouter);
 (async () => {
   await DBConnection.Init();
   var server = app.listen(8081, function () {

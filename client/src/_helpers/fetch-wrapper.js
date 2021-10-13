@@ -20,19 +20,26 @@ function useFetchWrapper() {
     };
 
     function request(method) {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         return (url, header, body) => {
             const requestOptions = {
                 method,
                 mode: "no-cors",
-                headers: authHeader(url)
+                headers: myHeaders,
+                redirect: 'follow'
             };
             if (body) {
                 requestOptions.headers['Content-Type'] = header;
                 requestOptions.body = body;
             }
-            return fetch(url, requestOptions).then(handleResponse);
+            return fetch(url, requestOptions);
         }
     }
+
+    // function loginrequest(method){
+    //     console.log("Test Login request");
+    // }
     
     // helper functions
     

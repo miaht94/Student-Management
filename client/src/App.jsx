@@ -14,11 +14,15 @@ import { Profile } from '_components/profile';
 import { StudentInfoList } from '_components/studentInfoList';
 import { StudentScoreList } from '_components/studentScoreList';
 
+import { useAuthWrapper } from '_helpers';
+
 export { App };
 
 function App() {
     const auth = useRecoilValue(authAtom);
-
+    const authWrapper = useAuthWrapper();
+    authWrapper.loadLoginToken();
+    authWrapper.getLoginToken();
     return (
         <div className={'app-container' + (auth ? ' bg-light' : '')}>
             <Router history={history}>

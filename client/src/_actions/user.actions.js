@@ -1,6 +1,6 @@
 import { useRecoilState, useSetRecoilState, useResetRecoilState } from 'recoil';
 
-import { history, useFetchWrapper } from '_helpers';
+import { history, useFetchWrapper, useAuthWrapper } from '_helpers';
 import { authAtom, usersAtom, userAtom } from '_state';
 
 export { useUserActions };
@@ -8,6 +8,7 @@ export { useUserActions };
 function useUserActions () {
     const baseUrl = `${process.env.REACT_APP_API_URL}/users`;
     const fetchWrapper = useFetchWrapper();
+    const authWrapper = useAuthWrapper();
     const [auth, setAuth] = useRecoilState(authAtom);
     const setUsers = useSetRecoilState(usersAtom);
     const setUser = useSetRecoilState(userAtom);
@@ -16,15 +17,13 @@ function useUserActions () {
         login,
         logout,
         register,
-        getAll,
-        getById,
         update,
         delete: _delete,
         resetUsers: useResetRecoilState(usersAtom),
         resetUser: useResetRecoilState(userAtom)
     }
 
-    function login({ username, password }) {
+    async function login({ username, password }) {
         var details = {
             'userName': username,
             'password': password
@@ -33,24 +32,17 @@ function useUserActions () {
         var urlencoded = new URLSearchParams();
         urlencoded.append("username", username);
         urlencoded.append("password", password);
-
-        return fetchWrapper.post("http://localhost:8081/auth/login", "application/x-www-form-urlencoded", urlencoded)
-            .then(response => {
-                // token = 
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-
-                setAuth(token);
-
-                // get return url from location state or default to home page
-                const { from } = history.location.state || { from: { pathname: '/' } };
-                history.push(from);
-            });
+        authWrapper.login(urlencoded).then(response => {
+            console.log(response);
+            const { from } = history.location.state || { from: { pathname: '/' } };
+            history.push(from);
+        });
     }
 
     function logout() {
         // remove user from local storage, set auth state to null and redirect to login page
-        localStorage.removeItem('user');
-        setAuth(null);
+        // localStorage.removeItem('token');
+        authWrapper.logout();
         history.push('/account/login');
     }
 
@@ -58,13 +50,13 @@ function useUserActions () {
         return fetchWrapper.post(`${baseUrl}/register`, user);
     }
 
-    function getAll() {
-        return fetchWrapper.get(baseUrl).then(setUsers);
-    }
+    // function getAll() {
+    //     return fetchWrapper.get(baseUrl).then(setUsers);
+    // }
 
-    function getById(id) {
-        return fetchWrapper.get(`${baseUrl}/${id}`).then(setUser);
-    }
+    // function getById(id) {
+    //     return fetchWrapper.get(`${baseUrl}/${id}`).then(setUser);
+    // }
 
     function update(id, params) {
         return fetchWrapper.put(`${baseUrl}/${id}`, params)

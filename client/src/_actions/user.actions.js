@@ -24,7 +24,7 @@ function useUserActions () {
         resetUser: useResetRecoilState(userAtom)
     }
 
-    async function login({ username, password }) {
+    function login({ username, password }) {
         var details = {
             'userName': username,
             'password': password
@@ -33,17 +33,18 @@ function useUserActions () {
         var urlencoded = new URLSearchParams();
         urlencoded.append("username", username);
         urlencoded.append("password", password);
-        
-        var response = await fetchWrapper.post("http://localhost:8081/auth/login", "application/x-www-form-urlencoded", urlencoded)
-        // response = await response.body.text();
-        await handleLoginResponse(response);
-        // const { from } = history.location.state || { from: { pathname: '/' } };
-        // history.push(from);
 
-    }
+        return fetchWrapper.post("http://localhost:8081/auth/login", "application/x-www-form-urlencoded", urlencoded)
+            .then(response => {
+                // token = 
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
 
-    async function handleLoginResponse(response){
-        console.log(response);
+                setAuth(token);
+
+                // get return url from location state or default to home page
+                const { from } = history.location.state || { from: { pathname: '/' } };
+                history.push(from);
+            });
     }
 
     function logout() {

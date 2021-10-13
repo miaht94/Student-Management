@@ -4,4 +4,4 @@ const Config = require('../configs/Constants');
 const userRouter = require('express').Router();
 userRouter.get(Config.API_PATH.PROFILE_BY_ID , validateToken, getProfileById);
 userRouter.post(Config.API_PATH.SET_PROFILE_BY_ID, validateEditProfileArgument, editProfileById);
-module.exports = userRouter
+module.exports = userRouter;

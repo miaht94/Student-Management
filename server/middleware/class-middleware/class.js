@@ -50,7 +50,6 @@ async function addMembersToClass(req, res) {
     var membersVNUIds
     try {
         membersVNUIds = JSON.parse(req.body.members);
-        console.log(membersVNUIds);
     } catch(e) {
         res.status(400);
         res.json({status: "Error", message:"Array Members Invalid"})
@@ -69,4 +68,19 @@ async function addMembersToClass(req, res) {
     res.json({status:"Success", message: JSON.stringify(req.classInstance.class_members)})
 }
 
-module.exports = {createClass, validateClassTeacher, addMembersToClass}
+async function getCurClass(req, res) {
+    var sender = req.senderInstance;
+    if (sender.role == "teacher") {
+        var classes = await global.DBConnection.Class.find({class_teacher: sender.vnu_id})
+        res.status(200);
+        res.json(classes);
+        
+    } else if (sender.role == "student") {
+        var classes = await global.DBConnection.Class.find({class_members: sender.vnu_id})
+        if (classes.length == 1) classes = classes[0]; 
+        res.status(200);
+        res.json(classes);
+    }
+}
+
+module.exports = {createClass, validateClassTeacher, addMembersToClass, getCurClass}

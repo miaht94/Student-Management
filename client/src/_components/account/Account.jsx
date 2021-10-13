@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, RecoilRoot } from 'recoil';
 
 import { authAtom } from '_state';
 import { Login, Register } from './';
@@ -19,6 +19,7 @@ function Account({ history, match }) {
     }, []);
 
     return (
+
         <div className="container">
             <div className="row">
                 <div className="col-sm-8 offset-sm-2 mt-5">
@@ -29,5 +30,6 @@ function Account({ history, match }) {
                 </div>
             </div>
         </div>
+
     );
 }

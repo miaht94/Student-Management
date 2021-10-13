@@ -12,6 +12,7 @@ function Dashboard() {
         <div className="p-4">
             <div className="container">
                 <h1>This is Dashboard</h1>
+                <div>{auth}</div>
             </div>
         </div>
     );

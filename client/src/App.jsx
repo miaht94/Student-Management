@@ -19,12 +19,11 @@ import { useAuthWrapper } from '_helpers';
 export { App };
 
 function App() {
-    const auth = useRecoilValue(authAtom);
     const authWrapper = useAuthWrapper();
-    authWrapper.loadLoginToken();
-    authWrapper.getLoginToken();
     return (
-        <div className={'app-container' + (auth ? ' bg-light' : '')}>
+        
+        <div className={'app-container' + (authWrapper.tokenValue ? ' bg-light' : '')}>
+            <div>{JSON.stringify(authWrapper.tokenValue)}</div>
             <Router history={history}>
                 <div className='navbar'>
                     <Nav />
@@ -46,5 +45,6 @@ function App() {
                 </div>
             </Router>
         </div>
+
     );
 }

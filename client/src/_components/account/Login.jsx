@@ -4,12 +4,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 import { useUserActions } from '_actions';
-
+import { Redirect } from 'react-router-dom';
+import { authAtom } from '_state';
+import { useRecoilValue } from 'recoil';
 export { Login };
 
-function Login() {
+function Login(props) {
     const userActions = useUserActions();
-
+    const auth = useRecoilValue(authAtom);
     // form validation rules 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required('Username is required'),
@@ -21,7 +23,11 @@ function Login() {
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
-    return (
+    return (auth ? 
+            // logged in 
+            <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+        :
+
         <div className="card m-3">
             <h4 className="card-header">Login</h4>
             <div className="card-body">
@@ -44,5 +50,6 @@ function Login() {
                 </form>
             </div>
         </div>
+
     )
 }

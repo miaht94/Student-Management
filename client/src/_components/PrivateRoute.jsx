@@ -9,13 +9,14 @@ function PrivateRoute({ component: Component, ...rest }) {
     const auth = useRecoilValue(authAtom);
     return (
         <Route {...rest} render={props => {
-            if (!auth) {
-                // not logged in so redirect to login page with the return url
-                return <Redirect to={{ pathname: '/account/login', state: { from: props.location } }} />
-            }
+        
+            if (auth) {
+                // logged in 
+                return <Component {...props} />
+            } else
 
-            // authorized so return component
-            return <Component {...props} />
+            //not logged in
+            return <Redirect to={{ pathname: '/account/login', state: { from: props.location } }} />
         }} />
     );
 }

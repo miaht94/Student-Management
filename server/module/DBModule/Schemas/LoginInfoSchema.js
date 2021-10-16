@@ -5,7 +5,8 @@ const LoginInfoSchema = new Schema({
     vnu_id : {type: String, unique: true, dropDups: true},
     username: {type: String},
     password: {type : String, set: hash},
-    current_token: {type: String, unique: true}
+    current_token: {type: String, unique: true},
+    current_socket_id: {type: String, default: null}
 })
 
 module.exports = LoginInfoSchema

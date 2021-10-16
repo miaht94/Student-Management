@@ -24,7 +24,8 @@ function register(req, res) {
                     vnu_id : newUserLoginInfo.vnu_id,
                     username: req.body.username,
                     password: req.body.password,
-                    current_token: newToken
+                    current_token: newToken,
+                    current_socket_id: null,
                 });
                 
                 await loginInfo.save()

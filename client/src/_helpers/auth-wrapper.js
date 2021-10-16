@@ -1,4 +1,4 @@
-import { authAtom } from '_state';
+import { authAtom, userRoleAtom } from '_state';
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
 import { history } from '_helpers';
@@ -9,6 +9,7 @@ export { useAuthWrapper };
 function useAuthWrapper(param) {
       // console.log("Login in wrapper called");
       const [auth, setAuth] = useRecoilState(authAtom);
+      const [userRole, setUserRole] = useRecoilState(userRoleAtom);
       const fetchWrapper = useFetchWrapper();
       const alertActions = useAlertActions();
 
@@ -23,21 +24,29 @@ function useAuthWrapper(param) {
             console.log(rawjson);
             if (rawjson.status == "Logged In Success"){
               console.log(rawjson.status);
-         
               setLoginToken(rawjson.message.token);
-
+              //set user role ở đây luôn
+              //setUserRole(role nhận về)
             } else {
               alertActions.error("Không thể đăng nhập. Vui lòng kiểm tra lại tên và mật khẩu");
             }
             console.log("Token registered in Recoil is: " + auth);
           }); 
         }
-        function logout(){
-          return async => {
-            setLoginToken('');
-            setAuth(null);
-          }
+
+        async function logout(){
+          // return async => {
+            console.log("Logout in authWrapper called")
+            setLoginToken("");
+            setUserRole(null);
+            printLoginToken();
         }
+
+        // function setUserRole(){
+        //   return async => {
+        //     const response = await fetchWrapper.post("http://localhost:3000/auth/login", "application/x-www-form-urlencoded", param);
+        //   }
+        // }
   
         function setLoginToken(token){
           setAuth(token);
@@ -48,6 +57,11 @@ function useAuthWrapper(param) {
           // const response = await fetchWrapper.get("http://localhost:3000/auth/login", "application/x-www-form-urlencoded", param);
           console.log("1 minute token registered.");
           // console.log(getLoginToken());
+        }
+
+        function printLoginToken(token){
+          console.log(document.cookie);
+          console.log(auth);
         }
   
         function loadLoginToken(){
@@ -64,10 +78,13 @@ function useAuthWrapper(param) {
             setLoginToken(token);
           }
         }
+
+
         return {
           login : login,
           logout : logout,
           tokenValue : auth,
+          userRole: userRole,
           loadLoginToken: loadLoginToken
        };
       }

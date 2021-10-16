@@ -26,7 +26,7 @@ function App() {
             <div>{JSON.stringify(authWrapper.tokenValue)}</div>
             <Router history={history}>
                 <div className='navbar'>
-                    <Nav />
+                <Nav />
                 </div>
                 <Alert />
                 <div className='content'>
@@ -38,7 +38,7 @@ function App() {
                         <PrivateRoute exact path="/feed" component={Feed} />
                         <PrivateRoute exact path="/chat" component={Chat} />
                         <PrivateRoute exact path="/profile" component={Profile} />
-                        <PrivateRoute path="/users" component={Users} />
+                        {/* <PrivateRoute path="/users" component={Users} /> */}
                         <Route path="/account" component={Account} />
                         <Redirect from="*" to="/" />
                     </Switch>

@@ -1,17 +1,20 @@
 import { Route, Redirect } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
-import { authAtom } from '_state';
+import { useAuthWrapper } from '_helpers';
 
 export { PrivateRoute };
 
 function PrivateRoute({ component: Component, ...rest }) {
-    const auth = useRecoilValue(authAtom);
+    const authWrapper = useAuthWrapper();
     return (
         <Route {...rest} render={props => {
         
-            if (auth) {
+            if (authWrapper.tokenValue) {
                 // logged in 
+                // pick class here
+                // console.log("Logged in");
+                //if 
                 return <Component {...props} />
             } else
 

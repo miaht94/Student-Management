@@ -4,12 +4,19 @@ const authAtom = atom({
     key: 'token',
     // get initial state from local storage to enable user to stay logged in
     default: getCookie("token")
+    // default: null
 });
 
-const userRole = atom({
-    key: 'userRole',
-    default: 'guest'
+const userRoleAtom = atom({
+  key: 'userRoleAtom',
+  default: null
 });
+//2 role student, teacher
+
+const initClassAtom = atom({
+  key: 'initClassAtom',
+  default: null
+})
 
 function getCookie(cname) {
     let name = cname + "=";
@@ -26,4 +33,5 @@ function getCookie(cname) {
     }
     return "";
   }
-export { authAtom };
+
+export { authAtom, userRoleAtom, initClassAtom };

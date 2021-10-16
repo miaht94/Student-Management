@@ -39,10 +39,11 @@ function useUserActions () {
         });
     }
 
-    function logout() {
+    async function logout() {
         // remove user from local storage, set auth state to null and redirect to login page
         // localStorage.removeItem('token');
-        authWrapper.logout();
+        console.log("Logout called.");
+        await authWrapper.logout();
         history.push('/account/login');
     }
 

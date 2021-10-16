@@ -53,7 +53,7 @@ function useAuthWrapper(param) {
           setInterval(() => console.log(auth), 1000);
           var now = new Date();
           now.setMinutes( now.getMinutes() + 1 );
-          document.cookie = "token=" + token + "expires=" + now.toUTCString() + ";";
+          document.cookie = `token=${token};expires=${now.toUTCString()};path=/`;
           // const response = await fetchWrapper.get("http://localhost:3000/auth/login", "application/x-www-form-urlencoded", param);
           console.log("1 minute token registered.");
           // console.log(getLoginToken());

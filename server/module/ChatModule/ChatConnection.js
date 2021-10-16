@@ -10,7 +10,15 @@ class ChatConnection {
         this.io.on("connection", client => {
             console.log(client.senderVNUId);
             console.log(`New connection, ID[${client.id}]`);
-            client.on("disconnect", () => console.log(`ID[${client.id}] closed connection`))
+            client.on("disconnect", () => {
+                console.log(`ID[${client.id}] closed connection`)
+                client.loginInfo.current_socket_id = null;
+                try {
+                client.loginInfo.save();
+                } catch (e) {
+                    console.log("Reset ID socket in DB error")
+                }
+            })
         })
     }
 }

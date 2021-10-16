@@ -3,24 +3,26 @@ const jwt = require('jsonwebtoken');
 const hash = require('sha256')
 /* Xác định trạng thái của token có hợp lệ chưa
     req.authState được truyền vào req cùng senderVNUId */
-function validateToken(req, res, next) {
+async function validateToken(req, res, next) {
     if (req.cookies.token) {
         let token = req.cookies.token;
         console.log(token);
         try {
             var decoded = jwt.verify(token, Configs.SECRET_KEY);
-            global.DBConnection.LoginInfo.findOne({current_token : token}, ((err, instance) => {
-                console.log(token);
-                if (instance != null) {
-                    req.authState = Configs.AUTH_STATE.AUTHORIZED;
-                    req.senderVNUId = instance.vnu_id;
-                    next();
-                } else {
-                    req.authState = Configs.AUTH_STATE.INVALID_AUTHORIZED;
-                    req.token = token;
-                    next();
-                }
-            }))
+            var instance = await global.DBConnection.LoginInfo.findOne({current_token : token})
+            if (instance != null) {
+                req.authState = Configs.AUTH_STATE.AUTHORIZED;
+                req.senderVNUId = instance.vnu_id;
+                req.senderInstance = await global.DBConnection.User.findOne({vnu_id: req.senderVNUId});
+                if (req.senderInstance == null) throw Error("UserNotFound")
+                next();
+            } else {
+                req.authState = Configs.AUTH_STATE.INVALID_AUTHORIZED;
+                req.token = token;
+                // next();
+                throw Error("TokenInvalid");
+            }
+        
           } catch(err) {
             if (err.name == "TokenExpiredError") {
                 res.status(410);
@@ -28,7 +30,11 @@ function validateToken(req, res, next) {
             } else if (err.name == "JsonWebTokenError") {
                 res.status(400);
                 res.send(`${err.name} : ${err.message}`)
-            } else {
+            } else if (err.name="UserNotFound") {
+                res.status(400)
+                res.send(`${err.name}`);
+            } 
+            else {
                 res.status(400);
                 res.send("Unknown Error: \n" + err.toString())
             }
@@ -48,6 +54,7 @@ function validateLoginArgument(req, res, next) {
         res.json({"Status" : "Error", "message: " : "Username and password must be filled"});
     }
 }
+
 function login(req, res) {
     const rUsername = req.body.username;
     const rPassword = req.body.password;

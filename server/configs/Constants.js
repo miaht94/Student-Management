@@ -4,7 +4,8 @@ const API_PATH = {
     PROFILE_BY_ID: "/api/profile/:profileId",
     SET_PROFILE_BY_ID: "/api/profile/edit/:profileId",
     CREATE_CLASS: "/api/classes/create",
-    ADD_MEMBER_CLASS: "/api/classes/:classId/members/add"
+    ADD_MEMBER_CLASS: "/api/classes/:classId/members/add",
+    MY_CLASS: "/api/classes/me"
 };
 
 const AUTH_STATE = {
@@ -24,4 +25,9 @@ const DB_SCHEMA = {
     LOGIN_INFO: "LoginInfo"
 }
 
-module.exports = {API_PATH, SECRET_KEY, DB_CONFIGS, DB_SCHEMA, AUTH_STATE}
+const RES_FORM = {
+    Status: null,
+    Message: null,
+}
+
+module.exports = {API_PATH, SECRET_KEY, DB_CONFIGS, DB_SCHEMA, AUTH_STATE, RES_FORM}

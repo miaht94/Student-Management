@@ -57,7 +57,7 @@ function useUserActions () {
 
     // function getById(id) {
     //     return fetchWrapper.get(`${baseUrl}/${id}`).then(setUser);
-    // }
+    // //}
 
     function update(id, params) {
         return fetchWrapper.put(`${baseUrl}/${id}`, params)

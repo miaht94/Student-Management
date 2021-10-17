@@ -20,11 +20,11 @@ function useFetchWrapper() {
     };
 
     function request(method) {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
         return (url, header, body) => {
+            var myHeaders = new Headers();
+            if (header) myHeaders.append("Content-Type", header);
             const requestOptions = {
-                method,
+                method: method,
                 mode: "no-cors",
                 headers: myHeaders,
                 redirect: 'follow'

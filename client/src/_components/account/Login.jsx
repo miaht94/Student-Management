@@ -11,8 +11,6 @@ import { authAtom } from '_state';
 import { useRecoilValue } from 'recoil';
 export { Login };
 
-
-
 function Login(props) {
     const userActions = useUserActions();
     const auth = useRecoilValue(authAtom);
@@ -32,26 +30,24 @@ function Login(props) {
             <Redirect to={{ pathname: '/', state: { from: props.location } }} />
         :
         
-        
         <div className="card m-3">
-            <h4 className="card-header">Login</h4>
+            <h4 className="card-header">Đăng nhập hệ thống</h4>
             <div className="card-body">
                 <form onSubmit={handleSubmit(userActions.login)}>
                     <div className="form-group">
-                        <label>Username</label>
+                        <label>Tài khoản</label>
                         <input name="username" type="text" {...register('username')} className={`form-control ${errors.username ? 'is-invalid' : ''}`} />
                         <div className="invalid-feedback">{errors.username?.message}</div>
                     </div>
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>Mật khẩu</label>
                         <input name="password" type="password" {...register('password')} className={`form-control ${errors.password ? 'is-invalid' : ''}`} />
                         <div className="invalid-feedback">{errors.password?.message}</div>
                     </div>
                     <button disabled={isSubmitting} className="btn btn-primary">
                         {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                        Login
+                        Đăng nhập
                     </button>
-                    <Link to="register" className="btn btn-link">Register</Link>
                 </form>
             </div>
         </div>

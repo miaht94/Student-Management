@@ -84,7 +84,7 @@ function Nav() {
               <span>Cá nhân</span>
               <Link to="/profile"></Link>
             </Menu.Item>
-            <Menu.Item >
+            <Menu.Item key="abc">
             </Menu.Item>
             <Menu.Item onClick={userActions.logout}>
               <LoginOutlined />

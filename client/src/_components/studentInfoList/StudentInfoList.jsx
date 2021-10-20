@@ -8,20 +8,21 @@ import { SearchOutlined,EditTwoTone,DeleteFilled, UserOutlined} from '@ant-desig
 
 export { StudentInfoList };
 
-const data = [];
-for (let i = 0; i< 100; i++) {
-    data.push({
-        key: i,
-        name: 'Nguyễn văn A ' + i,
-        tags: (i % 2) ? ['Bình thường'] : ['Cảnh cáo'],
-        date_of_birth: i%30 + 1 + '/1/2001',
-        email: i + 19021000 + '@vnu.edu.vn',
-        vnu_id: 19020000 + i,
-      });
-}
+// const data = [];
+// for (let i = 0; i< 100; i++) {
+//     data.push({
+//         key: i,
+//         name: 'Nguyễn văn A ' + i,
+//         tags: (i % 2) ? ['Bình thường'] : ['Cảnh cáo'],
+//         date_of_birth: i%30 + 1 + '/1/2001',
+//         email: i + 19021000 + '@vnu.edu.vn',
+//         vnu_id: 19020000 + i,
+//       });
+// }
 
-function StudentInfoList(){
-    
+function StudentInfoList(props){
+    var data = props.data;
+    console.log(data);
     const [state, setState] = useState({
         searchText: '',
         searchedColumn: '',

@@ -3,7 +3,7 @@ import { BrowserRouter as Router,
     Route, 
     Redirect,
     Link,
-    useParams} from 'react-router-dom';
+    useParams, useLocation} from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { authAtom } from '_state';
@@ -54,8 +54,9 @@ function App() {
                         <Switch>
                           <PrivateRoute exact path="/" component={Home} />
                           {/* <PrivateRoute exact path="/:classID" children={<Child classID="123"/>} component={Child}/>  */}
-                          <PrivateRoute path="/:classID" children={<Child classID="123"/> } />
                           <Route path="/account" component={Account} />
+                          <PrivateRoute path="/:classID" classID="123" component={Child} />
+                         
                           <Redirect from="*" to="/" />
                         </Switch>
                     </Content>
@@ -72,15 +73,25 @@ function App() {
 }
 
 function Child(props) {
-    let { id } = useParams();
+    let { classID } = useParams();
     console.log('hello');
+    const location  = useLocation()
     // let { path } = match;
     // console.log(path);
   
     return (
         <div>
+            <div className="p-4">
+                <div className="container">
+                    <h1>Hi Dashboard {classID}</h1>
+                    
+                </div>
+            </div>
             <Switch>
-                <PrivateRoute path={"/dashboard"} component={Dashboard} />
+                <PrivateRoute exact path={"/:classID/dashboard"} component={Dashboard} />
+                <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
+                <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
+                <PrivateRoute exact path="/:classID/feed" component={Feed} />
             </Switch>
         </div>
     );

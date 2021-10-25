@@ -1,19 +1,28 @@
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import React ,{useEffect, useState} from 'react';
+import { authAtom, bachAtom } from '_state';
+import { BachComponent } from '_components/subcomponents';
 
-import { authAtom } from '_state';
+import { Card, Button } from 'antd';
+
 
 export { Dashboard };
 
+
 function Dashboard() {
-    const auth = useRecoilValue(authAtom);
+    const [bach, setbach] = useRecoilState(bachAtom);
+
+    function puoi(){
+        setbach({...bach, name : "Meo meo"});
+    }
 
     return (
         <div className="p-4">
-            <div className="container">
-                <h1>This is Dashboard</h1>
-                <div>{auth}</div>
-            </div>
+            <BachComponent bach={bach}/>
+            <Button type="primary" onClick={puoi}>
+                Biến Trần Xuân Bách thành meo meo
+            </Button>
         </div>
-    );
+    )
 }

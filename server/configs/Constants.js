@@ -23,7 +23,9 @@ const DB_CONFIGS = {
 const DB_SCHEMA = {
     USER: "User",
     CLASS: "Class",
-    LOGIN_INFO: "LoginInfo"
+    LOGIN_INFO: "LoginInfo",
+    CHAT: "Chat",
+    MESSAGE: "Message"
 }
 
 const RES_FORM =(status, message) => {

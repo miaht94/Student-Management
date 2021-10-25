@@ -5,7 +5,6 @@ async function checkLoginInfo(socket, next) {
         var instance = await global.DBConnection.LoginInfo.findOne({current_token : socket.handshake.headers['x-auth-token']})
         socket.loginInfo = instance;
         instance.current_socket_id = socket.id;
-        console.log("adawdawdwa")
         await instance.save();
         if (!instance) {
             next(new Error("TokenInvalid"));
@@ -25,5 +24,7 @@ function checkTokenValid(socket, next) {
         next(new Error(e))
     }
 }
+
+
 
 module.exports = {checkLoginInfo, checkTokenValid};

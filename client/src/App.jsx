@@ -1,4 +1,9 @@
-import { Router, Route, Switch, Redirect} from 'react-router-dom';
+import { BrowserRouter as Router,
+    Switch,
+    Route, 
+    Redirect,
+    Link,
+    useParams} from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { authAtom } from '_state';
@@ -48,13 +53,8 @@ function App() {
                     <Content style={{ margin: '20px 16px' }}>
                         <Switch>
                           <PrivateRoute exact path="/" component={Home} />
-                          <PrivateRoute exact path="/dashboard" component={Dashboard} />
-                          <PrivateRoute exact path="/studentinfo" component={StudentInfoList} />
-                          <PrivateRoute exact path="/studentscore" component={StudentScoreList} />
-                          <PrivateRoute exact path="/feed" component={Feed} />
-                          <PrivateRoute exact path="/chat" component={Chat} />
-                          <PrivateRoute exact path="/profile" component={Profile} />
-                          {/* <PrivateRoute path="/users" component={Users} /> */}
+                          {/* <PrivateRoute exact path="/:classID" children={<Child classID="123"/>} component={Child}/>  */}
+                          <PrivateRoute path="/:classID" children={<Child classID="123"/> } />
                           <Route path="/account" component={Account} />
                           <Redirect from="*" to="/" />
                         </Switch>
@@ -71,32 +71,57 @@ function App() {
     );
 }
 
+function Child(props) {
+    let { id } = useParams();
+    console.log('hello');
+    // let { path } = match;
+    // console.log(path);
+  
+    return (
+        <div>
+            <Switch>
+                <PrivateRoute path={"/dashboard"} component={Dashboard} />
+            </Switch>
+        </div>
+    );
+  }
+
 // function App() {
 //     const authWrapper = useAuthWrapper();
 //     return (
 //         <div className={'app-container' + (authWrapper.tokenValue ? ' bg-light' : '')}>
-//             <div>{JSON.stringify(authWrapper.tokenValue)}</div>
+//             {/* <div>{JSON.stringify(authWrapper.tokenValue)}</div> */}
 //             <Router history={history}>
-//                 <div className='navbar'>
+//             <Layout>
+//                 <Header style={{ padding: '20px 0px 2px 20px', height: '70px' }}>
+//                     <Title style={{ padding: 0, color: 'white' }} level={3}>Student Advisor Web App</Title>
+//                 </Header>
+//             </Layout>
+//             <Layout>
 //                 <Nav />
-//                 </div>
-//                 <Alert />
-//                 <div className='content'>
-//                     <Switch>
-//                         <PrivateRoute exact path="/" component={Home} />
-//                         <PrivateRoute exact path="/dashboard" component={Dashboard} />
-//                         <PrivateRoute exact path="/studentinfo" component={StudentInfoList} />
-//                         <PrivateRoute exact path="/studentscore" component={StudentScoreList} />
-//                         <PrivateRoute exact path="/feed" component={Feed} />
-//                         <PrivateRoute exact path="/chat" component={Chat} />
-//                         <PrivateRoute exact path="/profile" component={Profile} />
-//                         {/* <PrivateRoute path="/users" component={Users} /> */}
-//                         <Route path="/account" component={Account} />
-//                         <Redirect from="*" to="/" />
-//                     </Switch>
-//                 </div>
+//                 <Layout>
+//                     <Content style={{ margin: '20px 16px' }}>
+//                         <Switch>
+//                           <PrivateRoute exact path="/" component={Home} />
+//                           <PrivateRoute exact path="/dashboard" component={Dashboard} />
+//                           <PrivateRoute exact path="/studentinfo" component={StudentInfoList} />
+//                           <PrivateRoute exact path="/studentscore" component={StudentScoreList} />
+//                           <PrivateRoute exact path="/feed" component={Feed} />
+//                           <PrivateRoute exact path="/chat" component={Chat} />
+//                           <PrivateRoute exact path="/profile" component={Profile} />
+//                           {/* <PrivateRoute path="/users" component={Users} /> */}
+//                           <Route path="/account" component={Account} />
+//                           <Redirect from="*" to="/" />
+//                         </Switch>
+//                     </Content>
+//                     <Footer style={{ textAlign: 'center' }}>
+//                         Phần mềm quản lý CVHT & SV
+//                         <br/>
+//                         Thực hiện bởi @vakoyomi, @miaht94, @anhbomx13, @h2b, @tuna
+//                     </Footer>
+//                </Layout>
+//              </Layout>
 //             </Router>
-//         </div>
-
+//         </div>        
 //     );
 // }

@@ -9,7 +9,7 @@ export { Feed };
 
 function Feed() {
 
-    const student = useRecoilState(studentsAtom);
+    const [student, setstudent] = useRecoilState(studentsAtom);
     return (
         <div className="p-4">
             <StudentInfoList data={student}/>

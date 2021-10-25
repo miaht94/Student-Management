@@ -4,10 +4,9 @@ import { BrowserRouter as Router,
     Redirect,
     Link,
     useParams, useLocation} from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
-import { authAtom } from '_state';
-import { Nav, Alert, PrivateRoute } from '_components';
+import { Nav, Alert, PrivateRoute, ClassPicker } from '_components';
 import { history } from '_helpers';
 import { Home } from 'home';
 import { Users } from 'users';
@@ -20,34 +19,67 @@ import { StudentInfoList } from '_components/studentInfoList';
 import { StudentScoreList } from '_components/studentScoreList';
 
 import { useAuthWrapper } from '_helpers';
+import { classesAtom, authAtom } from '_state';
+import { Layout, Menu, Button, Row, Col, Drawer } from 'antd';
 
-import { Layout, Avatar, Menu, Icon, Breadcrumb, Button } from 'antd';
-
-import {
-    HomeOutlined,
-    DashboardOutlined,
-    TeamOutlined,
-} from '@ant-design/icons';
+import React, { useState } from 'react';
 
 import Title from 'antd/lib/typography/Title';
 import SubMenu from 'antd/lib/menu/SubMenu';
+
+const style = { };
 
 const { Header, Footer, Content } = Layout;
 
 export { App };
 
 function App() {
+    const [classes, setClasses] = useRecoilState(classesAtom);
     const authWrapper = useAuthWrapper();
+
+    const [drawerVisible, setDrawerVisible] = useState(false);
+
+    const showDrawer = () => {
+        setDrawerVisible(true);
+    };
+
+    const onDrawerClose = () => {
+        setDrawerVisible(false);
+    };
+
     return (
         <div className={'app-container' + (authWrapper.tokenValue ? ' bg-light' : '')}>
             {/* <div>{JSON.stringify(authWrapper.tokenValue)}</div> */}
             <Router history={history}>
             <Layout>
-                <Header style={{ padding: '20px 0px 2px 20px', height: '70px' }}>
-                    <Title style={{ padding: 0, color: 'white' }} level={3}>Student Advisor Web App</Title>
-                </Header>
+                <Header>
+                    <Row gutter={0}>
+                        <Col className="gutter-row" span={18}>
+                            <div style={style}>
+                                <Title style={{ padding: '15px 0px 0px 0px', color: 'white' }} level={3}> Student Advisor Web App </Title>
+                            </div>
+                        </Col>
+                        <Col className="gutter-row" span={5}>
+                        <div>
+                            <div style={{color: 'white' }}> 
+                                {ClassNameDisplay()}
+                            </div>
+                        </div>
+                        </Col>
+                        <Col className="gutter-row" span={1}>
+                        <div style={{'marginLeft': 'auto','marginRight': 'auto' }}>
+                            <Button type="primary" style={{'marginLeft': 'auto','marginRight': 'auto' }} onClick={showDrawer}>
+                                Đổi lớp
+                            </Button>
+                        </div>
+                        </Col>
+                    </Row>         
+                </Header>       
             </Layout>
             <Layout>
+                <Drawer title="Chọn một lớp..." placement="right" onClose={onDrawerClose} visible={drawerVisible} width="640">
+                    <ClassPicker data={classes}/>
+                </Drawer>
                 <Nav />
                 <Layout>
                     <Content style={{ margin: '20px 16px' }}>
@@ -56,7 +88,6 @@ function App() {
                           {/* <PrivateRoute exact path="/:classID" children={<Child classID="123"/>} component={Child}/>  */}
                           <Route path="/account" component={Account} />
                           <PrivateRoute path="/:classID" classID="123" component={Child} />
-                         
                           <Redirect from="*" to="/" />
                         </Switch>
                     </Content>
@@ -84,11 +115,10 @@ function Child(props) {
             <div className="p-4">
                 <div className="container">
                     <h1>Hi Dashboard {classID}</h1>
-                    
                 </div>
             </div>
             <Switch>
-                <PrivateRoute exact path={"/:classID/dashboard"} component={Dashboard} />
+                <PrivateRoute exact path="/:classID/dashboard" component={Dashboard} />
                 <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
                 <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
                 <PrivateRoute exact path="/:classID/feed" component={Feed} />
@@ -96,6 +126,19 @@ function Child(props) {
         </div>
     );
   }
+
+function ClassNameDisplay(){
+    const auth = useRecoilValue(authAtom);
+    if (auth){
+        if (localStorage.getItem('currentClass')) {
+            return "Lớp hiện tại: " + JSON.parse(localStorage.getItem('currentClass')).className;
+        }
+        return "Chưa chọn lớp";
+    }    
+    localStorage.removeItem('currentClass');
+    return "";
+}
+
 
 // function App() {
 //     const authWrapper = useAuthWrapper();

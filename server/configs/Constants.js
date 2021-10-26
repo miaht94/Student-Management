@@ -6,7 +6,8 @@ const API_PATH = {
     CREATE_CLASS: "/api/classes/create",
     ADD_MEMBER_CLASS: "/api/classes/:classId/members/add",
     MY_CLASS: "/api/classes/me",
-    MY_CLASS_MEMBERS_INFORS: "/api/classes/:classId/members/infors"
+    MY_CLASS_MEMBERS_INFORS: "/api/classes/:classId/members/infors",
+    RECENT_CHAT: "/api/chat/recent"
 };
 
 const AUTH_STATE = {
@@ -25,7 +26,7 @@ const DB_SCHEMA = {
     CLASS: "Class",
     LOGIN_INFO: "LoginInfo",
     CHAT: "Chat",
-    MESSAGE: "Message"
+    MESSAGE: "Message",
 }
 
 const RES_FORM =(status, message) => {

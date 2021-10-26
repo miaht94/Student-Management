@@ -1,9 +1,14 @@
+const Configs = require('../../configs/Constants');
 const userSchema = require('../../module/DBModule/Schemas/UserSchema');
 
 
 function getProfileById(req, res) {
-    if (req.params.profileId == "me")
-        req.params.profileId = req.senderVNUId;
+    if (req.params.profileId == "me") {
+        var final = req.senderInstance;
+        res.status(200);
+        res.json(Configs.RES_FORM("Success",final))
+        return;
+    } 
     global.DBConnection.User.findOne({"vnu_id": req.params.profileId}).lean().exec((err, instance) => {
         if (err) {
             res.status(400)
@@ -29,9 +34,23 @@ function validateEditProfileArgument(req, res, next) {
     next();
 }
 
-function editProfileById(req, res) {
-    if (req.params.profileId == "me")
+async function editProfileById(req, res) {
+    if (req.params.profileId == "me"){
         req.params.profileId = req.senderVNUId;
+        try {
+            // var final = await global.DBConnection.User.updateOne({_id :req.senderInstance._id},req.body, {new: true, runValidators: true,context: 'query'})
+            await req.senderInstance.$set(req.body);
+            var final = await req.senderInstance.save();
+            res.status(200);
+            res.json(Configs.RES_FORM("Success",final));
+            return;
+        } catch(e) {
+            console.log("Co loi xay ra khi update profile");
+            res.status(400);
+            res.json(Configs.RES_FORM("Error",JSON.stringify(e)));
+            return;
+        }
+    }
     global.DBConnection.User.findOneAndUpdate({"vnu_id": req.params.profileId}, req.body, {new: true, runValidators: true,
         context: 'query'}).exec((err, instance) => {
         if (err) {

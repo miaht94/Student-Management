@@ -1,6 +1,8 @@
 const { Server } = require("socket.io");
 const { v4: uuidv4 } = require('uuid');
 const Configs = require('../../configs/Constants');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId
 const jwtAuth = require("socketio-jwt-auth");
 const {checkLoginInfo, checkTokenValid} = require('./ChatAuthentication');
 class ChatConnection {
@@ -11,7 +13,7 @@ class ChatConnection {
         this.io.on("connection", socket => {
             console.log(socket.senderVNUId);
             console.log(`New connection, ID[${socket.id}]`);
-            socket.on('ChatMessage', this.handleNewMessage.bind(this, socket));
+            socket.on('NewMessage', this.handleNewMessage.bind(this, socket));
               socket.on("disconnect", () => {
                 console.log(`ID[${socket.id}] closed connection`)
                 socket.loginInfo.current_socket_id = null;
@@ -39,6 +41,7 @@ class ChatConnection {
             newMessage = new global.DBConnection.Message({
                 from: from,
                 to: to,
+                message: message,
                 createdDate: new Date().getTime()
             })
             newMessage = await newMessage.save();
@@ -51,10 +54,10 @@ class ChatConnection {
             if (!chatRoom) {
                 chatRoom = new global.DBConnection.Chat({
                     membersID : [from, to],
-                    messages: [newMessage._id]
+                    messages: [new ObjectId(newMessage._id)]
                 })
             } else {
-                chatRoom.messages.push(new ObjectID(newMessage._id));
+                chatRoom.messages.push(new ObjectId(newMessage._id));
                 chatRoom.save();
             }
         }
@@ -73,7 +76,7 @@ class ChatConnection {
                 curTargetSocketID = targetLoginInfo.current_socket_id;
                 if (!curTargetSocketID) return;
                 else {
-                    socket.to(curTargetSocketID).emit("NewChatMessage", msg);
+                    socket.to(curTargetSocketID).emit("NewMessage", msg);
                 }
             }
         }

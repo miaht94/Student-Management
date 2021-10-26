@@ -2,48 +2,38 @@ const Configs = require('./../../configs/Constants')
 const {
     v4: uuidv4
 } = require('uuid');
-
-function fCreateClass(req, res) {
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId
+async function fCreateClass(req, res) {
     let senderVNUId = req.senderVNUId;
+    if (req.senderInstance.role !== "teacher") {
+        res.status(404);
+        res.json({
+            status: "Error",
+            message: "Permission Denied, role != teacher nhung lai tao class ???"
+        })
+    } else {
+        try {
 
-    global.DBConnection.User.findOne({
-        vnu_id: senderVNUId
-    }, async (err, instance) => {
-        if (!instance) {
-            res.status(404);
-            res.json({
-                status: "Error",
-                message: "Khong tim thay nguoi gui request"
-            });
-        } else if (instance.role !== "teacher") {
-            res.status(404);
-            res.json({
-                status: "Error",
-                message: "Permission Denied, role != teacher nhung lai tao class ???"
+            let newClass = new global.DBConnection.Class({
+                class_id: uuidv4(),
+                class_name: req.body.class_name,
+                class_teacher: new ObjectId(req.senderInstance._id),
             })
-        } else {
-            try {
-
-                let newClass = new global.DBConnection.Class({
-                    class_id: uuidv4(),
-                    class_name: req.body.class_name,
-                    class_teacher: req.senderVNUId,
-                })
-                await newClass.save();
-                res.status(200);
-                res.json({
-                    status: "Success",
-                    message: "Tao lop thanh cong"
-                });
-            } catch (e) {
-                res.status(400);
-                res.json({
-                    status: "Error",
-                    message: "Xay ra loi trong viec tao lop"
-                });
-            }
+            await newClass.save();
+            res.status(200);
+            res.json({
+                status: "Success",
+                message: "Tao lop thanh cong"
+            });
+        } catch (e) {
+            res.status(400);
+            res.json({
+                status: "Error",
+                message: "Xay ra loi trong viec tao lop"
+            });
         }
-    })
+    }
 }
 
 /**Tiên quyết : có params classId, đã authenticate token và có instance user */
@@ -68,9 +58,9 @@ async function findClassByClassId(req, res, next) {
 }
 
 /** Tiên quyết: có class Instance (find class rồi), đã authen token, có instance user, senderVNUId */
-function validateClassTeacher(req, res, next) {
-    var classInstance = req.classInstance;
-    if (classInstance.class_teacher == req.senderVNUId) {
+async function validateClassTeacher(req, res, next) {
+    var classInstance = await req.classInstance.populate('class_teacher');
+    if (classInstance.class_teacher.vnu_id == req.senderVNUId) {
             next();
     } else {
         res.status(400);
@@ -81,7 +71,7 @@ function validateClassTeacher(req, res, next) {
 /** Tiên quyết: đã authentoken, có senderInstance, params có classId */
 function validateClassMember(req, res, next) {
     var classInstance = req.classInstance;
-    if (classInstance.class_members.includes(req.senderVNUId)) {
+    if (classInstance.class_members.includes(req.senderVNUId) || classInstance.class_teacher.equals(req.senderInstance._id)) {
         next();
     } else {
         res.status(400);
@@ -91,21 +81,23 @@ function validateClassMember(req, res, next) {
 
 /** Tiên quyết: đã findClass( có class Instance ) */
 async function fGetMemberBasicInfors(req, res) {
-    let classInstance = req.classInstance;
-    let classMembers = classInstance.class_members;
+    let classInstance = await req.classInstance.populate('class_members');
     let limit = req.query.limit;
-    let members = await global.DBConnection.User.find({ vnu_id: {$in : classMembers}}).limit(parseInt(limit));
+    if (limit > classInstance.class_members.length) limit = classInstance.class_members.length;
+    let classMembers = classInstance.class_members.slice(0, limit);
+    
+    // let members = await global.DBConnection.User.find({ vnu_id: {$in : classMembers}}).limit(parseInt(limit));
     res.status(200);
-    res.json(Configs.RES_FORM("Sucess", members));
+    res.json(Configs.RES_FORM("Sucess", classMembers));
 }
 
 /** Tiên quyết: Body có danh sách vnu_id của các members cần add (Array)
  *  Có classInstance (đã có findClassById, body có classId)
  */
 async function fAddMembersToClass(req, res) {
-    var membersVNUIds
+    var membersVNUEmails;
     try {
-        membersVNUIds = JSON.parse(req.body.members);
+        membersVNUEmails = JSON.parse(req.body.members);
     } catch (e) {
         res.status(400);
         res.json({
@@ -115,35 +107,52 @@ async function fAddMembersToClass(req, res) {
     }
 
     var curMembers = req.classInstance.class_members
-    for (var memberVNUId of membersVNUIds) {
-        let instance = await global.DBConnection.User.findOne({
-            vnu_id: memberVNUId
-        });
-        if (instance) {
-            curMembers.push(memberVNUId);
-        }
+    var set = new Set();
+    for (var i = 0; i < curMembers.length; i++) {
+        set.add(curMembers[i].toHexString());
+        console.log(curMembers[i].toHexString());
     }
-    req.classInstance.class_members = curMembers;
-    await req.classInstance.save()
+    let instances = await global.DBConnection.User.find({
+        email:{ $in : membersVNUEmails}
+    });
+        // if (instance) {
+        //     curMembers.push(memberVNUId);
+        // }
+    var check = {};
+    for (i of membersVNUEmails) {
+        check[i] = false;
+    }
+    for (instance of instances) {
+        check[instance.email] = true;
+        set.add(instance._id.toHexString());
+    }
+    req.classInstance.class_members = [];
+    for (instance of set) {
+        check[instance.email] = true;
+        req.classInstance.class_members.push(new ObjectId(instance));
+    }
+    await req.classInstance.save();
+    var notFound = [];
+    for ([key, value] of Object.entries(check)) {
+        if (!value)
+            notFound.push(key)
+    }
     res.status(200)
-    res.json({
-        status: "Success",
-        message: JSON.stringify(req.classInstance.class_members)
-    })
+    res.json(Configs.RES_FORM("Success", {members: req.classInstance.class_members, notFound: notFound}))
 }
 
 async function fGetCurClasses(req, res) {
     var sender = req.senderInstance;
     if (sender.role == "teacher") {
         var classes = await global.DBConnection.Class.find({
-            class_teacher: sender.vnu_id
+            class_teacher: sender._id
         })
         res.status(200);
         res.json(classes);
 
     } else if (sender.role == "student") {
         var classes = await global.DBConnection.Class.find({
-            class_members: sender.vnu_id
+            class_members: sender.id_
         })
         if (classes.length == 1) classes = classes[0];
         res.status(200);

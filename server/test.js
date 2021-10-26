@@ -27,6 +27,12 @@ var jwt = require('jsonwebtoken');
 //   data: 'foobar'
 // }, CONFIG.SECRET_KEY, { expiresIn: 60 });
 
-var decoded = jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZm9vYmFyIiwiaWF0IjoxNjMzMjQ5ODkxLCJleHAiOjE2MzMyNDk5NTF9.dGjjQeFhm3Q8mH_SbiP87ajPRNmE8G6325PXP9tUjss", CONFIG.SECRET_KEY);
-console.log(decoded);
+// var decoded = jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZm9vYmFyIiwiaWF0IjoxNjMzMjQ5ODkxLCJleHAiOjE2MzMyNDk5NTF9.dGjjQeFhm3Q8mH_SbiP87ajPRNmE8G6325PXP9tUjss", CONFIG.SECRET_KEY);
+// console.log(decoded);
+
+function abc(a, b, c) {
+    console.log(`${a}, ${b}, ${c}`);
+}
+abc1 = abc.bind(null, 1);
+abc1(2,3);
 // console.log(token);

@@ -1,6 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 const Configs = require('./../../configs/Constants')
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId
 const hash = require('sha256')
 function register(req, res) {
     global.DBConnection.LoginInfo.findOne({"username": req.body.username},async (err, instance) => {
@@ -11,20 +13,21 @@ function register(req, res) {
         } else {
             try {
                 let newUserLoginInfo = new global.DBConnection.User({
-                    vnu_id : uuidv4(),
+                    vnu_id : req.body.vnu_id ? req.body.vnu_id : uuidv4(),
                     name: req.body.name,
                     role: req.body.role,
                     email: req.body.email,
                     date_of_birth: req.body.dateOfBirth
                 })
-                await newUserLoginInfo.save()
+                newUserLoginInfo = await newUserLoginInfo.save()
                 let newToken = jwt.sign({vnu_id: newUserLoginInfo.vnu_id, createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: 3600});
                 console.log("new token: ", newToken);
                 let loginInfo = new global.DBConnection.LoginInfo({
-                    vnu_id : newUserLoginInfo.vnu_id,
+                    user_ref : new ObjectId(newUserLoginInfo._id),
                     username: req.body.username,
                     password: req.body.password,
-                    current_token: newToken
+                    current_token: newToken,
+                    current_socket_id: null,
                 });
                 
                 await loginInfo.save()

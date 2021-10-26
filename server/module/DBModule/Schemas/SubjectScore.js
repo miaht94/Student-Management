@@ -5,7 +5,8 @@ const Configs = require('../../../configs/Constants');
 const ObjectId = Schema.Types.ObjectId;
 const SubjectSchema = new Schema({
     subject_name : {type: String, unique: true, required: true},
-    subject_teacher : {type: ObjectId, required: true, ref: Configs.DB_SCHEMA.USER},
+    subject_code: {type : String, unique: true, required: true},
+    subject_teacher : {type: ObjectId, ref: Configs.DB_SCHEMA.USER},
 })
 
 module.exports = SubjectSchema

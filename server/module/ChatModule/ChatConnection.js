@@ -11,7 +11,7 @@ class ChatConnection {
         this.io.use(checkTokenValid);
         this.io.use(checkLoginInfo);
         this.io.on("connection", socket => {
-            console.log(socket.senderVNUId);
+            socket.loginInfo.populate("user_ref")
             console.log(`New connection, ID[${socket.id}]`);
             socket.on('NewMessage', this.handleNewMessage.bind(this, socket));
               socket.on("disconnect", () => {
@@ -27,19 +27,22 @@ class ChatConnection {
     }
     handleNewMessage = async (socket, msg) => {
         console.log('New Chat Message: ' + msg);
-        let message, from, to;
+        let message, to, from;
         try {
+            var toInstance = await global.DBConnection.User.findOne({vnu_id : msg.to});
+            if (!toInstance) throw Error("Khong tim thay nguoi nhan tin nhan");
             message = msg.message;
-            from = msg.from;
-            to = msg.to;
+            from = socket.loginInfo.user_ref
+            to = new ObjectId(toInstance._id);
         } catch(e) {
             console.log("Du lieu message ko hop le");
+            console.log(e);
             return;
         }
         let newMessage;
         try {
             newMessage = new global.DBConnection.Message({
-                from: from,
+                from: new ObjectId(from._id),
                 to: to,
                 message: message,
                 createdDate: new Date().getTime()
@@ -47,15 +50,18 @@ class ChatConnection {
             newMessage = await newMessage.save();
         } catch {
             console.log("Create or save message fail");
+        
         }
         
         try {
-            var chatRoom = await global.DBConnection.Chat.findOne({membersID : {$size: 2, $all : [from, to]}});
+            
+            var chatRoom = await global.DBConnection.Chat.findOne({membersID : {$size: 2, $all : [ObjectId(socket.loginInfo.user_ref._id), ObjectId(toInstance._id)]}}).populate();
             if (!chatRoom) {
                 chatRoom = new global.DBConnection.Chat({
-                    membersID : [from, to],
+                    membersID : [new ObjectId(socket.loginInfo.user_ref._id), new ObjectId(toInstance._id)],
                     messages: [new ObjectId(newMessage._id)]
-                })
+                });
+                chatRoom.save();
             } else {
                 chatRoom.messages.push(new ObjectId(newMessage._id));
                 chatRoom.save();
@@ -68,7 +74,7 @@ class ChatConnection {
         }
 
         try {
-            var targetLoginInfo = await global.DBConnection.LoginInfo.findOne({vnu_id: to})
+            var targetLoginInfo = await global.DBConnection.LoginInfo.findOne({vnu_id: toInstance.vnu_id})
             var curTargetSocketID;
             if (!targetLoginInfo) {
                 console.log("Khong tim thay nguoi nhan");
@@ -76,7 +82,10 @@ class ChatConnection {
                 curTargetSocketID = targetLoginInfo.current_socket_id;
                 if (!curTargetSocketID) return;
                 else {
-                    socket.to(curTargetSocketID).emit("NewMessage", msg);
+                    socket.to(curTargetSocketID).emit("NewMessage", {
+                        from: socket.loginInfo.user_ref.vnu_id,
+                        message: msg.message
+                    });
                 }
             }
         }

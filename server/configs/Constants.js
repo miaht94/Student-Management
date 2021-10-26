@@ -7,7 +7,8 @@ const API_PATH = {
     ADD_MEMBER_CLASS: "/api/classes/:classId/members/add",
     MY_CLASS: "/api/classes/me",
     MY_CLASS_MEMBERS_INFORS: "/api/classes/:classId/members/infors",
-    RECENT_CHAT: "/api/chat/recent"
+    RECENT_CHAT: "/api/chat/recent",
+    MESSAGES_BY_VNU_ID: "/api/chat/:otherVNUId",
 };
 
 const AUTH_STATE = {

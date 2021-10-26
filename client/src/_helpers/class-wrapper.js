@@ -1,14 +1,14 @@
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
 import { useAlertActions } from '_actions';
-
-import { useState, useEffect } from "react";
+import { classesAtom } from '_state';
 
 export { useClassWrapper };
 
 function useClassWrapper(param) {
     const fetchWrapper = useFetchWrapper();
     const alertActions = useAlertActions();
+    const [classes, setClasses] = useRecoilState(classesAtom);
 
     async function getClassList(){
         console.log("Get class list wrapper called.");
@@ -17,10 +17,10 @@ function useClassWrapper(param) {
             console.log("No response.");
             return null;
         }
-        await response.json().then(rawjson => { 
+        response.json().then(rawjson => { 
             console.log(rawjson);
-            return rawjson;
-          }); 
+            setClasses(rawjson);
+          });
     }
 
     async function createClass(param){

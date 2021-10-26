@@ -31,7 +31,7 @@ function useClassActions () {
 
     async function getClassList() {
         console.log("Get class list called.");
-        return await classWrapper.getClassList();
+        return classWrapper.getClassList();
     }
 
     async function setCurrentClass(cls){

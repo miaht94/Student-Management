@@ -4,8 +4,9 @@ import 'antd/dist/antd.css';
 import { Card , Row, Col} from 'antd';
 import { useRecoilState } from 'recoil';
 import { classesAtom } from '_state';
+import { useClassWrapper } from '_helpers';
 
-import { useClassActions } from '_actions';
+// import { useClassActions } from '_actions';
 
 export { ClassPicker };
 
@@ -23,26 +24,31 @@ const cardHeadStyle = {
 }
 
 function ClassPicker(props) {
-    const classActions = useClassActions();
-    var input = props.data;
+    const classWrapper = useClassWrapper();
+    const [classes, setClasses] = useRecoilState(classesAtom);
+
+    var input = classes;
+
     console.log(input);
+
     let Cards = [];
     for(let i = 0; i < input.length; i++) {
         Cards.push(
-            <div key = {input[i].id} onClick = {() => {
-                        alert(input[i].className + " is selected");
-                        classActions.setCurrentClass(input[i]);
+            <div key = {input[i].class_id} onClick = {() => {
+                        alert(input[i].class_name + " is selected");
+                        classWrapper.chooseClass(input[i]);
                     }}>
                 <Col>
-                    <Card title = {input[i].className} 
+                    <Card title = {input[i].class_name} 
                     style = {cardStyle} headStyle = {cardHeadStyle}
-                    cover={<img alt="example" src={input[i].background} />}
+                    cover={<img alt="example" src={'https://maisienoble.github.io/jig/images/backgrounds/blueish.jpg'} />}
                     hoverable = 'true'>
                         <p>Sample Card Content 1</p>
                     </Card>
                 </Col>
             </div>)
     }
+    
     return (
         <Row wrap = 'true'>
           {Cards}

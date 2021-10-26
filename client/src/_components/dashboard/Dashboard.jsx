@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
-import { useRecoilValue, useRecoilState } from 'recoil';
-import React ,{useEffect, useState} from 'react';
-import { authAtom, bachAtom } from '_state';
+import { useRecoilState } from 'recoil';
+import React from 'react';
+import { bachAtom } from '_state';
 import { BachComponent } from '_components/subcomponents';
 
 import { Card, Button } from 'antd';

@@ -18,8 +18,8 @@ import { Profile } from '_components/profile';
 import { StudentInfoList } from '_components/studentInfoList';
 import { StudentScoreList } from '_components/studentScoreList';
 
-import { useAuthWrapper } from '_helpers';
-import { classesAtom, authAtom } from '_state';
+import { useAuthWrapper, useClassWrapper } from '_helpers';
+import { authAtom } from '_state';
 import { Layout, Menu, Button, Row, Col, Drawer } from 'antd';
 
 import React, { useState } from 'react';
@@ -34,12 +34,13 @@ const { Header, Footer, Content } = Layout;
 export { App };
 
 function App() {
-    const [classes, setClasses] = useRecoilState(classesAtom);
     const authWrapper = useAuthWrapper();
+    const classWrapper = useClassWrapper();
 
     const [drawerVisible, setDrawerVisible] = useState(false);
 
     const showDrawer = () => {
+        classWrapper.getClassList();
         setDrawerVisible(true);
     };
 
@@ -78,7 +79,7 @@ function App() {
             </Layout>
             <Layout>
                 <Drawer title="Chọn một lớp..." placement="right" onClose={onDrawerClose} visible={drawerVisible} width="640">
-                    <ClassPicker data={classes}/>
+                    <ClassPicker />
                 </Drawer>
                 <Nav />
                 <Layout>
@@ -131,7 +132,7 @@ function ClassNameDisplay(){
     const auth = useRecoilValue(authAtom);
     if (auth){
         if (localStorage.getItem('currentClass')) {
-            return "Lớp hiện tại: " + JSON.parse(localStorage.getItem('currentClass')).className;
+            return "Lớp hiện tại: " + JSON.parse(localStorage.getItem('currentClass')).class_name;
         }
         return "Chưa chọn lớp";
     }    

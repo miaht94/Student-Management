@@ -12,5 +12,3 @@ const classesAtom = atom({
         "background" : "https://maisienoble.github.io/jig/images/backgrounds/blueish.jpg"
     }]
 });
-
-

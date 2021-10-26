@@ -31,7 +31,9 @@ function Nav() {
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = (collapsed) => setCollapsed(collapsed);
     // only show nav when logged in
-    if (!auth) return null;
+    if (!auth || !localStorage.getItem('currentClass')) return null;
+
+    const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id
       
     return (
         <Sider 
@@ -86,7 +88,7 @@ function Nav() {
             </Menu.Item>
             <Menu.Item key="abc">
             </Menu.Item>
-            <Menu.Item onClick={userActions.logout}>
+            <Menu.Item key="logout" onClick={userActions.logout}>
               <LoginOutlined />
               <span>Đăng xuất</span>
             </Menu.Item>

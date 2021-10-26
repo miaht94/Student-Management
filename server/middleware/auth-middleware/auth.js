@@ -1,19 +1,20 @@
 const Configs = require('./../../configs/Constants')
 const jwt = require('jsonwebtoken');
 const hash = require('sha256')
-/* Xác định trạng thái của token có hợp lệ chưa
-    req.authState được truyền vào req cùng senderVNUId */
+/** Xác định trạng thái của token có hợp lệ chưa
+    req.authState được truyền vào req cùng senderVNUId và senderInstance*/
 async function validateToken(req, res, next) {
     if (req.cookies.token) {
         let token = req.cookies.token;
         console.log(token);
         try {
             var decoded = jwt.verify(token, Configs.SECRET_KEY);
-            var instance = await global.DBConnection.LoginInfo.findOne({current_token : token})
+            var instance = await global.DBConnection.LoginInfo.findOne({current_token : token}).populate("user_ref");
+            // console.log(instance.user_ref.name);
             if (instance != null) {
                 req.authState = Configs.AUTH_STATE.AUTHORIZED;
-                req.senderVNUId = instance.vnu_id;
-                req.senderInstance = await global.DBConnection.User.findOne({vnu_id: req.senderVNUId});
+                req.senderVNUId = instance.user_ref.vnu_id;
+                req.senderInstance = instance.user_ref;
                 if (req.senderInstance == null) throw Error("UserNotFound")
                 next();
             } else {
@@ -62,7 +63,7 @@ function login(req, res) {
     global.DBConnection.LoginInfo.findOne({"username": rUsername, "password": rPassword},(err, instance) => {
         console.log(instance);
         if (instance != null) {
-            let newToken = jwt.sign({vnu_id: instance.vnu_id, createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: 3600})
+            let newToken = jwt.sign({id: instance.user_ref.toString(), createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: 3600})
             instance.current_token = newToken;
             instance.save();
             res.status(200);

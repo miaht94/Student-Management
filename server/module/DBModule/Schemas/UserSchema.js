@@ -11,7 +11,8 @@ const UserSchema = new Schema({
         values: ['student', 'teacher'],
         message: 'Role {VALUE} is not supported'
     }},
-    date_of_birth: {type: Date},
+    location: {type: String, default:"Ha Noi"},
+    date_of_birth: {type: Date, default: new Date().getTime()},
     email: { type: String, set: toLower },
     vnu_id: {type: String, index: { unique: true }, dropDups: true},
   });

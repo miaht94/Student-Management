@@ -63,7 +63,7 @@ function login(req, res) {
     global.DBConnection.LoginInfo.findOne({"username": rUsername, "password": rPassword},(err, instance) => {
         console.log(instance);
         if (instance != null) {
-            let newToken = jwt.sign({id: instance.user_ref.toString(), createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: 3600})
+            let newToken = jwt.sign({id: instance.user_ref.toString(), createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: "2 days"})
             instance.current_token = newToken;
             instance.save();
             res.status(200);

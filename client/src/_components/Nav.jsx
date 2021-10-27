@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-
 import { authAtom } from '_state';
 import { useUserActions } from '_actions';
 import 'antd/dist/antd.css';
@@ -27,6 +26,8 @@ export { Nav };
 function Nav(props) {
     var classID = props.classID ? props.classID : "";
     const location = useLocation();
+
+	// const [pathname, setPathname] = useState(location.pathname);
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = (collapsed) => setCollapsed(collapsed);
     const userActions = useUserActions();
@@ -39,6 +40,8 @@ function Nav(props) {
 		console.log(location.pathname)
       console.log("NAV constructing ", classID);
     }, [])
+
+	
 
     if (!auth) return null;
     // const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id;
@@ -58,6 +61,7 @@ function Nav(props) {
             theme="dark"
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
+			selectedKeys={[location.pathname]}
           >
             <Menu.Item key="/">
               <HomeOutlined />

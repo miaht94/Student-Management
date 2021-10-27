@@ -7,17 +7,6 @@ const authAtom = atom({
     // default: null
 });
 
-const userRoleAtom = atom({
-  key: 'userRoleAtom',
-  default: null
-});
-//2 role student, teacher
-
-const initClassAtom = atom({
-  key: 'initClassAtom',
-  default: null
-})
-
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -34,4 +23,4 @@ function getCookie(cname) {
     return "";
   }
 
-export { authAtom, userRoleAtom, initClassAtom };
+export { authAtom };

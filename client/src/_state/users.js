@@ -1,16 +1,21 @@
 import { atom } from 'recoil';
 
-const usersAtom = atom({
-    key: 'users',
-    default: null
-});
+export {userAtom, usersAtom, initClassAtom };
 
 const userAtom = atom({
-    key: 'user',
+    key: 'userAtom',
     default: null
-});
+  });
+  //2 role student, teacher
+  
+const initClassAtom = atom({
+    key: 'initClassAtom',
+    default: null
+  })
+  
+  
+const usersAtom = atom({
+    key: 'usersAtom',
+    default: null
+  });
 
-export { 
-    usersAtom,
-    userAtom
-};

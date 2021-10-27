@@ -2,24 +2,22 @@ import { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { useRecoilValue, RecoilRoot } from 'recoil';
 
-import { authAtom } from '_state';
+import { authAtom, initClassAtom } from '_state';
 import { Login, Register } from './';
 
 export { Account };
 
 function Account({ history, match }) {
     const auth = useRecoilValue(authAtom);
+    const classPicked = useRecoilValue(initClassAtom);
     const { path } = match;
 
     useEffect(() => {
-        // redirect to home if already logged in
         if (auth) history.push('/');
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
-
         <div className="container">
             <div className="row">
                 <div className="col-sm-8 offset-sm-2 mt-5">

@@ -9,6 +9,10 @@ const API_PATH = {
     MY_CLASS_MEMBERS_INFORS: "/api/classes/:classId/members/infors",
     RECENT_CHAT: "/api/chat/recent",
     MESSAGES_BY_VNU_ID: "/api/chat/:otherVNUId",
+    UPLOAD_DSSV : "/api/upload/dssv",
+    UPLOAD_DSCV : "/api/upload/dscv",
+    UPLOAD_DSMH: "/api/upload/dsmh",
+    UPLOAD_SV_MH_SCORE : "/api/upload/svscore"
 };
 
 const AUTH_STATE = {

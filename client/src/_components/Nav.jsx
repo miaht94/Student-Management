@@ -40,8 +40,8 @@ function Nav(props) {
       console.log("NAV constructing ", classID);
     }, [])
 
-    if (!auth || !localStorage.getItem('currentClass')) return null;
-    const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id;
+    if (!auth) return null;
+    // const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id;
 
     return (
         <Sider 

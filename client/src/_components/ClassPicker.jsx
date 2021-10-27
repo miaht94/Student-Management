@@ -34,6 +34,7 @@ function ClassPicker(props) {
     };
   
     const handleOk = (values) => {
+      console.log("Sending.");
       setConfirmLoading(true);
       classWrapper.createClass(values.class_name);
       setVisible(false);
@@ -55,11 +56,14 @@ function ClassPicker(props) {
                         classWrapper.chooseClass(input[i]);
                     }}>
                 <Col>
-                    <Card title = {input[i].class_name} 
-                    style = {cardStyle} headStyle = {cardHeadStyle}
-                    hoverable = 'true'>
-                        <p>Sample Card Content 1</p>
-                    </Card>
+                    <Link to={"/" + input[i].class_id} onClick={onDrawerClose}>
+                        <Card title = {input[i].class_name} 
+                        style = {cardStyle} headStyle = {cardHeadStyle}
+                        cover={<img alt="example" src={'https://maisienoble.github.io/jig/images/backgrounds/blueish.jpg'} />}
+                        hoverable = 'true'>
+                            <p>Sample Card Content 1</p>
+                        </Card>
+                    </Link>
                 </Col>
             </div>)
     }

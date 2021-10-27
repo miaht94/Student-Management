@@ -29,18 +29,19 @@ function Nav(props) {
     const location = useLocation();
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = (collapsed) => setCollapsed(collapsed);
+    const userActions = useUserActions();
 
     const auth = props.auth;
     const onLogout = props.onLogout;
     // only show nav when logged in
-    if (!auth || !localStorage.getItem('currentClass')) return null;
-
-    const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id
 
     useEffect(()=> {
       console.log("NAV constructing ", classID);
     }, [])
-    
+
+    if (!auth || !localStorage.getItem('currentClass')) return null;
+    const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id;
+
     return (
         <Sider 
         style={{

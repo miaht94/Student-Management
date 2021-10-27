@@ -7,7 +7,11 @@ const API_PATH = {
     ADD_MEMBER_CLASS: "/api/classes/:classId/members/add",
     MY_CLASS: "/api/classes/me",
     MY_CLASS_MEMBERS_INFORS: "/api/classes/:classId/members/infors",
-    RECENT_CHAT: "/api/chat/recent"
+    RECENT_CHAT: "/api/chat/recent",
+    UPLOAD_DSSV : "/api/upload/dssv",
+    UPLOAD_DSCV : "/api/upload/dscv",
+    UPLOAD_DSMH: "/api/upload/dsmh",
+    UPLOAD_SV_MH_SCORE : "/api/upload/svscore"
 };
 
 const AUTH_STATE = {

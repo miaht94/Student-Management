@@ -112,30 +112,30 @@ function App() {
 function Child(props) {
     let {classID} = useParams();
     const classWrapper = useClassWrapper();
+    const [loaded, setloaded] = useState(false);
     console.log('hello');
     const location  = useLocation()
     // let { path } = match;
     // console.log(path);
     useEffect(() => {
-        classWrapper.chooseClassById(classID);
+        classWrapper.chooseClassById(classID).then(data => {
+            setloaded(true)
+            
+        });
         console.log("Child component construct, classID: ", classID)
     },[])
 
     return (
-    !classWrapper.curClass ? <Redirect from="*" to="/" /> :
-        <div>
-            <div className="p-4">
-                <div className="container">
-                    <h1>Hi Dashboard {classID}</h1>
-                </div>
-            </div>
+    !classWrapper.curClass && loaded ? <Redirect from="*" to="/" /> :
+        <>
+            {<Redirect to={"/" + classID + "/dashboard"} />}
             <Switch>
                 <PrivateRoute exact path="/:classID/dashboard" component={Dashboard} />
                 <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
                 <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
                 <PrivateRoute exact path="/:classID/feed" component={Feed} />
             </Switch>
-        </div>
+        </>
     );
   }
 

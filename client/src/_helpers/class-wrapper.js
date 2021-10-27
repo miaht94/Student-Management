@@ -39,7 +39,7 @@ function useClassWrapper(param) {
           }); 
     }
     
-    async function chooseClass(cls) {
+    function chooseClass(cls) {
 		    setCurClass(cls);
         localStorage.setItem('currentClass', JSON.stringify(cls));
         console.log("Choosen class :", cls)

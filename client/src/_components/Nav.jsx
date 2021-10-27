@@ -34,6 +34,7 @@ function Nav(props) {
     const onLogout = props.onLogout;
     // only show nav when logged in
     useEffect(()=> {
+		console.log(location.pathname)
       console.log("NAV constructing ", classID);
     }, [])
     if (!auth) return null;
@@ -54,7 +55,7 @@ function Nav(props) {
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
           >
-            <Menu.Item key={`/`}>
+            <Menu.Item key="/">
               <HomeOutlined />
               <span>Trang chủ</span>
               <Link to="/"></Link>

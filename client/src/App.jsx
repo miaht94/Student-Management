@@ -89,7 +89,10 @@ function App() {
                           <PrivateRoute exact path="/" component={Home} />
                           {/* <PrivateRoute exact path="/:classID" children={<Child classID="123"/>} component={Child}/>  */}
                           <Route path="/account" component={Account} />
-                          <PrivateRoute path="/:classID" classID="123" component={Child} />
+                          <PrivateRoute path="/chat" component={Chat} />
+                          <PrivateRoute path="/profile" component={Profile} />
+                          <PrivateRoute path="/:classID" component={Child} />
+                          
                           <Redirect from="*" to="/" />
                         </Switch>
                     </Content>
@@ -116,7 +119,9 @@ function Child(props) {
         classWrapper.chooseClassById(classID);
         console.log("Child component construct, classID: ", classID)
     },[])
+
     return (
+    !classWrapper.curClass ? <Redirect from="*" to="/" /> :
         <div>
             <div className="p-4">
                 <div className="container">
@@ -135,7 +140,7 @@ function Child(props) {
 
 function ClassNameDisplay(){
     const auth = useRecoilValue(authAtom);
-    if (auth){
+    if (auth) {
         if (localStorage.getItem('currentClass')) {
             return "Lớp hiện tại: " + JSON.parse(localStorage.getItem('currentClass')).class_name;
         }

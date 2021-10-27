@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { authAtom } from '_state';
@@ -24,17 +24,23 @@ const { Sider } = Layout;
 
 export { Nav };
 
-function Nav() {
-    const auth = useRecoilValue(authAtom);
-    const userActions = useUserActions();
+function Nav(props) {
+    var classID = props.classID ? props.classID : "";
     const location = useLocation();
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = (collapsed) => setCollapsed(collapsed);
+
+    const auth = props.auth;
+    const onLogout = props.onLogout;
     // only show nav when logged in
     if (!auth || !localStorage.getItem('currentClass')) return null;
 
     const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id
-      
+
+    useEffect(()=> {
+      console.log("NAV constructing ", classID);
+    }, [])
+    
     return (
         <Sider 
         style={{
@@ -51,36 +57,38 @@ function Nav() {
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
           >
-            <Menu.Item key="/">
+            <Menu.Item key={`/`}>
               <HomeOutlined />
               <span>Trang chủ</span>
               <Link to="/"></Link>
             </Menu.Item>
-            <Menu.Item key="/dashboard">
-              <DashboardOutlined />
-              <span>Dashboard</span>
-              <Link to="/dashboard"></Link>
+            {classID != false &&
+            <>
+        <Menu.Item key={`/${classID}/dashboard`}>
+          <DashboardOutlined />
+          <span>Dashboard</span>
+          <Link to={`/${classID}/dashboard`}></Link>
+        </Menu.Item>
+        <Menu.Item key={`/${classID}/studentinfo`}>
+              <InfoCircleOutlined />
+              <span>Thông tin SV</span>
+              <Link to={`/${classID}/studentinfo`}></Link>
             </Menu.Item>
-            <Menu.Item key="/feed">
-              <BellOutlined />
-              <span>Bảng thông báo</span>
-              <Link to="/feed"></Link>
+            <Menu.Item key={`/${classID}/studentscore`}>
+              <TableOutlined />
+              <span>Bảng điểm SV</span>
+              <Link to={`/${classID}/studentscore`}></Link>
             </Menu.Item>
+        </>
+      }
+            
+            
             <Menu.Item key="/chat">
               <MessageOutlined />
               <span>Tin nhắn</span>
               <Link to="/chat"></Link>
             </Menu.Item>
-            <Menu.Item key="/studentinfo">
-              <InfoCircleOutlined />
-              <span>Thông tin SV</span>
-              <Link to="/studentinfo"></Link>
-            </Menu.Item>
-            <Menu.Item key="/studentscore">
-              <TableOutlined />
-              <span>Bảng điểm SV</span>
-              <Link to="/studentscore"></Link>
-            </Menu.Item>
+            
             <Menu.Item key="/profile">
               <UserOutlined />
               <span>Cá nhân</span>
@@ -97,29 +105,3 @@ function Nav() {
         </Sider>
     );
 }
-
-{/* <NavLink exact to="/" className="nav-item">Trang chủ</NavLink>
-            <NavLink exact to="/dashboard" className="nav-item">Dashboard</NavLink>
-            <NavLink exact to="/feed" className="nav-item">Bảng tin</NavLink>
-            <NavLink exact to="/chat" className="nav-item">Nhắn tin</NavLink>
-            <NavLink exact to="/studentinfo" className="nav-item">Thông tin SV</NavLink>
-            <NavLink exact to="/studentscore" className="nav-item">Bảng điểm SV</NavLink>
-            <NavLink exact to="/profile" className="nav-item">Hồ sơ cá nhân</NavLink>
-            <NavLink to="/users" className="nav-item">QL Tài khoản</NavLink> */}
-
-// return (
-//     <nav className="navbar">
-//         <div>
-//             <NavLink exact to="/" className="nav-item">Trang chủ</NavLink>
-//             <NavLink exact to="/dashboard" className="nav-item">Dashboard</NavLink>
-//             <NavLink exact to="/feed" className="nav-item">Bảng tin</NavLink>
-//             <NavLink exact to="/chat" className="nav-item">Nhắn tin</NavLink>
-//             <NavLink exact to="/studentinfo" className="nav-item">Thông tin SV</NavLink>
-//             <NavLink exact to="/studentscore" className="nav-item">Bảng điểm SV</NavLink>
-//             <NavLink exact to="/profile" className="nav-item">Hồ sơ cá nhân</NavLink>
-//             <NavLink to="/users" className="nav-item">QL Tài khoản</NavLink>
-
-//             <a onClick={userActions.logout} className="nav-item">Đăng xuất</a>
-//         </div>
-//     </nav>
-// );

@@ -19,14 +19,14 @@ import { StudentInfoList } from '_components/studentInfoList';
 import { StudentScoreList } from '_components/studentScoreList';
 
 import { useAuthWrapper, useClassWrapper } from '_helpers';
-import { authAtom } from '_state';
+import { authAtom, classPickerVisibleAtom } from '_state';
 import { Layout, Menu, Button, Row, Col, Drawer } from 'antd';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Title from 'antd/lib/typography/Title';
 import SubMenu from 'antd/lib/menu/SubMenu';
-
+import { useUserActions } from '_actions';
 const style = { };
 
 const { Header, Footer, Content } = Layout;
@@ -36,9 +36,8 @@ export { App };
 function App() {
     const authWrapper = useAuthWrapper();
     const classWrapper = useClassWrapper();
-
-    const [drawerVisible, setDrawerVisible] = useState(false);
-
+    const [drawerVisible, setDrawerVisible] = useRecoilState(classPickerVisibleAtom);
+    const userActions = useUserActions();
     const showDrawer = () => {
         classWrapper.getClassList();
         setDrawerVisible(true);
@@ -68,21 +67,23 @@ function App() {
                             </div>
                         </div>
                         </Col>
-                        <Col className="gutter-row" span={1}>
-                        <div style={{'marginLeft': 'auto','marginRight': 'auto' }}>
-                            <Button type="primary" style={{'marginLeft': 'auto','marginRight': 'auto' }} onClick={showDrawer}>
-                                Đổi lớp
-                            </Button>
-                        </div>
-                        </Col>
+                            {
+                            authWrapper.tokenValue != "" &&
+                            <Col className="gutter-row" span={1}>
+                            
+                            <div style={{'marginLeft': 'auto','marginRight': 'auto' }}>
+                                <Button type="primary" style={{'marginLeft': 'auto','marginRight': 'auto' }} onClick={showDrawer}>
+                                    Đổi lớp
+                                </Button>
+                            </div>
+                            </Col>
+                            }
                     </Row>         
                 </Header>       
             </Layout>
             <Layout>
-                <Drawer title="Chọn một lớp..." placement="right" onClose={onDrawerClose} visible={drawerVisible} width="640">
-                    <ClassPicker />
-                </Drawer>
-                <Nav />
+                    <ClassPicker drawerVisible = {drawerVisible} setDrawerVisible = {setDrawerVisible} onDrawerClose={onDrawerClose}/>
+                <Nav onLogout = {userActions.logout} auth = {authWrapper.tokenValue} classID = {classWrapper.curClass ? classWrapper.curClass.class_id : ""}/>
                 <Layout>
                     <Content style={{ margin: '20px 16px' }}>
                         <Switch>
@@ -106,12 +107,16 @@ function App() {
 }
 
 function Child(props) {
-    let { classID } = useParams();
+    let {classID} = useParams();
+    const classWrapper = useClassWrapper();
     console.log('hello');
     const location  = useLocation()
     // let { path } = match;
     // console.log(path);
-  
+    useEffect(() => {
+        classWrapper.chooseClassById(classID);
+        console.log("Child component construct, classID: ", classID)
+    },[])
     return (
         <div>
             <div className="p-4">

@@ -1,7 +1,7 @@
 import { useRecoilState, useSetRecoilState, useResetRecoilState } from 'recoil';
 
 import { history, useFetchWrapper, useAuthWrapper } from '_helpers';
-import { authAtom, usersAtom, userAtom } from '_state';
+import { authAtom, usersAtom, userAtom, currentClassAtom } from '_state';
 
 export { useUserActions };
 
@@ -12,7 +12,7 @@ function useUserActions () {
     const [auth, setAuth] = useRecoilState(authAtom);
     const setUsers = useSetRecoilState(usersAtom);
     const setUser = useSetRecoilState(userAtom);
-
+    const [curClass, setCurClass] = useRecoilState(currentClassAtom)
     return {
         login,
         logout,
@@ -44,6 +44,7 @@ function useUserActions () {
         // localStorage.removeItem('token');
         console.log("Logout called.");
         await authWrapper.logout();
+        setCurClass(null);
         history.push('/account/login');
     }
 

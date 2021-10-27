@@ -5,7 +5,7 @@ import { Card , Row, Col, Modal, Form, Input, Space, Button} from 'antd';
 import { useRecoilState } from 'recoil';
 import { classesAtom } from '_state';
 import { useClassWrapper } from '_helpers';
-
+import { Link } from 'react-router-dom';
 // import { useClassActions } from '_actions';
 
 export { ClassPicker };
@@ -41,15 +41,17 @@ function ClassPicker(props) {
       console.log(classes);
     };
 
-    var input = classes;
-
+    var drawerVisible = props.drawerVisible;
+    var setDrawerVisible = props.setDrawerVisible;
+    var onDrawerClose = props.onDrawerClose;
+    var input = classWrapper.classes;
+  
     console.log(input);
 
     let Cards = [];
     for(let i = 0; i < input.length; i++) {
         Cards.push(
             <div key = {input[i].class_id} onClick = {() => {
-                        alert(input[i].class_name + " is selected");
                         classWrapper.chooseClass(input[i]);
                     }}>
                 <Col>
@@ -79,7 +81,8 @@ function ClassPicker(props) {
         </div>)
 
     return (
-        <Row wrap = 'true'> 
+        <Drawer title="Chọn một lớp..." placement="right" onClose={onDrawerClose} visible={drawerVisible} width="640">
+            <Row wrap = 'true'> 
             <CollectionCreateForm
                 visible={visible}
                 onCreate={handleOk}
@@ -89,6 +92,7 @@ function ClassPicker(props) {
             />     
             {Cards}       
         </Row>
+        </Drawer>
     )
 }
 

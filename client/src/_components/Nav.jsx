@@ -59,7 +59,7 @@ function Nav(props) {
               <span>Trang chủ</span>
               <Link to="/"></Link>
             </Menu.Item>
-            {classID != "" &&
+            {classID != false &&
             <>
         <Menu.Item key={`/${classID}/dashboard`}>
           <DashboardOutlined />

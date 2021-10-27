@@ -66,7 +66,8 @@ function useClassWrapper(param) {
         getClassList: getClassList,
         createClass: createClass,
         chooseClass: chooseClass,
-		chooseClassById
+		    chooseClassById,
+        setCurClass
     };
 }
 

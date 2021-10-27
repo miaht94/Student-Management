@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import { Card , Row, Col} from 'antd';
+import { Card , Row, Col, Drawer} from 'antd';
 import { useRecoilState } from 'recoil';
 import { classesAtom } from '_state';
 import { useClassWrapper } from '_helpers';
-
+import { Link } from 'react-router-dom';
 // import { useClassActions } from '_actions';
 
 export { ClassPicker };
@@ -25,9 +25,10 @@ const cardHeadStyle = {
 
 function ClassPicker(props) {
     const classWrapper = useClassWrapper();
-    const [classes, setClasses] = useRecoilState(classesAtom);
-
-    var input = classes;
+    var drawerVisible = props.drawerVisible;
+    var setDrawerVisible = props.setDrawerVisible;
+    var onDrawerClose = props.onDrawerClose;
+    var input = classWrapper.classes;
 
     console.log(input);
 
@@ -35,24 +36,27 @@ function ClassPicker(props) {
     for(let i = 0; i < input.length; i++) {
         Cards.push(
             <div key = {input[i].class_id} onClick = {() => {
-                        alert(input[i].class_name + " is selected");
                         classWrapper.chooseClass(input[i]);
                     }}>
                 <Col>
-                    <Card title = {input[i].class_name} 
-                    style = {cardStyle} headStyle = {cardHeadStyle}
-                    cover={<img alt="example" src={'https://maisienoble.github.io/jig/images/backgrounds/blueish.jpg'} />}
-                    hoverable = 'true'>
-                        <p>Sample Card Content 1</p>
-                    </Card>
+                    <Link to={"/" + input[i].class_id} onClick={onDrawerClose}>
+                        <Card title = {input[i].class_name} 
+                        style = {cardStyle} headStyle = {cardHeadStyle}
+                        cover={<img alt="example" src={'https://maisienoble.github.io/jig/images/backgrounds/blueish.jpg'} />}
+                        hoverable = 'true'>
+                            <p>Sample Card Content 1</p>
+                        </Card>
+                    </Link>
                 </Col>
             </div>)
     }
     
     return (
-        <Row wrap = 'true'>
-          {Cards}
-        </Row>
+        <Drawer title="Chọn một lớp..." placement="right" onClose={onDrawerClose} visible={drawerVisible} width="640">
+            <Row wrap = 'true'>
+            {Cards}
+            </Row>
+        </Drawer>
     )
 }
 

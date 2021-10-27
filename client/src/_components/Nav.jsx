@@ -33,10 +33,13 @@ function Nav(props) {
     const auth = props.auth;
     const onLogout = props.onLogout;
     // only show nav when logged in
+    if (!auth || !localStorage.getItem('currentClass')) return null;
+
+    const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id
+
     useEffect(()=> {
       console.log("NAV constructing ", classID);
     }, [])
-    if (!auth) return null;
     
     return (
         <Sider 
@@ -93,7 +96,7 @@ function Nav(props) {
             </Menu.Item>
             <Menu.Item key="abc">
             </Menu.Item>
-            <Menu.Item onClick={onLogout}>
+            <Menu.Item key="logout" onClick={userActions.logout}>
               <LoginOutlined />
               <span>Đăng xuất</span>
             </Menu.Item>

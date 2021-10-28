@@ -56,6 +56,11 @@ async function findClassByClassId(req, res, next) {
         res.json(Configs.RES_FORM("Error", "UnknownError"));
     }
 }
+/** Tiên quyết đã findClassByClassId */
+async function fFindClassByClassId(req, res, next) {
+    res.status(200);
+    res.json(req.classInstance);
+}
 
 /** Tiên quyết: có class Instance (find class rồi), đã authen token, có instance user, senderVNUId */
 async function validateClassTeacher(req, res, next) {
@@ -167,5 +172,6 @@ module.exports = {
     fGetCurClasses,
     findClassByClassId,
     validateClassMember,
-    fGetMemberBasicInfors
+    fGetMemberBasicInfors,
+    fFindClassByClassId
 }

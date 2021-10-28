@@ -6,7 +6,6 @@ const hash = require('sha256')
 async function validateToken(req, res, next) {
     if (req.cookies.token) {
         let token = req.cookies.token;
-        console.log(token);
         try {
             var decoded = jwt.verify(token, Configs.SECRET_KEY);
             var instance = await global.DBConnection.LoginInfo.findOne({current_token : token}).populate("user_ref");

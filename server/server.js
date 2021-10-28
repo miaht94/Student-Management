@@ -2,7 +2,14 @@ var express = require('express');
 var app = express();
 var cookieParser = require('cookie-parser')
 var router = express.Router();
-
+var fileUpload = require('express-fileupload')
+app.use(fileUpload({
+  useTempFiles : true,
+  tempFileDir : '/public/data',
+  limits: { fileSize: 50 * 1024 * 1024 },
+  createParentPath: true,
+  debug: true
+}));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(cookieParser());
@@ -12,6 +19,8 @@ const userRouter = require('./routers/user');
 const registerRouter = require('./routers/register');
 const classRouter = require('./routers/class');
 const chatRouter = require('./routers/chat');
+const uploadRouter = require('./routers/upload');
+const publicRoute = require('./routers/public')
 const DBConnection = require('./module/DBModule/DBConnection');
 const ChatConnection = require('./module/ChatModule/ChatConnection');
 app.use((req, res, next) => {
@@ -24,6 +33,8 @@ app.use(authRouter);
 app.use(registerRouter);
 app.use(classRouter);
 app.use(chatRouter);
+app.use(uploadRouter);
+app.use(publicRoute);
 (async () => {
   await DBConnection.Init();
   var server = app.listen(8081, function () {

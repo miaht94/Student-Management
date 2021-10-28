@@ -4,6 +4,7 @@ const LoginInfoSchema = require('./Schemas/LoginInfoSchema');
 const UserSchema = require('./Schemas/UserSchema');
 const ClassSchema = require('./Schemas/ClassSchema');
 const {ChatSchema, MessageSchema} = require('./Schemas/ChatSchema');
+const TestSchema = require('./Schemas/TestSchema');
 let DBConnection = {
     initiated : false,
     Init : (async () => {
@@ -14,6 +15,7 @@ let DBConnection = {
         this.Class = db.model(Configs.DB_SCHEMA.CLASS, ClassSchema);
         this.Chat = db.model(Configs.DB_SCHEMA.CHAT, ChatSchema);
         this.Message = db.model(Configs.DB_SCHEMA.MESSAGE, MessageSchema);
+        this.Test = db.model(Configs.DB_SCHEMA.TEST_SCHEMA, TestSchema);
         global.DBConnection = this;
         this.initiated = true;
 
@@ -23,6 +25,7 @@ let DBConnection = {
     Class : undefined,
     Chat: undefined,
     Message: undefined,
+    Test: undefined,
 }
 
 module.exports = DBConnection;

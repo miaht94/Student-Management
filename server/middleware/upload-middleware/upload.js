@@ -1,6 +1,8 @@
 const { RES_FORM } = require("../../configs/Constants");
 const path = require('path')
 const { v4: uuidv4 } = require('uuid');
+const csv=require('csvtojson/v2')
+const {register} = require('../auth-middleware/register')
 /** Must call  handleUploadFile before*/
 function fHandleUploadFile (req, res) {
     res.status(200);
@@ -35,5 +37,44 @@ function handleUploadFile(req, res, next) {
         req.fileName = fileName;
         next();
     });
+}
+
+/** Must call  handleUploadFile before*/
+async function fHandleUploadDSCV(req, res) {
+    let success = [];
+    let fail = [];
+    const jsonArray = await csv().fromFile(req.fileUploadPath);
+        // let res = await global.DBConnection.Test.insertMany(jsonArray, { ordered: false })
+    class fakeRes {
+        statusCode = null;
+        responseJson = null;
+        json = (obj) => {
+            this.responseJson = obj;
+        };
+        status = (status) => {
+            this.statusCode = status;
+        }
+    }
+    class fakeReq {
+        body = null
+        constructor(body) {
+            this.body = body;
+        }
+    }
+    
+    for (var i of jsonArray) {
+        i.role = "teacher";
+        var fakeReqInstance = new fakeReq(i);
+        var fakeResInstance = new fakeRes();
+        await register(fakeReqInstance, fakeResInstance);
+        if (fakeResInstance.statusCode != 200) {
+            if (fakeResInstance.responseJson && fakeResInstance.responseJson.message)
+                i.error = fakeResInstance.responseJson.message;
+            fail.push(i);
+        }
+        else success.push(i);
+    }
+    res.status(200);
+    res.json(RES_FORM("Success", {registered : success, failed: fail}));
 }
 module.exports = {fHandleUploadFile, fHandleUploadDSCV, handleUploadFile}

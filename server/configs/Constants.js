@@ -15,7 +15,8 @@ const API_PATH = {
     UPLOAD_DSMH: "/api/upload/dsmh",
     UPLOAD_SV_MH_SCORE : "/api/upload/svscore",
     UPLOAD_FILE : "/api/upload/file",
-    PUBLIC_DATA: "/public/data/:filename"
+    PUBLIC_DATA: "/public/data/:filename",
+    
 };
 
 const AUTH_STATE = {
@@ -35,13 +36,14 @@ const DB_SCHEMA = {
     LOGIN_INFO: "LoginInfo",
     CHAT: "Chat",
     MESSAGE: "Message",
+    TEST_SCHEMA : "JustForTesting",
 }
 
 const RES_FORM =(status, message) => {
     console.log("New Response", {Status : status, Message: message})
     return {
-        Status : status ? status : null,
-        Message: message? message: null,
+        status : status ? status : null,
+        message: message? message: null,
     }
 }
 

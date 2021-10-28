@@ -10,13 +10,14 @@ const API_PATH = {
     GET_CLASS_BY_ID : "/api/classes/:classId",
     RECENT_CHAT: "/api/chat/recent",
     MESSAGES_BY_VNU_ID: "/api/chat/:otherVNUId",
+    ADD_SUBJECT: "/api/subjects/add",
     UPLOAD_DSSV : "/api/upload/dssv",
     UPLOAD_DSCV : "/api/upload/dscv",
     UPLOAD_DSMH: "/api/upload/dsmh",
     UPLOAD_SV_MH_SCORE : "/api/upload/svscore",
     UPLOAD_FILE : "/api/upload/file",
+    SCORE_BY_ID : "/api/score/:userId",
     PUBLIC_DATA: "/public/data/:filename",
-    
 };
 
 const AUTH_STATE = {
@@ -36,6 +37,9 @@ const DB_SCHEMA = {
     LOGIN_INFO: "LoginInfo",
     CHAT: "Chat",
     MESSAGE: "Message",
+    SUBJECT: "Subject",
+    SCORE_TABLE: "SvScoreTable", 
+    SCORE: "SCORE",
     TEST_SCHEMA : "JustForTesting",
 }
 

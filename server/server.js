@@ -23,6 +23,8 @@ const uploadRouter = require('./routers/upload');
 const publicRoute = require('./routers/public')
 const DBConnection = require('./module/DBModule/DBConnection');
 const ChatConnection = require('./module/ChatModule/ChatConnection');
+const subjectRouter = require('./routers/subject');
+const scoreRouter = require('./routers/score');
 app.use((req, res, next) => {
   var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   console.log(`New request \n\tTYPE: ${req.method} \n\t URL: ${fullUrl} \n\tParam: ${JSON.stringify(req.params)} \n\tBody: ${JSON.stringify(req.body)} \n\tCookies: ${JSON.stringify(req.cookies)}`)
@@ -35,6 +37,8 @@ app.use(classRouter);
 app.use(chatRouter);
 app.use(uploadRouter);
 app.use(publicRoute);
+app.use(scoreRouter);
+app.use(subjectRouter);
 (async () => {
   await DBConnection.Init();
   var server = app.listen(8081, function () {

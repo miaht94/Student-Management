@@ -6,15 +6,22 @@ import { authAtom } from '_state';
 export { Home };
 
 function Home() {
-    const auth = useRecoilValue(authAtom);
+
+    const userData = localStorage.getItem("userData");
 
     return (
         <div className="p-4">
             <div className="container">
-                <h1>Hi {auth}!</h1>
-                <p>You're logged in with React + Recoil & JWT!!</p>
-                <p><Link to="/users">Manage Users</Link></p>
+                <h1>Xin chào!</h1>
+                <p>{ClassNameDisplay()}</p>
             </div>
         </div>
     );
+}
+
+function ClassNameDisplay(){
+   if (localStorage.getItem('currentClass')) {
+            return "Lớp hiện tại: " + JSON.parse(localStorage.getItem('currentClass')).class_name;
+        }
+    return "Vui lòng chọn lớp để bắt đầu";  
 }

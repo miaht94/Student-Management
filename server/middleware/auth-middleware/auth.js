@@ -6,7 +6,6 @@ const hash = require('sha256')
 async function validateToken(req, res, next) {
     if (req.cookies.token) {
         let token = req.cookies.token;
-        console.log(token);
         try {
             var decoded = jwt.verify(token, Configs.SECRET_KEY);
             var instance = await global.DBConnection.LoginInfo.findOne({current_token : token}).populate("user_ref");
@@ -52,7 +51,8 @@ function validateLoginArgument(req, res, next) {
         next();
     } else {
         res.status(400);
-        res.json({"Status" : "Error", "message: " : "Username and password must be filled"});
+        
+        res.json(Configs.RES_FORM("Error", "Username and password must be filled"));
     }
 }
 
@@ -67,10 +67,11 @@ function login(req, res) {
             instance.current_token = newToken;
             instance.save();
             res.status(200);
-            res.json({"status": "Logged In Success", "message" : {"token": newToken}});
+            Configs.RES_FORM("Logged In Success", {"token": newToken})
+            res.json(Configs.RES_FORM("Logged In Success", {"token": newToken}));
         } else {
             res.status(400);
-            res.json({"status": "Login Error", "message" : "Invalid username or password"});
+            res.json(Configs.RES_FORM("Login Error", "Invalid username or password"));
         }
     })
 }

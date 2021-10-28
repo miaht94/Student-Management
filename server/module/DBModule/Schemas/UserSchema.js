@@ -10,7 +10,7 @@ const UserSchema = new Schema({
     role:{type: String, enum: {
         values: ['student', 'teacher'],
         message: 'Role {VALUE} is not supported'
-    }},
+    }, require: true},
     location: {type: String, default:"Ha Noi"},
     date_of_birth: {type: Date, default: new Date().getTime()},
     email: { type: String, set: toLower },

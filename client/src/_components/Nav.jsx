@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-
 import { authAtom } from '_state';
 import { useUserActions } from '_actions';
 import 'antd/dist/antd.css';
@@ -27,17 +26,26 @@ export { Nav };
 function Nav(props) {
     var classID = props.classID ? props.classID : "";
     const location = useLocation();
+
+	// const [pathname, setPathname] = useState(location.pathname);
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = (collapsed) => setCollapsed(collapsed);
+    const userActions = useUserActions();
 
     const auth = props.auth;
     const onLogout = props.onLogout;
     // only show nav when logged in
+
     useEffect(()=> {
+		console.log(location.pathname)
       console.log("NAV constructing ", classID);
     }, [])
+
+	
+
     if (!auth) return null;
-    
+    // const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id;
+
     return (
         <Sider 
         style={{
@@ -53,8 +61,9 @@ function Nav(props) {
             theme="dark"
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
+			selectedKeys={[location.pathname]}
           >
-            <Menu.Item key={`/`}>
+            <Menu.Item key="/">
               <HomeOutlined />
               <span>Trang chủ</span>
               <Link to="/"></Link>
@@ -93,7 +102,7 @@ function Nav(props) {
             </Menu.Item>
             <Menu.Item key="abc">
             </Menu.Item>
-            <Menu.Item onClick={onLogout}>
+            <Menu.Item key="logout" onClick={userActions.logout}>
               <LoginOutlined />
               <span>Đăng xuất</span>
             </Menu.Item>

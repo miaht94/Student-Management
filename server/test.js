@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Configs = require('./configs/Constants');
 const DBConnection = require('./module/DBModule/DBConnection');
+const csv=require('csvtojson/v2')
+const csvFilePath= __dirname + "/public/data/users.csv";
+const {register} = require('./middleware/auth-middleware/register');
 // var ObjectId = require('mongoose').Types.ObjectId; 
 // (async () =>{
     
@@ -34,24 +37,55 @@ const { ObjectId } = require('mongodb');
 // console.log(decoded);
 (async ()=> {
     await DBConnection.Init();
-    let msv = "abc"
-    let res = await global.DBConnection.Chat.aggregate([
-        {
-            $match: {
-                vnu_id : msv
+    // let msv = "abc"
+    // let res = await global.DBConnection.Chat.aggregate([
+    //     {
+    //         $match: {
+    //             vnu_id : msv
+    //         }
+    //     },
+    //     {
+    //         $lookup:
+    //             {
+    //                 from: global.DBConnection.User.collection.collectionName,
+    //                 localField: "from",
+    //                 foreignField: "_id",
+    //                 as: "fromInstance"
+    //             }
+    //     }
+    // ])
+    
+    const jsonArray = await csv().fromFile(csvFilePath);
+    try {
+        // let res = await global.DBConnection.Test.insertMany(jsonArray, { ordered: false })
+        class fakeRes {
+            statusCode = null;
+            responseJson = null;
+            json = (obj) => {
+                this.responseJson = obj;
+            };
+            status = (status) => {
+                this.statusCode = status;
             }
-        },
-        {
-            $lookup:
-                {
-                    from: global.DBConnection.User.collection.collectionName,
-                    localField: "from",
-                    foreignField: "_id",
-                    as: "fromInstance"
-                }
         }
-    ])
-    console.log(res);
+        class fakeReq {
+            body = null
+            constructor(body) {
+                this.body = body;
+            }
+        }
+        
+        for (var i of jsonArray) {
+            i.role = "teacher";
+            var req = new fakeReq(i);
+            var res = new fakeRes();
+            await register(req, res);
+            console.log(res.statusCode);
+        }
+    } catch (e) {
+        console.log("Err:", e)
+    }
+    console.log(jsonArray)
 })()
 
 // console.log(token);

@@ -12,14 +12,14 @@ function getProfileById(req, res) {
     global.DBConnection.User.findOne({"vnu_id": req.params.profileId}).lean().exec((err, instance) => {
         if (err) {
             res.status(400)
-            res.json({"Status" : "Internal Error", "message" : err.toString()})
+            res.json(Configs.RES_FORM("Internal Error", err.toString()))
         }
         if (instance) {
             res.status(200);
             res.json(instance)
         } else {
             res.status(404);
-            res.json({"Status": "NotFound", "message": "User not found"})
+            res.json(Configs.RES_FORM("NotFound", "User not found"))
 
         }
     })
@@ -54,17 +54,17 @@ async function editProfileById(req, res) {
     global.DBConnection.User.findOneAndUpdate({"vnu_id": req.params.profileId}, req.body, {new: true, runValidators: true,
         context: 'query'}).exec((err, instance) => {
         if (err) {
-            res.status(400)
-            res.json({"Status" : "Internal Error", "message" : err.toString()})
+            res.status(400);
+            res.json(Configs.RES_FORM("Internal Error", err.toString()))
             return;
         }
         if (instance) {
             res.status(200);
-            res.json({"Status": "Success","message": instance})
+            res.json(Configs.RES_FORM("Success", instance))
             return;
         } else {
             res.status(404);
-            res.json({"Status": "NotFound", "message": "User not found"})
+            res.json(Configs.RES_FORM("NotFound", "User not found"))
             return;
         }
     })

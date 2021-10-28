@@ -15,32 +15,31 @@ function useClassWrapper(param) {
         const response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
         if (response == null) {
             console.log("No response.");
-            return null;
         }
         response.json().then(rawjson => { 
-            console.log(rawjson);
             setClasses(rawjson);
           });
     }
 
     async function createClass(param){
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("class_name", param);
         console.log("Create class wrapper called");
-          const response = await fetchWrapper.post("http://localhost:3000/api/classes/create", "application/x-www-form-urlencoded", param);
+          const response = await fetchWrapper.post("http://localhost:3000/api/classes/create", "application/x-www-form-urlencoded", urlencoded);
           if (response == null) {
             console.log("No response");
           }
-          console.log(response);
           response.json().then(rawjson => { 
             console.log(rawjson);
             if (rawjson.status == "Success"){
-              console.log(rawjson);
+              getClassList();
             } else {
               alertActions.error("Không thể tạo lớp");
             }
           }); 
     }
     
-    async function chooseClass(cls) {
+    function chooseClass(cls) {
 		    setCurClass(cls);
         localStorage.setItem('currentClass', JSON.stringify(cls));
         console.log("Choosen class :", cls)

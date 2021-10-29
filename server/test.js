@@ -35,57 +35,82 @@ const { ObjectId } = require('mongodb');
 
 // var decoded = jwt.verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZm9vYmFyIiwiaWF0IjoxNjMzMjQ5ODkxLCJleHAiOjE2MzMyNDk5NTF9.dGjjQeFhm3Q8mH_SbiP87ajPRNmE8G6325PXP9tUjss", CONFIG.SECRET_KEY);
 // console.log(decoded);
-(async ()=> {
-    await DBConnection.Init();
-    // let msv = "abc"
-    // let res = await global.DBConnection.Chat.aggregate([
-    //     {
-    //         $match: {
-    //             vnu_id : msv
-    //         }
-    //     },
-    //     {
-    //         $lookup:
-    //             {
-    //                 from: global.DBConnection.User.collection.collectionName,
-    //                 localField: "from",
-    //                 foreignField: "_id",
-    //                 as: "fromInstance"
-    //             }
-    //     }
-    // ])
+// (async ()=> {
+//     await DBConnection.Init();
+//     // let msv = "abc"
+//     // let res = await global.DBConnection.Chat.aggregate([
+//     //     {
+//     //         $match: {
+//     //             vnu_id : msv
+//     //         }
+//     //     },
+//     //     {
+//     //         $lookup:
+//     //             {
+//     //                 from: global.DBConnection.User.collection.collectionName,
+//     //                 localField: "from",
+//     //                 foreignField: "_id",
+//     //                 as: "fromInstance"
+//     //             }
+//     //     }
+//     // ])
     
-    const jsonArray = await csv().fromFile(csvFilePath);
-    try {
-        // let res = await global.DBConnection.Test.insertMany(jsonArray, { ordered: false })
-        class fakeRes {
-            statusCode = null;
-            responseJson = null;
-            json = (obj) => {
-                this.responseJson = obj;
-            };
-            status = (status) => {
-                this.statusCode = status;
-            }
-        }
-        class fakeReq {
-            body = null
-            constructor(body) {
-                this.body = body;
-            }
-        }
+//     const jsonArray = await csv().fromFile(csvFilePath);
+//     try {
+//         // let res = await global.DBConnection.Test.insertMany(jsonArray, { ordered: false })
+//         class fakeRes {
+//             statusCode = null;
+//             responseJson = null;
+//             json = (obj) => {
+//                 this.responseJson = obj;
+//             };
+//             status = (status) => {
+//                 this.statusCode = status;
+//             }
+//         }
+//         class fakeReq {
+//             body = null
+//             constructor(body) {
+//                 this.body = body;
+//             }
+//         }
         
-        for (var i of jsonArray) {
-            i.role = "teacher";
-            var req = new fakeReq(i);
-            var res = new fakeRes();
-            await register(req, res);
-            console.log(res.statusCode);
-        }
-    } catch (e) {
-        console.log("Err:", e)
+//         for (var i of jsonArray) {
+//             i.role = "teacher";
+//             var req = new fakeReq(i);
+//             var res = new fakeRes();
+//             await register(req, res);
+//             console.log(res.statusCode);
+//         }
+//     } catch (e) {
+//         console.log("Err:", e)
+//     }
+//     console.log(jsonArray)
+// })()
+class req {
+    constructor() {
+
     }
-    console.log(jsonArray)
-})()
+    a;
+    b;
+}
+class res {
+    constructor() {
+
+    }
+    c;
+    d;
+}
+function a(req, res, next) {
+    req.a = 2;
+    next();
+}
+function b(req, res) {
+    res.c = req.a;
+}
+var nReq = new req();
+var nRes = new res();
+a(nReq, nRes, b.bind(null, nReq, nRes));
+console.log(nRes.c)
 
 // console.log(token);

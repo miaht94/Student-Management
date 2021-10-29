@@ -4,4 +4,10 @@ function updateInstance(instance, update) {
     }
     return instance;
 }
+
+async function checkVNUIdExist(vnu_id) {
+    var instance = await global.DBConnection.User.findOne({vnu_id : vnu_id})
+    if (instance) return true;
+    return false;
+}
 module.exports = updateInstance;

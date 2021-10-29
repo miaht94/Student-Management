@@ -7,7 +7,7 @@ export default function Compose(props) {
         <input
           type="text"
           className="compose-input"
-          placeholder="Type a message, @name"
+          placeholder="Nhập tin nhắn"
         />
         {
           props.rightItems

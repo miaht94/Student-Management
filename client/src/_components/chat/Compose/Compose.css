@@ -4,8 +4,8 @@
   align-items: center;
   background: white;
   border-top: 1px solid #eeeef1;
-  position: fixed;
-  width: calc(100%);
+  position: sticky;
+  width: 100%;
   bottom: 0px;
 }
 
@@ -30,10 +30,5 @@
 }
 
 .compose .toolbar-button {
-  color: #bbbbbf;
   margin-left: 15px;
-}
-
-.compose .toolbar-button:hover {
-  color: #99999c;
 }

@@ -29,7 +29,7 @@ import SubMenu from 'antd/lib/menu/SubMenu';
 import { useUserActions } from '_actions';
 const style = { };
 
-const { Header, Footer, Content } = Layout;
+const { Header, Sider, Footer, Content } = Layout;
 
 export { App };
 
@@ -82,10 +82,9 @@ function App() {
                 </Header>       
             </Layout>
             <Layout>
-                    <ClassPicker drawerVisible = {drawerVisible} setDrawerVisible = {setDrawerVisible} onDrawerClose={onDrawerClose}/>
+                <ClassPicker drawerVisible = {drawerVisible} setDrawerVisible = {setDrawerVisible} onDrawerClose={onDrawerClose}/>
                 <Nav onLogout = {userActions.logout} auth = {authWrapper.tokenValue} classID = {classWrapper.curClass ? classWrapper.curClass.class_id : ""}/>
-                <Layout>
-                    <Content style={{ margin: '20px 16px' }}>
+                <Content style={{ margin: '20px 16px', height: '80vh'}}>
                         <Switch>
                           <PrivateRoute exact path="/" component={Home} />
                           {/* <PrivateRoute exact path="/:classID" children={<Child classID="123"/>} component={Child}/>  */}
@@ -96,13 +95,12 @@ function App() {
                           
                           <Redirect from="*" to="/" />
                         </Switch>
-                    </Content>
-                    <Footer style={{ textAlign: 'center' }}>
+                </Content>
+                    {/* <Footer style={{ textAlign: 'center' }}>
                         Phần mềm quản lý CVHT & SV
                         <br/>
                         Thực hiện bởi @vakoyomi, @miaht94, @anhbomx13, @h2b, @tuna
-                    </Footer>
-               </Layout>
+                    </Footer> */}
              </Layout>
             </Router>
         </div>        

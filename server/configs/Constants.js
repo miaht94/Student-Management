@@ -30,6 +30,7 @@ const DB_CONFIGS = {
     HOST: "mongodb://localhost",
     PORT: "27017"
 }
+
 const DB_SCHEMA = {
     USER: "User",
     CLASS: "Class",

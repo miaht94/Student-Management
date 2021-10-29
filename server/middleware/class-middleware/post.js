@@ -52,8 +52,14 @@ async function fPostToFeed(req, res) {
         res.json(Configs.RES_FORM("Error", "Error when creating new post to class feed. Err: " + e.toString()));
         return;
     }
-    feedInstance.posts.push(post);
-    await feedInstance.save();
+    try {
+        feedInstance.posts.push(new ObjectId(post._id));
+        await feedInstance.save();
+    } catch (e) {
+        res.status(400);
+        res.json(Configs.RES_FORM("Error", "Error when push post to feed instance. Err : " + e.toString()))
+    }
+    
     res.status(200);
     res.json(Configs.RES_FORM("Success", post));
     
@@ -130,4 +136,35 @@ async function fGetCommentsInPost(req, res) {
     res.status(200);
     res.json(Configs.RES_FORM("Success", post.comments));
 }
-module.exports = {fGetCommentsInPost, getFeedInstanceFromClassInstance, getPostInstance, fPostToFeed, fCommentToPost};
+
+/** validateToken, findClassByClassId, validateClassMember, getFeedInstanceFromClassInstance, getPostInstance
+ *  req.params.classId, req.params.postId, req.postInstance, req.classInstance, req.senderInstance
+ */
+async function fGetPostById(req, res) {
+    await req.postInstance.populate("comments");
+    await req.postInstance.populate("from")
+    res.status(200);
+    res.json(Configs.RES_FORM("Success", req.postInstance))
+}
+
+/** validateToken, findClassByClassId, validateClassMember, getFeedInstanceFromClassInstance
+ * req.params.classId, 
+ * req.classInstance, req.senderInstance
+ */
+async function fGetAllPost(req, res) {
+    await req.feedInstance.populate({
+        path: "posts",
+        populate: {
+            path: "from"
+        }
+    })
+    await req.feedInstance.populate({
+        path: "posts",
+        populate: {
+            path: "comments"
+        }
+    });
+    res.status(200);
+    res.json(Configs.RES_FORM("Sucess", req.feedInstance.posts))
+}
+module.exports = {fGetAllPost, fGetPostById, fGetCommentsInPost, getFeedInstanceFromClassInstance, getPostInstance, fPostToFeed, fCommentToPost};

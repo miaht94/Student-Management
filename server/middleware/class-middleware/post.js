@@ -132,7 +132,12 @@ async function fCommentToPost(req, res) {
  */
 async function fGetCommentsInPost(req, res) {
     let post = req.postInstance;
-    await post.populate("comments");
+    await post.populate({
+        path: "comments",
+        populate : {
+            path: "from"
+        }
+    });
     res.status(200);
     res.json(Configs.RES_FORM("Success", post.comments));
 }
@@ -152,18 +157,23 @@ async function fGetPostById(req, res) {
  * req.classInstance, req.senderInstance
  */
 async function fGetAllPost(req, res) {
+    
+    // await req.feedInstance.populate({
+    //     path: "posts",
+    //     populate: {
+    //         path: "comments",
+    //         populate : {
+    //             path : "from"
+    //         }
+    //     }
+    // });
     await req.feedInstance.populate({
         path: "posts",
         populate: {
-            path: "from"
+            path: "from",
         }
     })
-    await req.feedInstance.populate({
-        path: "posts",
-        populate: {
-            path: "comments"
-        }
-    });
+    console.log(req.feedInstance.posts[0].from);
     res.status(200);
     res.json(Configs.RES_FORM("Sucess", req.feedInstance.posts))
 }

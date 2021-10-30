@@ -26,7 +26,7 @@ class ChatConnection {
         })
     }
     handleNewMessage = async (socket, msg) => {
-        console.log('New Chat Message: ' + msg);
+        console.log('New Chat Message: ' + msg.toString());
         let message, to, from;
         try {
             var toInstance = await global.DBConnection.User.findOne({vnu_id : msg.to});
@@ -74,7 +74,7 @@ class ChatConnection {
         }
 
         try {
-            var targetLoginInfo = await global.DBConnection.LoginInfo.findOne({vnu_id: toInstance.vnu_id})
+            var targetLoginInfo = await global.DBConnection.LoginInfo.findOne({user_ref: toInstance._id})
             var curTargetSocketID;
             if (!targetLoginInfo) {
                 console.log("Khong tim thay nguoi nhan");

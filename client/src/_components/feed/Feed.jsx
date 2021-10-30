@@ -1,18 +1,18 @@
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { authAtom } from '_state';
+import { studentsAtom } from '_state';
+
+import { StudentInfoList } from '_components/studentInfoList/StudentInfoList';
 
 export { Feed };
 
 function Feed() {
-    const auth = useRecoilValue(authAtom);
 
+    const [student, setstudent] = useRecoilState(studentsAtom);
     return (
         <div className="p-4">
-            <div className="container">
-                <h1>This is Feed</h1>
-            </div>
+            <StudentInfoList data={student}/>
         </div>
     );
 }

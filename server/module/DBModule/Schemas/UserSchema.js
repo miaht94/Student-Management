@@ -10,8 +10,9 @@ const UserSchema = new Schema({
     role:{type: String, enum: {
         values: ['student', 'teacher'],
         message: 'Role {VALUE} is not supported'
-    }},
-    date_of_birth: {type: Date},
+    }, require: true},
+    location: {type: String, default:"Ha Noi"},
+    date_of_birth: {type: Number, default: new Date().getTime()},
     email: { type: String, set: toLower },
     vnu_id: {type: String, index: { unique: true }, dropDups: true},
   });

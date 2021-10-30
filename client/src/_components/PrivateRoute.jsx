@@ -9,7 +9,6 @@ function PrivateRoute({ component: Component, ...rest }) {
     const authWrapper = useAuthWrapper();
     return (
         <Route {...rest} render={props => {
-        
             if (authWrapper.tokenValue) {
                 // if (JSON.parse(localStorage.getItem('userData')).role == 'teacher'){
                 //     console.log("Teacher session initialized.");
@@ -21,8 +20,9 @@ function PrivateRoute({ component: Component, ...rest }) {
                 // }
                 return <Component {...props} />
             } else
-
+            
             //not logged in
+          
             return <Redirect to={{ pathname: '/account/login', state: { from: props.location } }} />
         }} />
     );

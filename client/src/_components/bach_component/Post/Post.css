@@ -1,0 +1,132 @@
+/* post */
+.post {
+    margin-top: 15px;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
+    display: flex;
+    padding-top: 10px;
+}
+
+.postUsername {
+    padding: 0px;
+    margin: 0px;
+}
+.postDate {
+    padding: 0px;
+    margin: 0px;
+
+    font-size: small;
+    color: gray;
+}
+
+/* post Top */
+
+.postTop {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.postTopInfo {
+    align-content: center;
+    align-items: center;
+    display: flex;
+}
+
+/* post Bottom */
+.postBottom {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 15px 25px;
+}
+
+/* post Image */
+.postImage img {
+    width: 100%;
+}
+
+/* post Options */
+
+
+.postOptions {
+    padding-top: 10px;
+    border-top: 1px solid lightgray;
+    display: flex;
+    font-size: medium;
+    color: gray;
+    cursor: pointer;
+    padding: 15px;
+    justify-content: center;
+    border-bottom: 1px solid lightgray;
+}
+.postOptions + .postOptions{
+    border-left: 1px solid lightgray;
+}
+.postOption {
+    display: flex;
+    align-items: center;
+
+    justify-content: center;
+    margin-left: 10px;
+}
+.postOption p {
+    margin-left: 10px;
+}
+.postOption:hover {
+    background-color: #eff2f5;
+    border-radius: 5px;
+}
+
+.commentCtn {
+    padding-top: 8px;
+    margin-bottom: 5px;
+}
+.avatarComment {
+    display: flex;
+    justify-content: center;
+}
+
+.commentUsername {
+    padding: 0px;
+    margin: 0px;
+}
+.commentInfo {
+    border-radius: 10px;
+    background-color: rgb(240, 242, 245);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.commentContent {
+    padding-bottom: 2px;
+    margin-bottom: 0px;
+}
+
+.inputComment {
+    border-radius : 10px;
+    background-color: rgb(240, 242, 245);
+    padding-left: 10px;
+    height:auto;
+    overflow: hidden;
+    min-height: 30px;
+}
+
+.inputCommentCtn {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.avatarCommentInput {
+    display: flex;
+    justify-content: center;
+}
+
+[placeholder]:empty::before {
+    content: attr(placeholder);
+    color: #555; 
+}
+
+[placeholder]:empty:focus::before {
+    content: "";
+}

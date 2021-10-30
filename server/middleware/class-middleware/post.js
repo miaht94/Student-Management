@@ -44,6 +44,7 @@ async function fPostToFeed(req, res) {
         post = new global.DBConnection.Post({
             from: new ObjectId(sender._id),
             content : postContent,
+            created_date: req.body.created_date ? req.body.created_date : new Date().getTime(),
             comment : []
         });
         await post.save();

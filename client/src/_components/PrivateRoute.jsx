@@ -9,7 +9,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     const authWrapper = useAuthWrapper();
     return (
         <Route {...rest} render={props => {
-            debugger
+    
             if (authWrapper.tokenValue) {
                 // if (JSON.parse(localStorage.getItem('userData')).role == 'teacher'){
                 //     console.log("Teacher session initialized.");

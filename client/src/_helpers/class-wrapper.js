@@ -9,7 +9,7 @@ function useClassWrapper(param) {
     const fetchWrapper = useFetchWrapper();
     const alertActions = useAlertActions();
     const [classes, setClasses] = useRecoilState(classesAtom);
-    const [curClass, setCurClass] = useRecoilState(currentClassAtom);
+    const [curClass, setCurClass_] = useRecoilState(currentClassAtom);
     async function getClassList(){
         console.log("Get class list wrapper called.");
         const response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
@@ -39,6 +39,11 @@ function useClassWrapper(param) {
           }); 
     }
     
+    function setCurClass(cls) {
+      setCurClass_(cls);
+      localStorage.setItem("curClass", cls)
+    }
+
     function chooseClass(cls) {
 		    setCurClass(cls);
         localStorage.setItem('currentClass', JSON.stringify(cls));
@@ -48,7 +53,7 @@ function useClassWrapper(param) {
     async function chooseClassById(classId) {
       	let response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
       	response = await response.json();
-		  console.log(response)
+		    console.log(response)
 		  for (var myClass of response) {
     		if(classId == myClass.class_id) {
 			

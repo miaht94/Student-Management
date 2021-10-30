@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { authAtom } from '_state';
+import {useClassWrapper} from '../_helpers/class-wrapper'
 import { useUserActions } from '_actions';
 import 'antd/dist/antd.css';
 
@@ -31,7 +32,7 @@ function Nav(props) {
     const [collapsed, setCollapsed] = useState(false);
     const onCollapse = (collapsed) => setCollapsed(collapsed);
     const userActions = useUserActions();
-
+    const classWrapper = useClassWrapper();
     const auth = props.auth;
     const onLogout = props.onLogout;
     // only show nav when logged in
@@ -63,27 +64,34 @@ function Nav(props) {
             defaultSelectedKeys={[location.pathname]}
 			selectedKeys={[location.pathname]}
           >
-            <Menu.Item key="/">
+            {!classWrapper.curClass && 
+              <Menu.Item key="/">
               <HomeOutlined />
               <span>Trang chủ</span>
               <Link to="/"></Link>
             </Menu.Item>
-            {classID != false &&
+            }
+            {classWrapper.curClass &&
             <>
-        <Menu.Item key={`/${classID}/dashboard`}>
+        <Menu.Item key={`/${classWrapper.curClass.class_id}/dashboard`}>
           <DashboardOutlined />
           <span>Dashboard</span>
-          <Link to={`/${classID}/dashboard`}></Link>
+          <Link to={`/${classWrapper.curClass.class_id}/dashboard`}></Link>
         </Menu.Item>
-        <Menu.Item key={`/${classID}/studentinfo`}>
+        <Menu.Item key={`/${classWrapper.curClass.class_id}/studentinfo`}>
               <InfoCircleOutlined />
               <span>Thông tin SV</span>
-              <Link to={`/${classID}/studentinfo`}></Link>
+              <Link to={`/${classWrapper.curClass.class_id}/studentinfo`}></Link>
             </Menu.Item>
-            <Menu.Item key={`/${classID}/studentscore`}>
+            <Menu.Item key={`/${classWrapper.curClass.class_id}/feed`}>
+              <TableOutlined />
+              <span>Bảng tin</span>
+              <Link to={`/${classWrapper.curClass.class_id}/feed`}></Link>
+            </Menu.Item>
+            <Menu.Item key={`/${classWrapper.curClass.class_id}/studentscore`}>
               <TableOutlined />
               <span>Bảng điểm SV</span>
-              <Link to={`/${classID}/studentscore`}></Link>
+              <Link to={`/${classWrapper.curClass.class_id}/studentscore`}></Link>
             </Menu.Item>
         </>
       }

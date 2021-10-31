@@ -25,6 +25,7 @@ function StudentInfoTable(props){
         searchedColumn: '',
         visible : false,
         currentRow: {
+          _id: '',
           key: 1,
           name: 'Nguyễn văn A ' + 1,
           tags: (1 % 2) ? ['Bình thường'] : ['Cảnh cáo'],
@@ -254,7 +255,7 @@ function StudentInfoTable(props){
               onCancel= {handleCloseModal}
               footer={[]}
             >
-              <StudentProfile Id = {state.currentRow.vnu_id}/>
+              <StudentProfile Id = {state.currentRow._id}/>
         </Modal>
         </div>
     )

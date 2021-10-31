@@ -7,6 +7,7 @@ const studentsAtom = atom({
         name: 'students'
     },
     default:  [{
+        _id: '',
         key: 1,
         name: 'Nguyễn văn A ' + 1,
         tags: (1 % 2) ? ['Bình thường'] : ['Cảnh cáo'],

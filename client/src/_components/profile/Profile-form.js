@@ -4,7 +4,6 @@ import moment from 'moment';
 import {useEffect} from 'react';
 import { pickBy, identity } from 'lodash';
 import {useRecoilValue} from 'recoil';
-import { profileAtom } from '_state';
 
 import { useProfileAction } from '_actions';
 
@@ -28,27 +27,30 @@ const avatarStyle = {
 
 const dateFormat = 'DD/MM/YYYY';
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
 
 function ProfileForm(props) {
     const profileAction = useProfileAction(); 
-    const profile = useRecoilValue(profileAtom);
     const [form] = Form.useForm();
     let data = props.data;
+    let isTable = props.isTable;
+    console.log(data);
 
     useEffect (() => {
-        if (profile !== undefined){
-            data = profile;
+        if (data !== undefined){
+            // data = profile;
             form.resetFields();
         }
-    },[profile])
+    },[data])
+
+    // useEffect (() => {
+    //     form.resetFields();
+    // },[data])
 
     function formatDate(timestamp) {
         let formatedDateOfBirth = moment(timestamp, 'X').format("DD/MM/YYYY") ;
-        debugger;  
         return formatedDateOfBirth
     }
-
 
     const cancelEdit = () => {
         form.resetFields();
@@ -64,7 +66,7 @@ function ProfileForm(props) {
                 changedFields.date_of_birth = timestamp;
           }
           console.log(changedFields);
-          profileAction.handleSubmit(changedFields,data.vnu_id);
+          profileAction.handleSubmit(changedFields, data.vnu_id, isTable);
         });
     }
 
@@ -102,7 +104,7 @@ function ProfileForm(props) {
                         </Button>
 
                         <Button onClick = {cancelEdit} style = {{position : 'relative', left : '40px'}}>
-                            Cancel
+                            Reset
                         </Button>
                     </Form.Item>
                 </Form>

@@ -9,6 +9,6 @@ export { Profile };
 function Profile() {
     const [profile,setProfile] = useRecoilState(profileAtom);
     return (
-        <ProfileForm data = {profile}/>
+        <ProfileForm data = {profile} isTable = {false}/>
     );
 }

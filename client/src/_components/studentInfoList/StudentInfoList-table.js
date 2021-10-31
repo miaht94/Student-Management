@@ -1,28 +1,25 @@
 import React ,{useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import { Table, Button, Space ,Tag, Modal, Form, Input, Avatar} from 'antd';
+import { Table, Button, Space ,Tag, Modal, Input, Avatar} from 'antd';
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined,EditTwoTone,DeleteFilled, UserOutlined} from '@ant-design/icons';
+import { SearchOutlined,EditTwoTone,DeleteFilled} from '@ant-design/icons';
+import moment from 'moment';
 
+import {StudentProfile} from '_components/studentInfoList';
+import { useAlertActions , useStudentInfoAction} from '_actions';
 
 
 export { StudentInfoTable };
-
-// const data = [];
-// for (let i = 0; i< 100; i++) {
-//     data.push({
-//         key: i,
-//         name: 'Nguyễn văn A ' + i,
-//         tags: (i % 2) ? ['Bình thường'] : ['Cảnh cáo'],
-//         date_of_birth: i%30 + 1 + '/1/2001',
-//         email: i + 19021000 + '@vnu.edu.vn',
-//         vnu_id: 19020000 + i,
-//       });
-// }
-
 function StudentInfoTable(props){
-    var data = props.data;
-    console.log(data);
+    var data =  JSON.parse(JSON.stringify(props.data));
+    data.forEach( object => { Object.entries(object).map(([key, val]) => {
+      if (key == 'date_of_birth') {
+          object.date_of_birth = moment(val, 'X').format("DD/MM/YYYY");
+      }
+    })});
+
+    const studentInfoAction = useStudentInfoAction();
+
     const [state, setState] = useState({
         searchText: '',
         searchedColumn: '',
@@ -37,7 +34,9 @@ function StudentInfoTable(props){
         },
       });
 
-    const [form] = Form.useForm();
+    useEffect(() =>{
+       
+     },[state.currentRow,data])
     
     let handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -60,24 +59,11 @@ function StudentInfoTable(props){
           visible : true});
     }
 
-    useEffect(() =>{
-      resetDefaultInfo(); 
-     },[state.currentRow])
-
-
-    let resetDefaultInfo = () => {
-      console.log(state.currentRow)
-      if(form != null) {
-        form.setFieldsValue({
-            name: state.currentRow.name,
-            vnu_id: state.currentRow.vnu_id,
-            email: state.currentRow.email,
-            date_of_birth: state.currentRow.date_of_birth,
-        })
-      }
-    }
-
-    let handleDelete = () => {
+    let handleDelete = (record) => {
+        setState({
+          ...state,
+          currentRow : record,});
+        studentInfoAction.deleteStudent(record.vnu_id);
         alert('Delete');
     }
 
@@ -160,6 +146,8 @@ function StudentInfoTable(props){
             text
           ),
       });
+
+      
         const columns = [
         {
             title: 'Name',
@@ -243,7 +231,7 @@ function StudentInfoTable(props){
                 danger
                 type="primary"
                 title="Delete"
-                onClick={() => handleDelete()}
+                onClick={() => handleDelete(record)}
                 icon={<DeleteFilled />}
                 size="small"
                 style={{ width: 50 }}
@@ -263,47 +251,10 @@ function StudentInfoTable(props){
             <Modal
               title="Detailed personal information"
               visible={state.visible}
-              onOk={handleSubmitModal}
-              onCancel={handleCloseModal}
-              footer={[
-                <Button key="submit" type="primary" onClick={handleSubmitModal}>
-                  Submit
-                </Button>,
-                <Button key="back" onClick={handleCloseModal}>
-                  Return
-                </Button>,
-                ]}
+              onCancel= {handleCloseModal}
+              footer={[]}
             >
-              <Form
-                labelCol={{ span: 6 }}
-                wrapperCol={{ span: 14 }}
-                layout="horizontal"
-                form={form}
-              >
-                <Avatar
-                    style={{
-                      backgroundColor: '#87d068',
-                      position: 'relative',
-                      top: '32%',
-                      left: '50%',
-                      transform: "translate(-50%, -50%)",
-                    }}
-                    icon={<UserOutlined />}
-                  />
-                  <br/>
-                  <Form.Item label="Name" name = "name">
-                    <Input defaultValue = {state.currentRow.name} />
-                  </Form.Item>
-                  <Form.Item label="Vnu_id" name = "vnu_id">
-                    <Input defaultValue = {state.currentRow.vnu_id} />
-                  </Form.Item>
-                  <Form.Item label="Date of Birth " name = "date_of_birth">
-                    <Input defaultValue = {state.currentRow.date_of_birth} />
-                  </Form.Item>
-                  <Form.Item label="Email" name = "email">
-                    <Input defaultValue = {state.currentRow.email} />
-                  </Form.Item>
-              </Form>
+              <StudentProfile Id = {state.currentRow.vnu_id}/>
         </Modal>
         </div>
     )

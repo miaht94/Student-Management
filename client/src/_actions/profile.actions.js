@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import {useFetchWrapper} from '_helpers';
-import { profileAtom , currentClassAtom} from '_state';
+import { profileAtom , currentClassAtom, alertBachAtom} from '_state';
 import { useAlertActions , useStudentInfoAction} from '_actions';
 
 
@@ -15,7 +15,8 @@ function useProfileAction() {
     const currentClass = useRecoilValue(currentClassAtom);
     const alertActions = useAlertActions();
     const studentInfoAction = useStudentInfoAction();
-    
+    const [alert, setAlert] = useRecoilState(alertBachAtom);
+
     async function getProfileById(Id) {
         console.log("get profile by id");
         const response = await fetchWrapper.get(`http://localhost:3000/api/profile/${Id}`, null, null);
@@ -67,8 +68,9 @@ function useProfileAction() {
             if(isTable) {
               studentInfoAction.getStudentList(currentClass);
             }
+            setAlert({message: "Thành công", description: "Cập nhật thông tin thành công"});
           } else {
-            alertActions.error("Không thể cập nhật thông tin");
+            setAlert({message: "Lỗi", description: "Không thể cập nhật thông tin"});
           }
         }); 
     }

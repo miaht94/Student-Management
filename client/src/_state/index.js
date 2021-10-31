@@ -6,4 +6,5 @@ export * from './students';
 export * from './classes';
 export * from './current_class';
 export * from './profile';
-export * from './app'
+export * from './app';
+export * from './alert_bach';

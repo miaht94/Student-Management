@@ -3,9 +3,12 @@ import { UserOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import {useEffect} from 'react';
 import { pickBy, identity } from 'lodash';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState} from 'recoil';
+
 
 import { useProfileAction } from '_actions';
+import { alertBachAtom } from '_state';
+
 
 export{ ProfileForm}
 
@@ -29,9 +32,12 @@ const dateFormat = 'DD/MM/YYYY';
 
 const { Header, Content } = Layout;
 
+
 function ProfileForm(props) {
     const profileAction = useProfileAction(); 
     const [form] = Form.useForm();
+    const [alert, setAlert] = useRecoilState(alertBachAtom);
+
     let data = props.data;
     let isTable = props.isTable;
     console.log(data);
@@ -53,6 +59,7 @@ function ProfileForm(props) {
     }
 
     const cancelEdit = () => {
+        setAlert({message: "Thành công", description: "Đã cập nhật lại các thông tin !"});
         form.resetFields();
     }     
 
@@ -67,7 +74,9 @@ function ProfileForm(props) {
           }
           console.log(changedFields);
           profileAction.handleSubmit(changedFields, data.vnu_id, isTable);
-        });
+        }).catch((e) => {
+            setAlert({message: "Lỗi", description: e});
+          });
     }
 
     return (

@@ -65,7 +65,6 @@ function StudentInfoTable(props){
           ...state,
           currentRow : record,});
         studentInfoAction.deleteStudent(record.vnu_id);
-        alert('Delete');
     }
 
     let handleCloseModal = () => {

@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
-import { useAlertActions } from '_actions';
+import { useAlertActions, useStudentInfoAction } from '_actions';
 import { classesAtom } from '_state';
 import {currentClassAtom} from '_state'
 export { useClassWrapper };
@@ -8,6 +8,7 @@ export { useClassWrapper };
 function useClassWrapper(param) {
     const fetchWrapper = useFetchWrapper();
     const alertActions = useAlertActions();
+    const studentInfoAction = useStudentInfoAction();
     const [classes, setClasses] = useRecoilState(classesAtom);
     const [curClass, setCurClass_] = useRecoilState(currentClassAtom);
     async function getClassList(){
@@ -48,6 +49,9 @@ function useClassWrapper(param) {
 		    setCurClass(cls);
         localStorage.setItem('currentClass', JSON.stringify(cls));
         console.log("Choosen class :", cls)
+        if (cls !== undefined) {
+          studentInfoAction.getStudentList(cls);
+        } 
     }
 
     async function chooseClassById(classId) {

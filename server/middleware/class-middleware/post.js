@@ -60,6 +60,11 @@ async function fPostToFeed(req, res) {
         res.status(400);
         res.json(Configs.RES_FORM("Error", "Error when push post to feed instance. Err : " + e.toString()))
     }
+    try {
+        global.IOConnection.notifyNewPost(post, req.classInstance.class_id);
+    } catch (e) {
+        console.log("Socket.io emit NewPost event fail")
+    }
     
     res.status(200);
     res.json(Configs.RES_FORM("Success", post));

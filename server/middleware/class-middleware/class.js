@@ -163,7 +163,7 @@ async function fGetCurClasses(req, res) {
 
     } else if (sender.role == "student") {
         var classes = await global.DBConnection.Class.find({
-            class_members: sender.id_
+            class_members: sender._id
         })
         if (classes.length == 1) classes = classes[0];
         res.status(200);

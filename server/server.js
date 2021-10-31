@@ -22,7 +22,7 @@ const chatRouter = require('./routers/chat');
 const uploadRouter = require('./routers/upload');
 const publicRoute = require('./routers/public')
 const DBConnection = require('./module/DBModule/DBConnection');
-const ChatConnection = require('./module/ChatModule/ChatConnection');
+const IOConnection = require('./module/IOModule/IOConnection');
 const subjectRouter = require('./routers/subject');
 const scoreRouter = require('./routers/score');
 app.use((req, res, next) => {
@@ -46,5 +46,5 @@ app.use(subjectRouter);
   var port = server.address().port
   console.log("Ung dung Node.js dang lang nghe tai dia chi: http://%s:%s", host, port)
   });
-  var chatConnection = new ChatConnection(server);
+  var chatConnection = new IOConnection(server);
 })()

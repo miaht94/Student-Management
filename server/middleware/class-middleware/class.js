@@ -76,7 +76,7 @@ async function validateClassTeacher(req, res, next) {
 /** Tiên quyết: đã authentoken, có senderInstance, có classInstance */
 function validateClassMember(req, res, next) {
     var classInstance = req.classInstance;
-    if (classInstance.class_members.includes(req.senderVNUId) || classInstance.class_teacher.equals(req.senderInstance._id)) {
+    if (classInstance.class_members.includes(req.senderInstance._id) || classInstance.class_teacher.equals(req.senderInstance._id)) {
         next();
     } else {
         res.status(400);
@@ -163,7 +163,7 @@ async function fGetCurClasses(req, res) {
 
     } else if (sender.role == "student") {
         var classes = await global.DBConnection.Class.find({
-            class_members: sender.id_
+            class_members: sender._id
         })
         if (classes.length == 1) classes = classes[0];
         res.status(200);

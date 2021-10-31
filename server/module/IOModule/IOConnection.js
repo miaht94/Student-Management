@@ -47,7 +47,7 @@ const handleNewConnection = async (socket)=> {
 
     } else if (sender.role == "student") {
         var classes = await global.DBConnection.Class.find({
-            class_members: sender.id_
+            class_members: sender._id
         })
         for (var i of classes) {
             socket.join(i.class_id);

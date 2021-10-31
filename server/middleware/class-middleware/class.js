@@ -197,8 +197,8 @@ async function fDeleteMemberInClass(req, res) {
         
     }
     let newMembers = [];
-    for (var i of curMembers) {
-        if (!deletedIndex[i]) newMembers.push(new ObjectId(i._id));
+    for (var i in curMembers) {
+        if (!deletedIndex[i]) newMembers.push(new ObjectId(curMembers[i]._id));
     }
     req.classInstance.class_members = newMembers;
     await req.classInstance.save();

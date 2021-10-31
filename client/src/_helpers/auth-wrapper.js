@@ -2,7 +2,7 @@ import { authAtom, userAtom } from '_state';
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
 import { history } from '_helpers';
-import { useAlertActions } from '_actions';
+import { useAlertActions ,useProfileAction} from '_actions';
 
 import { useState, useEffect } from "react";
 
@@ -14,7 +14,7 @@ function useAuthWrapper(param) {
       // const [user, setUser] = useRecoilState(userAtom);
       const fetchWrapper = useFetchWrapper();
       const alertActions = useAlertActions();
-
+      const profileAction = useProfileAction();
       useEffect(() =>{
         return () => {
           
@@ -79,6 +79,7 @@ function useAuthWrapper(param) {
               vnu_id: rawjson.vnu_id
             }
             localStorage.setItem('userData', JSON.stringify(userProfile));
+            profileAction.getMyProfile();
           }); 
         }
   

@@ -13,6 +13,7 @@ function fHandleUploadFile (req, res) {
 function handleUploadFile(req, res, next) {
     let sampleFile;
     let uploadPath;
+    console.log("Rn")
     
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send('No files were uploaded.');
@@ -27,7 +28,9 @@ function handleUploadFile(req, res, next) {
         fileName = uuidv4() + ext;
     }
     else fileName = uuidv4();
-    uploadPath = path.resolve(__dirname, "..", "..", "public", "data")
+    
+    uploadPath = path.resolve(__dirname, "..", "..", "public", "data"); 
+    console.log(uploadPath)
     uploadPath = uploadPath + "/" + fileName;
     console.log(uploadPath);
     // Use the mv() method to place the file somewhere on your server

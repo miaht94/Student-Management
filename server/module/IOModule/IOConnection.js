@@ -1,4 +1,4 @@
-const { Server } = require("socket.io");
+const io = require("socket.io");
 const { v4: uuidv4 } = require('uuid');
 const Configs = require('../../configs/Constants');
 const mongoose = require('mongoose');
@@ -11,11 +11,16 @@ class IOConnection {
     constructor(server) {
         this.handleChatMessage = handleChatMessage;
         this.notifyNewPost = notifyNewPost.bind(this);
-        this.io = new Server(server);
+        this.io = io(server, {
+            cors: {
+                origin: "http://localhost:3000",
+                methods: ["GET", "POST"]
+              }
+        });
         this.io.use(checkTokenValid);
         this.io.use(checkLoginInfo);
         this.io.on("connection", async (socket) => {
-            handleNewConnection(socket);
+            await handleNewConnection(socket);
             socket.loginInfo.populate("user_ref")
             console.log(`New connection, ID[${socket.id}]`);
             socket.on('NewMessage', this.handleChatMessage.bind(this, socket));

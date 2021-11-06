@@ -1,15 +1,17 @@
 import { useRecoilState } from 'recoil';
+import NewPost from '_components/bach_component/Post/NewPost';
 import { useFetchWrapper } from '_helpers';
-import { feedPageAtom } from '_state/feed_page';
+import { feedPageAtom, isInitiatedSocketFeed } from '_state/feed_page';
 import {useClassWrapper} from './class-wrapper';
-
 import * as Configs from './Constant'
-
-export { useFeedPageWrapper };
+import { socketWrapper } from './socket-wrapper';
+import { getRecoil, setRecoil } from "recoil-nexus";
 function useFeedPageWrapper() {
     let classWrapper = useClassWrapper();
-    let [feedPageState, setFeedPageState] = useRecoilState(feedPageAtom);
     let fetcher = useFetchWrapper();
+    let [feedPageState, setFeedPageState] = useRecoilState(feedPageAtom)
+    
+    
     async function getAllPosts() {
       
         console.log(Configs.HOST_NAME + Configs.API_PATH.GET_ALL_POSTS.replace(":classId", classWrapper.curClass.class_id));
@@ -24,7 +26,9 @@ function useFeedPageWrapper() {
     }
     return {
         feedPageState : feedPageState,
-        getAllPosts: getAllPosts
+        getAllPosts: getAllPosts,
+        setFeedPageState: setFeedPageState
 
     }
 }
+export { useFeedPageWrapper };

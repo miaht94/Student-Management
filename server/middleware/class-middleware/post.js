@@ -61,6 +61,7 @@ async function fPostToFeed(req, res) {
         res.json(Configs.RES_FORM("Error", "Error when push post to feed instance. Err : " + e.toString()))
     }
     try {
+        await post.populate('from');
         global.IOConnection.notifyNewPost(post, req.classInstance.class_id);
     } catch (e) {
         console.log("Socket.io emit NewPost event fail")
@@ -179,7 +180,6 @@ async function fGetAllPost(req, res) {
             path: "from",
         }
     })
-    console.log(req.feedInstance.posts[0].from);
     res.status(200);
     res.json(Configs.RES_FORM("Sucess", req.feedInstance.posts))
 }

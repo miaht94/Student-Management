@@ -21,7 +21,7 @@ function useFeedActions() {
         if (response.status == "Success") {
             setNotification(response.status, response.message);
         }
-        await feeder.getAllPosts();
+        
         callback();
     }
     return {

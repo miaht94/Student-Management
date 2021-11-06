@@ -5,7 +5,6 @@ import { history } from '_helpers';
 import { useAlertActions } from '_actions';
 
 import { useState, useEffect } from "react";
-
 export { useAuthWrapper };
 
 function useAuthWrapper(param) {
@@ -14,12 +13,6 @@ function useAuthWrapper(param) {
       // const [user, setUser] = useRecoilState(userAtom);
       const fetchWrapper = useFetchWrapper();
       const alertActions = useAlertActions();
-
-      useEffect(() =>{
-        return () => {
-          
-        }
-      }, []);
 
       async function login(param){
           console.log("Login in wrapper called");

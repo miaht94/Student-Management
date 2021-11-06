@@ -30,8 +30,10 @@ function Feed() {
             console.log("fetch done")
             setloaded(true)
         })
-        
+        debugger
+        // socketWrapper.socket.on("NewPost", onNewPost)
     }, [])
+
     var renderPosts = [];
     // useEffect(() => {},[feedPageWrapper])
     let temp = [...feedPageWrapper.feedPageState.posts]

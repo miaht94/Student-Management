@@ -55,7 +55,7 @@ const DB_SCHEMA = {
 }
 
 const RES_FORM =(status, message) => {
-    console.log("New Response", {Status : status, Message: message})
+    // console.log("New Response", {Status : status, Message: message})
     return {
         status : status ? status : null,
         message: message? message: null,

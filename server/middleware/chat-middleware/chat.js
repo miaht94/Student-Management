@@ -7,7 +7,7 @@ const Configs = require('./../../configs/Constants')
 async function fGetRecentChat(req, res) {
     let chatRoom = await global.DBConnection.Chat.find({membersID : {$all: [req.senderInstance._id] }}).populate('messages');
     res.status(200);
-    res.send(Configs.RES_FORM("Success",JSON.stringify(chatRoom)));
+    res.send(Configs.RES_FORM("Success",chatRoom));
 }
 
 /**Trả về cuộc hội thoại với 1 người nào đó 
@@ -42,4 +42,19 @@ async function fGetMessageByVNUId(req, res) {
         res.json(Configs.RES_FORM("Error"), "Không tìm thấy đối tượng cần xem tin nhắn");
     }
 }
-module.exports = {fGetRecentChat,fGetMessageByVNUId}
+/** Trả về các liên hệ gần đây và info của họ.
+ * Tiên quyết : validateToken (req.senderInstance, req.senderVNUId)
+*/
+async function fGetRecentContact(req, res) {
+    let chatRoom = await global.DBConnection.Chat.find({membersID : {$size: 2, $all: [req.senderInstance._id] }}).populate('membersID');;
+    let contacts = [];
+    for (var i of chatRoom) {
+        if (i.membersID[0]._id.toHexString() == req.senderInstance._id.toHexString())
+            contacts.push(i.membersID[1]);
+        else 
+            contacts.push(i.membersID[0]);
+    }
+    res.status(200);
+    res.send(Configs.RES_FORM("Success",contacts));
+}
+module.exports = {fGetRecentContact, fGetRecentChat,fGetMessageByVNUId}

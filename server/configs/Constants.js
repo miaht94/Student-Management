@@ -15,6 +15,7 @@ const API_PATH = {
     COMMENT_TO_POST: "/api/classes/:classId/feed/:postId/comments/add",
     GET_COMMENT_POST: "/api/classes/:classId/feed/:postId/comments/get",
     RECENT_CHAT: "/api/chat/recent",
+    RECENT_CONTACT: "/api/chat/recentcontact",
     MESSAGES_BY_VNU_ID: "/api/chat/:otherVNUId",
     ADD_SUBJECT: "/api/subjects/add",
     UPLOAD_DSSV : "/api/upload/dssv",

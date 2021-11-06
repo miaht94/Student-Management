@@ -51,8 +51,10 @@ function Nav(props) {
         <Sider 
         style={{
           overflow: 'auto',
-          height: '100vh',
+          height: '90vh',
           left: 0,
+          top: 64,
+          position: "sticky"
         }}
         collapsible collapsed={collapsed} 
         onCollapse={onCollapse}

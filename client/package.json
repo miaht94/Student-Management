@@ -20,6 +20,7 @@
         "react-scripts": "4.0.3",
         "recoil": "^0.4.1",
         "recoil-nexus": "^0.3.6",
+        "shave": "^2.5.10",
         "socket.io-client": "^4.3.2",
         "yup": "^0.32.9"
     },

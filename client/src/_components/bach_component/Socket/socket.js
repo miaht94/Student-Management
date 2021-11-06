@@ -11,13 +11,14 @@ export default function Socket(props) {
     let [auth, setAuth] = useRecoilState(authAtom)
     let feedPageWrapper = useFeedPageWrapper();
     var onNewPost = ((newPost) => {
+ 
         var feedPageState = getRecoil(feedPageAtom);
         let posts = [...feedPageState.posts];
             posts.push(newPost);
             setRecoil(feedPageAtom, {...feedPageWrapper.feedPageState, posts:posts})
     })
     useEffect(() => {
-        debugger
+
         socketWrapper.initConnection(auth);
         console.log("Socket khoi tao");
         socketWrapper.socket.on("NewPost", onNewPost)

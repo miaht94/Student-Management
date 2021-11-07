@@ -25,13 +25,14 @@ function Feed() {
         async function fetchMyAPI() {
             await feedPageWrapper.getAllPosts();
             console.log(feedPageWrapper.feedPageState)
-          }
+        }
         fetchMyAPI().then(() => {
             console.log("fetch done")
             setloaded(true)
         })
-        
+        // socketWrapper.socket.on("NewPost", onNewPost)
     }, [])
+
     var renderPosts = [];
     // useEffect(() => {},[feedPageWrapper])
     let temp = [...feedPageWrapper.feedPageState.posts]

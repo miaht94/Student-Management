@@ -13,7 +13,6 @@ app.use(fileUpload({
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(cookieParser());
-
 const authRouter = require('./routers/auth');
 const userRouter = require('./routers/user');
 const registerRouter = require('./routers/register');
@@ -25,6 +24,8 @@ const DBConnection = require('./module/DBModule/DBConnection');
 const IOConnection = require('./module/IOModule/IOConnection');
 const subjectRouter = require('./routers/subject');
 const scoreRouter = require('./routers/score');
+var serverWS = require('http').createServer(app);
+
 app.use((req, res, next) => {
   var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   console.log(`New request \n\tTYPE: ${req.method} \n\t URL: ${fullUrl} \n\tParam: ${JSON.stringify(req.params)} \n\tBody: ${JSON.stringify(req.body)} \n\tCookies: ${JSON.stringify(req.cookies)}`)
@@ -46,5 +47,6 @@ app.use(subjectRouter);
   var port = server.address().port
   console.log("Ung dung Node.js dang lang nghe tai dia chi: http://%s:%s", host, port)
   });
-  var chatConnection = new IOConnection(server);
+  serverWS.listen(5000);
+  var chatConnection = new IOConnection(serverWS);
 })()

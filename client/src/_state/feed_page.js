@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-export { feedPageAtom };
+export { feedPageAtom, isInitiatedSocketFeed };
 
 const feedPageAtom = atom({
     key: {
@@ -8,6 +8,10 @@ const feedPageAtom = atom({
     },
     default: {posts: []}
 });
+
+class isInitiatedSocketFeed {
+    static value = false;
+}
 
 
 

@@ -28,6 +28,8 @@ import Title from 'antd/lib/typography/Title';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import { useUserActions } from '_actions';
 import {Notification} from './_components/bach_component/Notification/Notification'
+import { socketWrapper } from '_helpers/socket-wrapper';
+import Socket from '_components/bach_component/Socket/socket';
 const style = { };
 
 const { Header, Footer, Content } = Layout;
@@ -48,14 +50,13 @@ function App() {
         setDrawerVisible(false);
     };
 
-
     return (
         <div className={'app-container' + (authWrapper.tokenValue ? ' bg-light' : '')}>
             {/* <div>{JSON.stringify(authWrapper.tokenValue)}</div> */}
             <Router history={history}>
-            
+            <Socket></Socket>
             <Layout>
-                <Header>
+                <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
                     <Row gutter={0}>
                         <Col className="gutter-row" span={18}>
                             <div style={style}>
@@ -80,14 +81,14 @@ function App() {
                             </div>
                             </Col>
                             }
-                    </Row>         
-                </Header>       
-            </Layout>
-            <Layout>
-                    <ClassPicker drawerVisible = {drawerVisible} setDrawerVisible = {setDrawerVisible} onDrawerClose={onDrawerClose}/>
-                <Nav onLogout = {userActions.logout} auth = {authWrapper.tokenValue} classID = {classWrapper.curClass ? classWrapper.curClass.class_id : ""}/>
+                    </Row>
+                </Header> 
                 <Layout>
-                    <Content style={{ margin: '20px 16px' }}>
+                    <Nav onLogout = {userActions.logout} auth = {authWrapper.tokenValue} classID = {classWrapper.curClass ? classWrapper.curClass.class_id : ""}/>
+                     
+                <Layout>
+
+                    <Content style={{ margin: '20px 16px' } }>
                         <Switch>
                           <PrivateRoute exact path="/" component={Home} />
                           {/* <PrivateRoute exact path="/:classID" children={<Child classID="123"/>} component={Child}/>  */}
@@ -98,13 +99,12 @@ function App() {
                           <Redirect from="*" to="/" />
                         </Switch>
                     </Content>
-                    <Footer style={{ textAlign: 'center' }}>
-                        Phần mềm quản lý CVHT & SV
-                        <br/>
-                        Thực hiện bởi @vakoyomi, @miaht94, @anhbomx13, @h2b, @tuna
-                    </Footer>
-               </Layout>
+    
              </Layout>
+             </Layout> 
+            </Layout>
+            
+            <ClassPicker drawerVisible = {drawerVisible} setDrawerVisible = {setDrawerVisible} onDrawerClose={onDrawerClose}/>
             <Notification></Notification>
             </Router>
         </div>        

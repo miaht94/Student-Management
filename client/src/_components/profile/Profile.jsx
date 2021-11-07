@@ -1,14 +1,18 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
-import { useProfileAction } from '_actions';
-import { profileAtom } from '_state';
-import {ProfileForm} from '_components/profile'
+import { authAtom } from '_state';
 
 export { Profile };
 
 function Profile() {
-    const [profile,setProfile] = useRecoilState(profileAtom);
+    const auth = useRecoilValue(authAtom);
+
     return (
-        <ProfileForm data = {profile} isTable = {false}/>
+        <div className="p-4">
+            <div className="container">
+                <h1>This is Profile</h1>
+            </div>
+        </div>
     );
 }

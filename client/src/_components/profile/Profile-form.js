@@ -1,12 +1,14 @@
 import { Layout , Form, Avatar, Input, DatePicker, Button} from 'antd';
-import { UserOutlined} from '@ant-design/icons';
+import { ConsoleSqlOutlined, UserOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import {useEffect} from 'react';
 import { pickBy, identity } from 'lodash';
-import {useRecoilValue} from 'recoil';
-import { profileAtom } from '_state';
+import {useRecoilState} from 'recoil';
+
 
 import { useProfileAction } from '_actions';
+import { alertBachAtom } from '_state';
+
 
 export{ ProfileForm}
 
@@ -28,29 +30,44 @@ const avatarStyle = {
 
 const dateFormat = 'DD/MM/YYYY';
 
-const { Header, Footer, Content } = Layout;
+const { Header, Content } = Layout;
+
 
 function ProfileForm(props) {
     const profileAction = useProfileAction(); 
-    const profile = useRecoilValue(profileAtom);
     const [form] = Form.useForm();
+    const [alert, setAlert] = useRecoilState(alertBachAtom);
+
     let data = props.data;
+    let isTable = props.isTable;
+    console.log(data);
+
+    if (data == null) {
+        profileAction.getMyProfile().then( newData =>{
+                console.log('set new data here!!!!!');
+                data = newData;
+            }
+        )
+    }
 
     useEffect (() => {
-        if (profile !== undefined){
-            data = profile;
+        if (data !== undefined){
+            // data = profile;
             form.resetFields();
         }
-    },[profile])
+    },[data])
+
+    // useEffect (() => {
+    //     form.resetFields();
+    // },[data])
 
     function formatDate(timestamp) {
         let formatedDateOfBirth = moment(timestamp, 'X').format("DD/MM/YYYY") ;
-        debugger;  
         return formatedDateOfBirth
     }
 
-
     const cancelEdit = () => {
+        setAlert({message: "Thành công", description: "Đã cập nhật lại các thông tin !"});
         form.resetFields();
     }     
 
@@ -64,11 +81,15 @@ function ProfileForm(props) {
                 changedFields.date_of_birth = timestamp;
           }
           console.log(changedFields);
-          profileAction.handleSubmit(changedFields,data.vnu_id);
-        });
+          profileAction.handleSubmit(changedFields, data.vnu_id, isTable);
+        }).catch((e) => {
+            setAlert({message: "Lỗi", description: e});
+          });
     }
 
     return (
+        (data)?
+       
         <Layout>
             <Header style ={Background}> </Header>
             <Content>
@@ -102,12 +123,13 @@ function ProfileForm(props) {
                         </Button>
 
                         <Button onClick = {cancelEdit} style = {{position : 'relative', left : '40px'}}>
-                            Cancel
+                            Reset
                         </Button>
                     </Form.Item>
                 </Form>
             </Content>
             
-        </Layout>
+        </Layout> 
+        :<></>
     )
 }

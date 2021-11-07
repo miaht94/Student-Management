@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import {useFetchWrapper} from '_helpers';
-import { profileAtom } from '_state';
-import { useAlertActions } from '_actions';
+import { profileAtom , currentClassAtom, alertBachAtom} from '_state';
+import { useAlertActions , useStudentInfoAction} from '_actions';
 
 
 export {useProfileAction} 
@@ -12,8 +12,11 @@ function useProfileAction() {
 
     const fetchWrapper = useFetchWrapper();
     const [profile,setProfile] = useRecoilState(profileAtom);
+    const currentClass = useRecoilValue(currentClassAtom);
     const alertActions = useAlertActions();
-    
+    const studentInfoAction = useStudentInfoAction();
+    const [alert, setAlert] = useRecoilState(alertBachAtom);
+
     async function getProfileById(Id) {
         console.log("get profile by id");
         const response = await fetchWrapper.get(`http://localhost:3000/api/profile/${Id}`, null, null);
@@ -47,7 +50,7 @@ function useProfileAction() {
         setProfile(rawjson.message);
     }
 
-    async function handleSubmit (info,Id){
+    async function handleSubmit (info,Id,isTable){
         var urlencoded = new URLSearchParams();
         console.log('from profile action',info);
         Object.entries(info).map(([key, val]) => {
@@ -62,8 +65,12 @@ function useProfileAction() {
           console.log(rawjson);
           if (rawjson.status == "Success"){
             getMyProfile();
+            if(isTable) {
+              studentInfoAction.getStudentList(currentClass);
+            }
+            setAlert({message: "Thành công", description: "Cập nhật thông tin thành công"});
           } else {
-            alertActions.error("Không thể cập nhật thông tin");
+            setAlert({message: "Lỗi", description: "Không thể cập nhật thông tin"});
           }
         }); 
     }

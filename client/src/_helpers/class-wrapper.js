@@ -1,6 +1,6 @@
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
-import { useAlertActions } from '_actions';
+import { useAlertActions, useStudentInfoAction } from '_actions';
 import { classesAtom } from '_state';
 import {currentClassAtom} from '_state'
 export { useClassWrapper };
@@ -8,8 +8,9 @@ export { useClassWrapper };
 function useClassWrapper(param) {
     const fetchWrapper = useFetchWrapper();
     const alertActions = useAlertActions();
+    const studentInfoAction = useStudentInfoAction();
     const [classes, setClasses] = useRecoilState(classesAtom);
-    const [curClass, setCurClass] = useRecoilState(currentClassAtom);
+    const [curClass, setCurClass_] = useRecoilState(currentClassAtom);
     async function getClassList(){
         console.log("Get class list wrapper called.");
         const response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
@@ -39,16 +40,24 @@ function useClassWrapper(param) {
           }); 
     }
     
+    function setCurClass(cls) {
+      setCurClass_(cls);
+      localStorage.setItem("curClass", cls)
+    }
+
     function chooseClass(cls) {
 		    setCurClass(cls);
         localStorage.setItem('currentClass', JSON.stringify(cls));
         console.log("Choosen class :", cls)
+        if (cls !== undefined) {
+          studentInfoAction.getStudentList(cls);
+        } 
     }
 
     async function chooseClassById(classId) {
       	let response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
       	response = await response.json();
-		  console.log(response)
+		    console.log(response)
 		  for (var myClass of response) {
     		if(classId == myClass.class_id) {
 			

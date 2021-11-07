@@ -1,8 +1,9 @@
+
 import { atom } from 'recoil';
 
-const alertAtom = atom({
-    key: 'alert',
+const alertBachAtom = atom({
+    key: 'alertBach',
     default: {message: null, description: null}
 });
 
-export { alertAtom };
+export { alertBachAtom };

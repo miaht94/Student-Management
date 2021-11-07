@@ -27,6 +27,7 @@ import React, { useEffect, useState } from 'react';
 import Title from 'antd/lib/typography/Title';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import { useUserActions } from '_actions';
+import {Notification} from './_components/bach_component/Notification/Notification'
 const style = { };
 
 const { Header, Footer, Content } = Layout;
@@ -52,6 +53,7 @@ function App() {
         <div className={'app-container' + (authWrapper.tokenValue ? ' bg-light' : '')}>
             {/* <div>{JSON.stringify(authWrapper.tokenValue)}</div> */}
             <Router history={history}>
+            
             <Layout>
                 <Header>
                     <Row gutter={0}>
@@ -93,7 +95,6 @@ function App() {
                           <PrivateRoute path="/chat" component={Chat} />
                           <PrivateRoute path="/profile" component={Profile} />
                           <PrivateRoute path="/:classID" component={Child} />
-                          
                           <Redirect from="*" to="/" />
                         </Switch>
                     </Content>
@@ -104,6 +105,7 @@ function App() {
                     </Footer>
                </Layout>
              </Layout>
+            <Notification></Notification>
             </Router>
         </div>        
     );
@@ -126,24 +128,29 @@ function Child(props) {
     },[])
 
     return (
-    !classWrapper.curClass && loaded ? <Redirect from="*" to="/" /> :
+    (!classWrapper.curClass && loaded) ? <Redirect from="*" to="/" /> :
         <>
-            {<Redirect to={"/" + classID + "/dashboard"} />}
-            <Switch>
-                <PrivateRoute exact path="/:classID/dashboard" component={Dashboard} />
-                <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
-                <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
-                <PrivateRoute exact path="/:classID/feed" component={Feed} />
-            </Switch>
+            {(classWrapper.curClass) &&  <>
+                    <Switch>
+                    <PrivateRoute exact path="/:classID/dashboard" component={Dashboard} />
+                    <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
+                    <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
+                    <PrivateRoute exact path="/:classID/feed" component={Feed} />
+                    <Redirect from="*" to={`/${classWrapper.curClass.class_id}/dashboard`} />
+                    </Switch>
+                </>
+            }
+            
         </>
     );
   }
 
 function ClassNameDisplay(){
     const auth = useRecoilValue(authAtom);
+    const classWrapper = useClassWrapper();
     if (auth) {
-        if (localStorage.getItem('currentClass')) {
-            return "Lớp hiện tại: " + JSON.parse(localStorage.getItem('currentClass')).class_name;
+        if (classWrapper.curClass) {
+            return "Lớp hiện tại: " + classWrapper.curClass.class_name;
         }
         return "Chưa chọn lớp";
     }    

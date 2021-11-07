@@ -20,6 +20,7 @@ function useFetchWrapper() {
     };
 
     function request(method) {
+     
         return (url, header, body) => {
             var myHeaders = new Headers();
             if (header) myHeaders.append("Content-Type", header);
@@ -29,6 +30,9 @@ function useFetchWrapper() {
                 headers: myHeaders,
                 redirect: 'follow'
             };
+            if(method == 'DELETE'){
+                requestOptions.mode = 'cors';
+            }
             if (body) {
                 requestOptions.headers['Content-Type'] = header;
                 requestOptions.body = body;

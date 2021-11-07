@@ -35,11 +35,15 @@ async function fGetMessageByVNUId(req, res) {
                     }
                 });
         res.status(200);
-        res.send(Configs.RES_FORM("Success",chatRoom.messages))
+        if (chatRoom)
+            res.send(Configs.RES_FORM("Success",chatRoom.messages));
+        else {
+            res.send(Configs.RES_FORM("Success",[]));
+        }
 
     } else {
-        res.status(400);
-        res.json(Configs.RES_FORM("Error"), "Không tìm thấy đối tượng cần xem tin nhắn");
+        res.status(404);
+        res.json(Configs.RES_FORM("Error", "Không tìm thấy đối tượng cần xem tin nhắn"));
     }
 }
 /** Trả về các liên hệ gần đây và info của họ.

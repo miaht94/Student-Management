@@ -3,9 +3,13 @@ var app = express();
 var cookieParser = require('cookie-parser')
 var router = express.Router();
 var fileUpload = require('express-fileupload')
+var tempFileDir = "/public/data";
+if (process.platform == "darwin") {
+  tempFileDir = "." + tempFileDir
+}
 app.use(fileUpload({
   useTempFiles : true,
-  tempFileDir : '/public/data',
+  tempFileDir : tempFileDir,
   limits: { fileSize: 50 * 1024 * 1024 },
   createParentPath: true,
   debug: true

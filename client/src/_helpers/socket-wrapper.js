@@ -23,6 +23,7 @@ function useSocketWrapper() {
 
 class socketWrapper {
     constructor() {
+
     }
     static feeder;
     static initiated = false;
@@ -38,6 +39,7 @@ class socketWrapper {
                     token: token
                 }
             })
+            socketWrapper.initiated =true;
         }
         
     }

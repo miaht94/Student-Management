@@ -5,5 +5,5 @@ const {fGetRecentContact,fGetRecentChat, fGetMessageByVNUId} = require('../middl
 // chatRouter.post('/api/chat', validateToken);
 chatRouter.get(Configs.API_PATH.RECENT_CHAT, validateToken, fGetRecentChat);
 chatRouter.get(Configs.API_PATH.RECENT_CONTACT, validateToken, fGetRecentContact);
-chatRouter.post(Configs.API_PATH.MESSAGES_BY_VNU_ID, validateToken, fGetMessageByVNUId);
+chatRouter.get(Configs.API_PATH.MESSAGES_BY_VNU_ID, validateToken, fGetMessageByVNUId);
 module.exports = chatRouter

@@ -13,18 +13,33 @@ import './MessageList.css';
 export default function MessageList(props) {
   let {vnu_id} = useParams();
   const [fetchDone, setFetchDone] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
   const messageEnd = useRef(null);
   const chatAction = useChatAction();
   const chatWrapper = useChatWrapper();
   const NOT_MY_USER_ID = vnu_id
   useEffect(() => {
-    chatAction.getCurChatMessageById(vnu_id).then(res => {
-      setFetchDone(true);
-    });
+
+    setIsHidden(true);
+    if (vnu_id)
+    chatAction.addContactToList({vnu_id : vnu_id}).then(() => {
+      chatAction.getCurChatMessageById(vnu_id).then(res => {
+        setFetchDone(true);
+        setIsHidden(false);
+      });
+    })
+    
     
   },[vnu_id])
-  debugger
-  let messages = chatWrapper.curListMessages ? chatWrapper.curListMessages.map(result => {
+  useEffect(() => {
+    return () => {
+      chatWrapper.setCurChatPerson(null);
+    }
+  }, [])
+  let messages = [];
+
+  if (fetchDone)
+    messages = chatWrapper.curListMessages &&  chatWrapper.curListMessages.length > 0 ? chatWrapper.curListMessages.map(result => {
     
     return {
       id: result._id,
@@ -41,7 +56,7 @@ export default function MessageList(props) {
     let i = 0;
     let messageCount = messages.length;
     let tempMessages = [];
-    debugger
+    
     while (i < messageCount) {
       let previous = messages[i - 1];
       let current = messages[i];
@@ -109,7 +124,7 @@ export default function MessageList(props) {
               ref={messageEnd}>
           </div>
         </div>
-       <Compose/>
+        <Compose onSendMessage={chatAction.onSendMessage} visible={!isHidden}/>
         
       </div>
     );

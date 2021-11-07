@@ -23,13 +23,14 @@ import { authAtom, classPickerVisibleAtom } from '_state';
 import { Layout, Menu, Button, Row, Col, Drawer } from 'antd';
 
 import React, { useEffect, useState } from 'react';
-
+import { loadingVisibleAtom } from '_state';
 import Title from 'antd/lib/typography/Title';
 import SubMenu from 'antd/lib/menu/SubMenu';
 import { useUserActions } from '_actions';
 import {Notification} from './_components/bach_component/Notification/Notification'
 import { socketWrapper } from '_helpers/socket-wrapper';
 import Socket from '_components/bach_component/Socket/socket';
+import LinearProgress from '@mui/material/LinearProgress';
 const style = { };
 
 const { Header, Footer, Content } = Layout;
@@ -40,6 +41,7 @@ function App() {
     const authWrapper = useAuthWrapper();
     const classWrapper = useClassWrapper();
     const [drawerVisible, setDrawerVisible] = useRecoilState(classPickerVisibleAtom);
+    const [loadingVisible, setLoadingVisible] = useRecoilState(loadingVisibleAtom);
     const userActions = useUserActions();
     const showDrawer = () => {
         classWrapper.getClassList();
@@ -55,6 +57,7 @@ function App() {
             {/* <div>{JSON.stringify(authWrapper.tokenValue)}</div> */}
             <Router history={history}>
             <Socket></Socket>
+            
             <Layout>
                 <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
                     <Row gutter={0}>
@@ -106,6 +109,7 @@ function App() {
             
             <ClassPicker drawerVisible = {drawerVisible} setDrawerVisible = {setDrawerVisible} onDrawerClose={onDrawerClose}/>
             <Notification></Notification>
+            <LinearProgress sx={{position:"fixed", width: "100%", top: "0px", zIndex:2, visibility: (loadingVisible ? "visible" : "hidden")}} />
             </Router>
         </div>        
     );

@@ -22,4 +22,18 @@ const curListContactAtom = atom({
     },
     default: null,
 })
-export { curChatPersonAtom, curListMessagesAtom, curListContactAtom };
+
+const waitToAddContactAtom = atom({
+    key:{
+        name: "waitToAddContact"
+    },
+    default: null
+})
+
+const waitForUpdateLatestMsgAtom = atom({
+    key: {
+        name: "waitForUpdateLatestMsg"
+    },
+    default: null
+})
+export { curChatPersonAtom, curListMessagesAtom, curListContactAtom, waitToAddContactAtom, waitForUpdateLatestMsgAtom };

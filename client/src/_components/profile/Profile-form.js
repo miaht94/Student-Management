@@ -1,5 +1,5 @@
 import { Layout , Form, Avatar, Input, DatePicker, Button} from 'antd';
-import { UserOutlined} from '@ant-design/icons';
+import { ConsoleSqlOutlined, UserOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import {useEffect} from 'react';
 import { pickBy, identity } from 'lodash';
@@ -42,6 +42,14 @@ function ProfileForm(props) {
     let isTable = props.isTable;
     console.log(data);
 
+    if (data == null) {
+        profileAction.getMyProfile().then( newData =>{
+                console.log('set new data here!!!!!');
+                data = newData;
+            }
+        )
+    }
+
     useEffect (() => {
         if (data !== undefined){
             // data = profile;
@@ -80,6 +88,8 @@ function ProfileForm(props) {
     }
 
     return (
+        (data)?
+       
         <Layout>
             <Header style ={Background}> </Header>
             <Content>
@@ -119,6 +129,7 @@ function ProfileForm(props) {
                 </Form>
             </Content>
             
-        </Layout>
+        </Layout> 
+        :<></>
     )
 }

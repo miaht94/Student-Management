@@ -1,10 +1,8 @@
-import { authAtom, userAtom } from '_state';
+import { authAtom} from '_state';
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
-import { history } from '_helpers';
 import { useAlertActions } from '_actions';
 
-import { useState, useEffect } from "react";
 export { useAuthWrapper };
 
 function useAuthWrapper(param) {

@@ -1,12 +1,12 @@
 import React ,{useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import { Table, Button, Space ,Tag, Modal, Input, Avatar} from 'antd';
+import { Table, Button, Space , Modal, Input} from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined,EditTwoTone,DeleteFilled} from '@ant-design/icons';
 import moment from 'moment';
 
 import {StudentProfile} from '_components/studentInfoList';
-import { useAlertActions , useStudentInfoAction} from '_actions';
+import {useStudentInfoAction} from '_actions';
 
 
 export { StudentInfoTable };

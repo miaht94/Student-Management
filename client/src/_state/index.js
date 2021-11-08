@@ -8,3 +8,4 @@ export * from './current_class';
 export * from './profile';
 export * from './app';
 export * from './alert_bach';
+export * from './dashboard';

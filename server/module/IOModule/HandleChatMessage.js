@@ -15,6 +15,7 @@ const handleChatMessage = async (socket, msg) => {
         return;
     }
     let newMessage;
+    let newFullyMessage;
     try {
         newMessage = new global.DBConnection.Message({
             from: new ObjectId(from._id),
@@ -27,7 +28,13 @@ const handleChatMessage = async (socket, msg) => {
         console.log("Create or save message fail");
     
     }
-    
+    newFullyMessage = {
+        from : from,
+        to : toInstance,
+        message: message,
+        createdDate: newMessage.createdDate
+    }
+    let newContact = false;
     try {
         
         var chatRoom = await global.DBConnection.Chat.findOne({membersID : {$size: 2, $all : [ObjectId(socket.loginInfo.user_ref._id), ObjectId(toInstance._id)]}}).populate();
@@ -36,7 +43,9 @@ const handleChatMessage = async (socket, msg) => {
                 membersID : [new ObjectId(socket.loginInfo.user_ref._id), new ObjectId(toInstance._id)],
                 messages: [new ObjectId(newMessage._id)]
             });
+            
             chatRoom.save();
+            newContact = true;
         } else {
             chatRoom.messages.push(new ObjectId(newMessage._id));
             chatRoom.save();
@@ -47,7 +56,7 @@ const handleChatMessage = async (socket, msg) => {
         console.log(e);
         return;
     }
-
+    newFullyMessage.newContact = newContact;
     try {
         var targetLoginInfo = await global.DBConnection.LoginInfo.findOne({user_ref: toInstance._id})
         var curTargetSocketID;
@@ -55,14 +64,18 @@ const handleChatMessage = async (socket, msg) => {
             console.log("Khong tim thay nguoi nhan");
         } else {
             curTargetSocketID = targetLoginInfo.current_socket_id;
-            if (!curTargetSocketID) return;
-            else {
-                socket.to(curTargetSocketID).emit("NewMessage", {
+            if (curTargetSocketID) {
+                let message = {
                     from: socket.loginInfo.user_ref.vnu_id,
                     message: msg.message
-                });
+                }
+                socket.to(curTargetSocketID).emit("NewMessage", {...newFullyMessage, isSender: false});
+                console.log("Transfered message: ", message)
             }
+            
         }
+        if (socket.loginInfo.current_socket_id) 
+                    socket.emit("NewMessage", {...newFullyMessage, selfSend: true, isSender: true});
     }
     catch(e) {
         console.log("Loi khi tim kiem target of message hoac khi gui message");

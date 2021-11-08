@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-
+import Messenger from '_components/bach_component/Messenger';
+import { PrivateRoute } from '_components/PrivateRoute';
 import { authAtom } from '_state';
 
 export { Chat };
@@ -8,10 +9,9 @@ export { Chat };
 function Chat() {
     const auth = useRecoilValue(authAtom);
     return (
-        <div className="p-4">
-            <div className="container">
-                <h1>This is Chat</h1>
-            </div>
+        <div style={{height:"640px"}}>
+            <Messenger></Messenger>
+            
         </div>
     );
 }

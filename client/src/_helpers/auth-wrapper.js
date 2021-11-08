@@ -64,6 +64,7 @@ function useAuthWrapper(param) {
           // console.log(response);
           await response.json().then(rawjson => { 
             console.log(rawjson);
+            rawjson = rawjson.message
             var userProfile = {
               name: rawjson.name,
               role: rawjson.role,
@@ -71,8 +72,21 @@ function useAuthWrapper(param) {
               email: rawjson.email,
               vnu_id: rawjson.vnu_id
             }
+            console.log(userProfile)
             localStorage.setItem('userData', JSON.stringify(userProfile));
           }); 
+        }
+
+        async function getUserInfo() {
+          let data = JSON.parse(localStorage.getItem("userData"))
+          if (data  && data.vnu_id) {
+            return data
+          }
+            
+          else {
+            await loadUser();
+          }
+          return JSON.parse(localStorage.getItem("userData"))
         }
   
         function loadLoginToken(){
@@ -94,6 +108,7 @@ function useAuthWrapper(param) {
           login : login,
           logout : logout,
           tokenValue : auth,
+          getUserInfo : getUserInfo,
           // user: user,
           // loadUserAtom: loadUserAtom,
           loadLoginToken: loadLoginToken

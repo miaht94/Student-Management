@@ -6,4 +6,9 @@ const classPickerVisibleAtom = atom({
     // default: null
 });
 
-export {classPickerVisibleAtom}
+const loadingVisibleAtom = atom({
+    key: "loadingVisible",
+    default: false
+})
+
+export {classPickerVisibleAtom, loadingVisibleAtom}

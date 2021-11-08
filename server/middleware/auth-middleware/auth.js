@@ -26,17 +26,19 @@ async function validateToken(req, res, next) {
           } catch(err) {
             if (err.name == "TokenExpiredError") {
                 res.status(410);
-                res.send("Token Expired");
+                res.send(Configs.RES_FORM("Error", {name : "TokenExpiredError", description: ""}));
             } else if (err.name == "JsonWebTokenError") {
                 res.status(400);
+                res.send(Configs.RES_FORM("Error", {name : err.name, description: err.message}));
                 res.send(`${err.name} : ${err.message}`)
             } else if (err.name="UserNotFound") {
                 res.status(400)
-                res.send(`${err.name}`);
+                res.send(Configs.RES_FORM("Error", {name : err.name,description: ""}));
+                
             } 
             else {
                 res.status(400);
-                res.send("Unknown Error: \n" + err.toString())
+                res.send(Configs.RES_FORM("Error", {name : "UnknownError",description: err.toString()}));
             }
         }
     } else {

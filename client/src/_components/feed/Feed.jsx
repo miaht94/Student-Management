@@ -25,12 +25,11 @@ function Feed() {
         async function fetchMyAPI() {
             await feedPageWrapper.getAllPosts();
             console.log(feedPageWrapper.feedPageState)
-          }
+        }
         fetchMyAPI().then(() => {
             console.log("fetch done")
             setloaded(true)
         })
-        debugger
         // socketWrapper.socket.on("NewPost", onNewPost)
     }, [])
 

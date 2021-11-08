@@ -134,6 +134,28 @@ async function fAddScoreToScoresTable(req, res) {
     
 }
 
+/** Tiên quyết : validateToken, getClassById, validateClassTeacher */
+async function fGetScoresClassByClassId(req, res) {
+    var classInstance = req.classInstance;
+    var senderInstance = req.senderInstance;
+    var members = classInstance.class_members;
+    let scores = await global.DBConnection.ScoresTable.find({user_ref: {$in : members}}).populate({
+        path: "scores",
+        populate: {
+            path: "subject"
+        }
+    }).populate("user_ref");
+    res.status(200);
+    if (scores) {
+        res.json(RES_FORM("Success", scores));
+        return;
+    }
+    else {
+        res.json(RES_FORM("Success", []));
+        return
+    }
+}
+
 /** Handle upload file first */
 async function fHandleUploadScore(req, res) {
     let success = [];
@@ -177,4 +199,4 @@ async function fHandleUploadScore(req, res) {
     res.status(200);
     res.json(RES_FORM("Success", {added : success, failed: fail}));
 }
-module.exports = {fAddScoreToScoresTable, checkTeacherOfVNUId, checkTargetAddScoreExist, fGetScoresByVNUId, fHandleUploadScore}
+module.exports = {fGetScoresClassByClassId, fAddScoreToScoresTable, checkTeacherOfVNUId, checkTargetAddScoreExist, fGetScoresByVNUId, fHandleUploadScore}

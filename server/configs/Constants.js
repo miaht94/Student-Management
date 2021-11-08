@@ -8,6 +8,7 @@ const API_PATH = {
     DELETE_MEMBER_CLASS: "/api/classes/:classId/members/delete",
     MY_CLASS: "/api/classes/me",
     MY_CLASS_MEMBERS_INFORS: "/api/classes/:classId/members/infors",
+    GET_SCORES_CLASS : "/api/classes/:classId/members/scores",
     GET_CLASS_BY_ID : "/api/classes/:classId",
     POST_TO_FEED : "/api/classes/:classId/feed/add",
     GET_POST_BY_ID: "/api/classes/:classId/feed/:postId",
@@ -26,6 +27,7 @@ const API_PATH = {
     UPLOAD_FILE : "/api/upload/file",
     ADD_SCORE_BY_VNU_ID: "/api/scores/add",
     GET_SCORES_BY_ID : "/api/scores/:userId",
+  
     PUBLIC_DATA: "/public/data/:filename",
 };
 

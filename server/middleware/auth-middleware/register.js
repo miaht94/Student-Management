@@ -15,6 +15,8 @@ async function register(req, res) {
             let newUserLoginInfo = new global.DBConnection.User({
                 vnu_id : req.body.vnu_id ? req.body.vnu_id : uuidv4(),
                 name: req.body.name,
+                gender: req.body.gender,
+                phone_number: req.body.phone_number,
                 role: req.body.role,
                 email: req.body.email,
                 location: req.body.location,

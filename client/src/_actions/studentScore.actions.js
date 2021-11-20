@@ -40,7 +40,7 @@ function useStudentScoreAction (param) {
             var CPA = 0;
             var totalCredit = 0;
             var totalScore = 0;
-            var date_of_birth = object.user_ref.date_of_birth = moment(object.user_ref.date_of_birth, 'X').format("DD/MM/YYYY");
+            var date_of_birth = object.user_ref.date_of_birth = moment.utc(object.user_ref.date_of_birth).format("DD/MM/YYYY");
             
             scoreObj.forEach(scoreElement => { 
                 var score = scoreElement.score / 10 * 4;

@@ -9,3 +9,4 @@ export * from './profile';
 export * from './app';
 export * from './alert_bach';
 export * from './dashboard';
+export * from './score';

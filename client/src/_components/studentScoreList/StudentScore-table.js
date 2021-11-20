@@ -1,28 +1,23 @@
 import React ,{useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import { Table, Button, Space , Modal, Input} from 'antd';
+import { Table, Button, Space, Input, Tag} from 'antd';
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined, EditTwoTone, DeleteFilled, WechatOutlined} from '@ant-design/icons';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { SearchOutlined} from '@ant-design/icons';
 
-import {StudentProfile} from '_components/studentInfoList';
-import {useStudentInfoAction} from '_actions';
+import {useStudentScoreAction} from '_actions';
 
 
-export { StudentInfoTable };
-function StudentInfoTable(props){
+export { StudentScoreTable };
+
+function StudentScoreTable(props){
+
     var data =  JSON.parse(JSON.stringify(props.data));
-    data.forEach( object => { Object.entries(object).map(([key, val]) => {
-      if (key == 'date_of_birth') {
-          object.date_of_birth = moment(val, 'X').format("DD/MM/YYYY");
-      }
-    })});
+    const studentScoreAction = useStudentScoreAction();
 
-    const studentInfoAction = useStudentInfoAction();
+    data = studentScoreAction.handleData(data);
 
     const [state, setState] = useState({
-        searchText: '',
+        searchText: '', 
         searchedColumn: '',
         visible : false,
         currentRow: {
@@ -53,31 +48,6 @@ function StudentInfoTable(props){
         clearFilters();
         setState({ ...state, searchText: '' });
       };
-
-    let handleEditProfile = (record) =>{
-        setState({
-          ...state,
-          currentRow : record,
-          visible : true});
-    }
-
-    let handleDelete = (record) => {
-        setState({
-          ...state,
-          currentRow : record,});
-        studentInfoAction.deleteStudent(record.vnu_id);
-    }
-
-    let handleCloseModal = () => {
-        setState({
-          ...state,
-          visible : false,
-      })
-    }
-
-    let handleMessage = (record) => {
-        alert('gửi tin nhắn tới id ' + record.vnu_id);
-      }
 
     let searchInput;
     let getColumnSearchProps = dataIndex => ({
@@ -149,7 +119,7 @@ function StudentInfoTable(props){
       
         const columns = [
         {
-            title: 'Name',
+            title: 'Tên',
             dataIndex: 'name',
             key: 'name',
             width: 100,
@@ -157,7 +127,7 @@ function StudentInfoTable(props){
             render: text => <a>{text}</a>,
         },
         {
-            title: 'vnu_id',
+            title: 'Mã sinh viên',
             width: 100,
             dataIndex: 'vnu_id',
             key: 'vnu_id',
@@ -166,89 +136,92 @@ function StudentInfoTable(props){
                 multiple: 5,
               },
         },
-        // {
-        //     title: 'State',
-        //     key: 'tags',
-        //     width: 100,
-        //     dataIndex: 'tags',
-        //     filters: [
-        //         {
-        //           text: 'Cảnh cáo',
-        //           value: 'Cảnh cáo',
-        //         },
-        //         {
-        //           text: 'Bình thường',
-        //           value: 'Bình thường',
-        //         },
-        //       ],
-        //       onFilter: (value, record) => record.tags.indexOf(value) === 0,
-        //     render: tags => (
-        //         <span>
-        //         {tags.map(tag => {
-        //             let color = 'red';
-        //             if (tag === 'Bình thường') {
-        //                 color = 'green';
-        //             }
-        //             return (
-        //                 <Tag color= {color} key = {tag}>
-        //                     {tag.toUpperCase()}
-        //                 </Tag>
-        //             );
-        //         })}
-        //         </span>
-        //     )
-        // },
         {
-            title: 'Date of Birth',
+            title: 'Trạng thái',
+            key: 'tags',
+            width: 100,
+            dataIndex: 'tags',
+            filters: [
+                {
+                  text: 'Cảnh cáo',
+                  value: 'Cảnh cáo',
+                },
+                {
+                  text: 'Bình thường',
+                  value: 'Bình thường',
+                },
+                {
+                  text: 'Đuổi học',
+                  value: 'Đuổi học',
+                },
+              ],
+              onFilter: (value, record) => record.tags.indexOf(value) === 0,
+            render: tags => (
+                <span>
+                {tags.map(tag => {
+                    let color = 'red';
+                    if (tag === 'Bình thường') {
+                        color = 'green';
+                    }else {
+                      if (tag ==='Cảnh cáo') {
+                        color = 'yellow';
+                      }
+                    }
+                    return (
+                        <Tag color= {color} key = {tag}>
+                            {tag.toUpperCase()}
+                        </Tag>
+                    );
+                })}
+                </span>
+            )
+        },
+        {
+            title: 'Ngày sinh',
             width: 100,
             dataIndex: 'date_of_birth',
             key: 'date_of_birth',
         },
         {
-            title: 'Email',
-            width: 100,
-            dataIndex: 'email',
-            key: 'email',
-        },
+          title: 'TBCTL',
+          width: 100,
+          dataIndex: 'cpa',
+          key: 'cpa',
+          sorter: {
+            compare: (a, b) => a.cpa - b.cpa,
+            multiple: 5,
+          },
+      },
         {
-            title: 'Action',
-            key: 'action',
-            fixed: "right",
-            width: 100,
-            render: (text, record) => (
-              <Space size="middle">
-                
-                <Button
-                title="Chỉnh sửa thông tin cá nhân"
-                onClick={() => handleEditProfile(record)}
-                icon={<EditTwoTone />}
-                size="small"
-                style={{ width: 50 }}
-                />
-
-                <Button
-                danger
-                type="primary"
-                title="Xóa thành viên"
-                onClick={() => handleDelete(record)}
-                icon={<DeleteFilled />}
-                size="small"
-                style={{ width: 50 }}
-                />
-                
-                <Link to={`/chat/${record.vnu_id}`} className="btn btn-link">
-                  <Button
-                  type="primary"
-                  title="Gửi tin nhắn cho thành viên này"
-                  icon={<WechatOutlined />}
-                  size="small"
-                  style={{ width: 50 }}
-                  />
-                </Link>
-
-              </Space>
-            )
-        }
+          title: 'Số học phần điểm C+',
+          width: 100,
+          dataIndex: 'Cplus',
+          key: 'Cplus',
+      },
+       {
+          title: 'Số học phần điểm C',
+          width: 100,
+          dataIndex: 'C',
+          key: 'C',
+      },
+      {
+          title: 'Số học phần điểm D+',
+          width: 100,
+          dataIndex: 'Dplus',
+          key: 'Dplus',
+      },
+       {
+          title: 'Số học phần điểm D',
+          width: 100,
+          dataIndex: 'D',
+          key: 'D',
+      },
+        {
+          title: 'Số học phần điểm F',
+          width: 100,
+          dataIndex: 'F',
+          key: 'F',
+      },
     ]
     return (
         <div>
@@ -258,14 +231,6 @@ function StudentInfoTable(props){
             bordered
             scroll={{ x: "calc(700px + 50%)", y: 500 }}
             />
-            <Modal
-              title="Detailed personal information"
-              visible={state.visible}
-              onCancel= {handleCloseModal}
-              footer={[]}
-            >
-              <StudentProfile Id = {state.currentRow._id}/>
-        </Modal>
         </div>
     )
   } 

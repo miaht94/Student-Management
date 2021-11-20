@@ -1,18 +1,17 @@
-import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-
 import { authAtom } from '_state';
+import { useRecoilState, useRecoilValue } from 'recoil';
+
+import { scoreAtom } from '_state';
+import { StudentScoreTable } from '_components/studentScoreList';
 
 export { StudentScoreList };
 
-function StudentScoreList() {
-    const auth = useRecoilValue(authAtom);
 
+function StudentScoreList() {
+    const [score, setScore] = useRecoilState(scoreAtom);
     return (
         <div className="p-4">
-            <div className="container">
-                <h1>This is Student Score List</h1>
-            </div>
+            <StudentScoreTable data = {score} />
         </div>
     );
 }

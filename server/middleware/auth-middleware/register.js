@@ -5,13 +5,9 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId
 const hash = require('sha256')
 async function register(req, res) {
-    let dupUsername = await global.DBConnection.LoginInfo.findOne({"username": req.body.username});
     let dupVNUId = await global.DBConnection.User.findOne({"vnu_id": req.body.vnu_id});
-    if (dupUsername != null) {
-        res.status(409);
-        
-        res.json(Configs.RES_FORM("Error", "Username is already registered by someone"))
-    } else if (dupVNUId) {
+    
+    if (dupVNUId) {
         res.status(409);
         res.json(Configs.RES_FORM("Error", "VNU-ID is already registered by someone"))
     } else {
@@ -19,6 +15,8 @@ async function register(req, res) {
             let newUserLoginInfo = new global.DBConnection.User({
                 vnu_id : req.body.vnu_id ? req.body.vnu_id : uuidv4(),
                 name: req.body.name,
+                gender: req.body.gender,
+                phone_number: req.body.phone_number,
                 role: req.body.role,
                 email: req.body.email,
                 location: req.body.location,
@@ -26,10 +24,9 @@ async function register(req, res) {
             })
             newUserLoginInfo = await newUserLoginInfo.save()
             let newToken = jwt.sign({vnu_id: newUserLoginInfo.vnu_id, createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: 3600});
-            console.log("new token: ", newToken);
+            // console.log("new token: ", newToken);
             let loginInfo = new global.DBConnection.LoginInfo({
                 user_ref : new ObjectId(newUserLoginInfo._id),
-                username: req.body.username,
                 password: req.body.password,
                 current_token: newToken,
                 current_socket_id: null,

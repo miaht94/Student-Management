@@ -58,11 +58,19 @@ function validateLoginArgument(req, res, next) {
     }
 }
 
-function login(req, res) {
+async function login(req, res) {
     const rUsername = req.body.username;
     const rPassword = req.body.password;
 
-    global.DBConnection.LoginInfo.findOne({"username": rUsername, "password": rPassword},(err, instance) => {
+    let userRef = await global.DBConnection.User.findOne({"vnu_id": rUsername})
+    if (!userRef) {
+        res.status(400);
+        res.json(Configs.RES_FORM("Error", "Username chưa được đăng ký"));
+        return;
+    }
+
+
+    global.DBConnection.LoginInfo.findOne({"user_ref" : userRef._id, "password": rPassword},(err, instance) => {
         console.log(instance);
         if (instance != null) {
             let newToken = jwt.sign({id: instance.user_ref.toString(), createdDate: new Date().getTime()}, Configs.SECRET_KEY, {expiresIn: "2 days"})

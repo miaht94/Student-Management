@@ -23,6 +23,8 @@ function StudentInfoTable(props){
       }
     })});
 
+    console.log(data);
+
     const studentInfoAction = useStudentInfoAction();
 
     const [state, setState] = useState({

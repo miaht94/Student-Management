@@ -55,8 +55,8 @@ function StudentScoreTable(props){
           ...state,
           currentRow : record,
           visible : true});
-        studentScoreAction.getScoreByID(state.currentRow.vnu_id);
-        console.log("getScoreByID triggered");
+        // studentScoreAction.getScoreByID(state.currentRow.vnu_id);
+        // console.log("getScoreByID triggered");
     }
 
     let handleCloseModal = () => {

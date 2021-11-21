@@ -10,36 +10,28 @@ export { StudentScore };
 function StudentScore(props) {
     const [personalScore, setPersonalScore] = useRecoilState(pscoreAtom);
     const studentScoreAction = useStudentScoreAction();
-    let data = personalScore;
 
-    if (data == null) {
-        studentScoreAction.getScoreByID(props.vnu_id).then( newData =>{
-                console.log("NewData");
-                data = newData;
-                console.log(data);
-            }
-        )
-    }
+    var scoreboard = [];
 
+    useEffect(() => {
+        console.log(props.vnu_id);
+        studentScoreAction.getScoreByID(props.vnu_id).then(newData =>{
+            // console.log("newData");
+            // console.log(personalScore);
+            var fetchedScore = personalScore;
+            fetchedScore.forEach(element => {
+                scoreboard.push({
+                    subject_name : element.subject.subject_name,
+                    subject_code : element.subject.subject_code,
+                    credit_number : element.subject.credits_number,
+                    score : element.score
+                })
+            });
+            console.log(scoreboard);
+        }
+    )
+    }, [props.vnu_id]);
 
-    // useEffect (() => {
-
-    // },[data])
-
-    const [state, setState] = useState({
-        currentRow: {
-          _id: '',
-          key: 1,
-          subject_name: 'Giải tích 1' + 1,
-          subject_code: 'INT1001' + 1,
-          credit_number: 0,
-          score: 10,
-        },
-      });
-    
-    // useEffect(() =>{
-       
-    // },[state.currentRow,data])
 
     const columns = [
         {
@@ -58,8 +50,8 @@ function StudentScore(props) {
         {
           title: 'Số tín chỉ',
           width: 50,
-          dataIndex: 'credit_number',
-          key: 'credit_number',
+          dataIndex: 'credits_number',
+          key: 'credits_number',
         },
         {
             title: 'Điểm hệ 10',
@@ -71,14 +63,13 @@ function StudentScore(props) {
 
     return (
         <div>
-            {data.scores[0].score}
-{/*         
+           Nothing
             <Table
             columns={columns}
-            dataSource={data}
+            dataSource={scoreboard}
             bordered
             scroll={{ x: "calc(700px + 50%)", y: 500 }}
-            /> */}
+            />
         </div>
     );
 }

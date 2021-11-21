@@ -34,15 +34,8 @@ function useStudentScoreAction (param) {
             return null;
         }
         response.json().then(rawjson => { 
-            // setpScore(rawjson);
-            // return rawjson;
             console.log(rawjson.status);
-            setpScore(rawjson.message.scores);
-            return rawjson;
-            // let data = JSON.parse(JSON.stringify(rawjson.message));
-            // console.log(data);
-            // setpScore(data);
-            // return data;
+            setpScore(rawjson.message);
           }); 
     }
 

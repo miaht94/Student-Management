@@ -1,9 +1,10 @@
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import React ,{useEffect, useState} from 'react';
 import { useStudentScoreAction } from '_actions';
 import { pscoreAtom } from '_state';
 import 'antd/dist/antd.css';
-import { Table, Button, Space, Input, Tag, Modal} from 'antd';
+import { Table} from 'antd';
+import { Scoreboard } from '_components/studentScoreList'
 
 export { StudentScore };
 
@@ -11,65 +12,88 @@ function StudentScore(props) {
     const [personalScore, setPersonalScore] = useRecoilState(pscoreAtom);
     const studentScoreAction = useStudentScoreAction();
 
-    var scoreboard = [];
+    const [scoreboard, setScoreboard] = useState([]);
+    const [scoreTotal, setScoreTotal] = useState({
+        name: "Trần Xuân Bách",
+        vnu_id: "12345678",
+        total_credits: 0,
+        cpa: "4.0",
+        stt:"what",
+    });
 
     useEffect(() => {
         console.log(props.vnu_id);
         studentScoreAction.getScoreByID(props.vnu_id).then(newData =>{
             // console.log("newData");
-            // console.log(personalScore);
-            var fetchedScore = personalScore;
+            console.log(personalScore);
+            var fetchedScore = personalScore.scores;
+            var convertedScore =[];
+
+            var CPA = 0;
+            var totalCredit = 0;
+            var totalScore = 0;
+
+
             fetchedScore.forEach(element => {
-                scoreboard.push({
+                convertedScore.push({
                     subject_name : element.subject.subject_name,
                     subject_code : element.subject.subject_code,
-                    credit_number : element.subject.credits_number,
+                    credits_number : element.subject.credits_number,
                     score : element.score
                 })
+                totalCredit += element.subject.credits_number;
+                totalScore += element.subject.credits_number*element.score;
             });
-            console.log(scoreboard);
+
+            setScoreboard(convertedScore);
+
+            CPA = ((totalScore/totalCredit)/10*4).toFixed(2);
+            var state = (CPA > 2.5) ? ['Bình thường'] : ['Cảnh cáo'];
+            state = (CPA < 1) ? ['Đuổi học'] : state;
+
+            setScoreTotal({
+                name: personalScore.user_ref.name,
+                vnu_id: personalScore.user_ref.vnu_id,
+                total_credits : totalCredit,
+                cpa: CPA,
+                stt: state
+            });
+            // this.forceUpdate();
+            // console.log(scoreTotal);
         }
     )
     }, [props.vnu_id]);
 
 
-    const columns = [
-        {
-            title: 'Tên học phần',
-            width: 120,
-            dataIndex: 'subject_name',
-            key: 'subject_name',
-        },
-        {
-            title: 'Mã học phần',
-            width: 80,
-            dataIndex: 'subject_code',
-            key: 'subject_code',
-        },
+    // const columns = [
+    //     {
+    //         title: 'Tên học phần',
+    //         dataIndex: 'subject_name',
+    //         key: 'subject_name',
+    //     },
+    //     {
+    //         title: 'Mã học phần',
+    //         dataIndex: 'subject_code',
+    //         key: 'subject_code',
+    //     },
         
-        {
-          title: 'Số tín chỉ',
-          width: 50,
-          dataIndex: 'credits_number',
-          key: 'credits_number',
-        },
-        {
-            title: 'Điểm hệ 10',
-            width: 50,
-            dataIndex: 'score',
-            key: 'score',
-        },
-    ]
+    //     {
+    //       title: 'Số tín chỉ',
+    //       dataIndex: 'credits_number',
+    //       key: 'credits_number',
+    //     },
+    //     {
+    //         title: 'Điểm hệ 10',
+    //         dataIndex: 'score',
+    //         key: 'score',
+    //     },
+    // ]
+
+    // console.log(scoreboard);
 
     return (
         <div>
-           Nothing
-            <Table
-            columns={columns}
-            dataSource={scoreboard}
-            bordered
-            scroll={{ x: "calc(700px + 50%)", y: 500 }}
-            />
+            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal}></Scoreboard>
         </div>
     );
 }

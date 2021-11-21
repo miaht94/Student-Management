@@ -4,14 +4,12 @@ import { Table, Button, Space, Input, Tag, Modal} from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined, InfoCircleTwoTone} from '@ant-design/icons';
 import { StudentScore } from '_components/studentScoreList'
-
 import {useStudentScoreAction} from '_actions';
 
 
 export { StudentScoreTable };
 
 function StudentScoreTable(props){
-
     var data =  JSON.parse(JSON.stringify(props.data));
     const studentScoreAction = useStudentScoreAction();
 
@@ -50,13 +48,15 @@ function StudentScoreTable(props){
         setState({ ...state, searchText: '' });
       };
     
-      let handleShowScoreboard = (record) =>{
+    let handleShowScoreboard = (record) =>{
         setState({
           ...state,
           currentRow : record,
           visible : true});
+        // setCurrentStudent(state.currentRow.vnu_id);
         // studentScoreAction.getScoreByID(state.currentRow.vnu_id);
         // console.log("getScoreByID triggered");
+
     }
 
     let handleCloseModal = () => {

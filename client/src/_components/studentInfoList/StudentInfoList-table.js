@@ -15,7 +15,7 @@ function StudentInfoTable(props){
     var data =  JSON.parse(JSON.stringify(props.data));
     data.forEach( object => { Object.entries(object).map(([key, val]) => {
       if (key == 'date_of_birth') {
-          object.date_of_birth = moment(val, 'X').format("DD/MM/YYYY");
+          object.date_of_birth = moment.utc(val).format("DD/MM/YYYY");
       }
     })});
 

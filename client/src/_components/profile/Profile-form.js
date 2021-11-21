@@ -62,7 +62,7 @@ function ProfileForm(props) {
     // },[data])
 
     function formatDate(timestamp) {
-        let formatedDateOfBirth = moment(timestamp, 'X').format("DD/MM/YYYY") ;
+        let formatedDateOfBirth = moment.utc(timestamp).format("DD/MM/YYYY") ;
         return formatedDateOfBirth
     }
 
@@ -77,7 +77,8 @@ function ProfileForm(props) {
         //   form.resetFields();
           const changedFields =  pickBy(values, identity);
           if(changedFields.date_of_birth) {
-                let timestamp = moment(changedFields.date_of_birth).add(0,'hours').add(0, 'minutes').add(0, 'seconds').format("X");
+                let timestamp = moment(changedFields.date_of_birth, 'DD/MM/YYYY').format('x');
+                console.log(timestamp);
                 changedFields.date_of_birth = timestamp;
           }
           console.log(changedFields);

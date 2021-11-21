@@ -1,7 +1,7 @@
 import { authAtom} from '_state';
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
-import { useAlertActions } from '_actions';
+import { useAlertActions ,useProfileAction} from '_actions';
 
 export { useAuthWrapper };
 
@@ -11,6 +11,7 @@ function useAuthWrapper(param) {
       // const [user, setUser] = useRecoilState(userAtom);
       const fetchWrapper = useFetchWrapper();
       const alertActions = useAlertActions();
+      const profileAction = useProfileAction();
 
       async function login(param){
           console.log("Login in wrapper called");
@@ -71,6 +72,7 @@ function useAuthWrapper(param) {
               vnu_id: rawjson.vnu_id
             }
             console.log(userProfile)
+            profileAction.getMyProfile();
             localStorage.setItem('userData', JSON.stringify(userProfile));
           }); 
         }

@@ -2,13 +2,14 @@ import { useRecoilState } from 'recoil';
 import moment from 'moment';
 
 import {useFetchWrapper} from '_helpers';
-import {scoreAtom, alertBachAtom} from '_state';
+import {scoreAtom, pscoreAtom, alertBachAtom} from '_state';
 
 export{ useStudentScoreAction };
 
 function useStudentScoreAction (param) {
     const fetchWrapper = useFetchWrapper();
     const [score, setScore] = useRecoilState(scoreAtom);
+    const [pscore, setpScore] = useRecoilState(pscoreAtom);
     const [alert, setAlert] = useRecoilState(alertBachAtom);
 
     async function getScoreList(Class){
@@ -21,6 +22,21 @@ function useStudentScoreAction (param) {
         response.json().then(rawjson => { 
             console.log(rawjson);
             setScoreData (rawjson);
+            return rawjson;
+          }); 
+    }
+
+    async function getScoreByID(vnu_id){
+        console.log("get score by id called from studentInfo-action");
+        const response = await fetchWrapper.get(`http://localhost:3000/api/scores/${vnu_id}`, null, null);
+        if (response == null) {
+            console.log("No response.");
+            return null;
+        }
+        response.json().then(rawjson => { 
+            console.log(rawjson);
+            let data = rawjson.message;
+            setpScore(data);
             return rawjson;
           }); 
     }
@@ -74,6 +90,7 @@ function useStudentScoreAction (param) {
 
     return {
         getScoreList : getScoreList,
+        getScoreByID : getScoreByID,
         handleData : handleData,
     }
 }

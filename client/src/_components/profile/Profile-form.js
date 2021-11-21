@@ -55,6 +55,7 @@ function ProfileForm(props) {
             // data = profile;
             form.resetFields();
         }
+        
     },[data])
 
     // useEffect (() => {
@@ -106,13 +107,16 @@ function ProfileForm(props) {
                         icon={<UserOutlined />}
                     />
                     <br/>
-                    <Form.Item label="Name" name = "name">
+                    <Form.Item label="Vai trò" name = "role">
+                        {data.role == 'teacher' ? "Giáo viên" : "Sinh viên" }
+                    </Form.Item>   
+                    <Form.Item label="Họ và tên" name = "name">
                         <Input defaultValue = {data.name} />
                     </Form.Item>
-                    <Form.Item label="Vnu_id" name = "vnu_id">
-                        <Input defaultValue = {data.vnu_id} />
+                    <Form.Item label="VNU ID" name = "vnu_id">
+                        <Input disabled defaultValue = {data.vnu_id} />
                     </Form.Item>
-                    <Form.Item label="Date of Birth " name = "date_of_birth">
+                    <Form.Item label="Ngày sinh" name = "date_of_birth">
                         <DatePicker defaultValue={moment(formatDate(data.date_of_birth), dateFormat)} format={dateFormat} />
                     </Form.Item>
                     <Form.Item label="Email" name = "email">
@@ -120,11 +124,11 @@ function ProfileForm(props) {
                     </Form.Item>
                     <Form.Item label=" " colon={false}>
                         <Button type="primary" htmlType="submit" onClick = {handleSubmit}>
-                            Submit
+                            Thay đổi
                         </Button>
 
                         <Button onClick = {cancelEdit} style = {{position : 'relative', left : '40px'}}>
-                            Reset
+                            Hoàn tác
                         </Button>
                     </Form.Item>
                 </Form>

@@ -1,8 +1,9 @@
 import React ,{useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import { Table, Button, Space, Input, Tag} from 'antd';
+import { Table, Button, Space, Input, Tag, Modal} from 'antd';
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined} from '@ant-design/icons';
+import { SearchOutlined, InfoCircleTwoTone} from '@ant-design/icons';
+import { StudentScore } from '_components/studentScoreList'
 
 import {useStudentScoreAction} from '_actions';
 
@@ -48,6 +49,22 @@ function StudentScoreTable(props){
         clearFilters();
         setState({ ...state, searchText: '' });
       };
+    
+      let handleShowScoreboard = (record) =>{
+        setState({
+          ...state,
+          currentRow : record,
+          visible : true});
+        studentScoreAction.getScoreByID(state.currentRow.vnu_id);
+        console.log("getScoreByID triggered");
+    }
+
+    let handleCloseModal = () => {
+        setState({
+          ...state,
+          visible : false,
+      })
+    }
 
     let searchInput;
     let getColumnSearchProps = dataIndex => ({
@@ -119,7 +136,7 @@ function StudentScoreTable(props){
       
         const columns = [
         {
-            title: 'Tên',
+            title: 'Họ và tên',
             dataIndex: 'name',
             key: 'name',
             width: 100,
@@ -222,6 +239,25 @@ function StudentScoreTable(props){
           dataIndex: 'F',
           key: 'F',
       },
+      {
+        title: 'Action',
+        key: 'action',
+        fixed: "right",
+        width: 100,
+        render: (text, record) => (
+          <Space size="middle">
+            
+            <Button
+            title="Xem bảng điểm"
+            onClick={() => handleShowScoreboard(record)}
+            icon={<InfoCircleTwoTone />}
+            size="small"
+            style={{ width: 50 }}
+            />
+
+          </Space>
+        )
+      }
     ]
     return (
         <div>
@@ -231,6 +267,14 @@ function StudentScoreTable(props){
             bordered
             scroll={{ x: "calc(700px + 50%)", y: 500 }}
             />
+            <Modal
+              title="Detailed personal information"
+              visible={state.visible}
+              onCancel= {handleCloseModal}
+              footer={[]}
+            >
+              <StudentScore vnu_id = {state.currentRow.vnu_id}/>
+            </Modal>
         </div>
     )
   } 

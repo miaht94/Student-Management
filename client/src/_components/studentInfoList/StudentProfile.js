@@ -2,7 +2,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useProfileAction } from '_actions';
 import { studentsAtom } from '_state';
-import {ProfileForm} from '_components/profile'
+import { ProfileForm } from '_components/profile'
 
 export { StudentProfile };
 

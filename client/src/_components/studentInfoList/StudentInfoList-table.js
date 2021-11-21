@@ -14,6 +14,10 @@ export { StudentInfoTable };
 function StudentInfoTable(props){
     var data =  JSON.parse(JSON.stringify(props.data));
     data.forEach( object => { Object.entries(object).map(([key, val]) => {
+      if (key == 'gender') {
+        if (val == 'male') object.gender = 'Nam';
+        if (val == 'female') object.gender = 'Nữ';
+      }
       if (key == 'date_of_birth') {
           object.date_of_birth = moment.utc(val).format("DD/MM/YYYY");
       }
@@ -33,6 +37,8 @@ function StudentInfoTable(props){
           date_of_birth: 1%30 + 1 + '/1/2001',
           email: 1 + 19021000 + '@vnu.edu.vn',
           vnu_id: 19020000 + 1,
+          phone_number: 100000000,
+          gender: 'male'
         },
       });
 
@@ -149,7 +155,7 @@ function StudentInfoTable(props){
       
         const columns = [
         {
-            title: 'Name',
+            title: 'Họ và tên',
             dataIndex: 'name',
             key: 'name',
             width: 100,
@@ -157,8 +163,8 @@ function StudentInfoTable(props){
             render: text => <a>{text}</a>,
         },
         {
-            title: 'vnu_id',
-            width: 100,
+            title: 'Mã sinh viên',
+            width: 70,
             dataIndex: 'vnu_id',
             key: 'vnu_id',
             sorter: {
@@ -199,16 +205,28 @@ function StudentInfoTable(props){
         //     )
         // },
         {
-            title: 'Date of Birth',
-            width: 100,
-            dataIndex: 'date_of_birth',
-            key: 'date_of_birth',
+            title: 'Giới tính',
+            width: 50,
+            dataIndex: 'gender',
+            key: 'gender',
+        },
+        {
+          title: 'Ngày sinh',
+          width: 80,
+          dataIndex: 'date_of_birth',
+          key: 'date_of_birth',
         },
         {
             title: 'Email',
             width: 100,
             dataIndex: 'email',
             key: 'email',
+        },
+        {
+          title: 'Số điện thoại liên lạc',
+          width: 80,
+          dataIndex: 'phone_number',
+          key: 'phone_number',
         },
         {
             title: 'Action',
@@ -265,7 +283,7 @@ function StudentInfoTable(props){
               footer={[]}
             >
               <StudentProfile Id = {state.currentRow._id}/>
-        </Modal>
+            </Modal>
         </div>
     )
   } 

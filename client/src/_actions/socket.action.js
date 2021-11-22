@@ -12,6 +12,11 @@ function useSocketAction() {
     let feedPageWrapper = useFeedPageWrapper();
     let chatWrapper = useChatWrapper();
     let [alert, setAlert] = useRecoilState(alertBachAtom);
+
+    function onConnected() {
+        debugger
+        socketWrapper.isConnected = true
+    }
     function onNewPost(newPost) {
  
         var feedPageState = getRecoil(feedPageAtom);
@@ -49,7 +54,7 @@ function useSocketAction() {
         setRecoil(waitForUpdateLatestMsgAtom, listUpdating)
         console.log(message);
     }
-    return {onNewPost, onNewMessage}
+    return {onNewPost, onNewMessage, onConnected}
 }
 
 export default useSocketAction;

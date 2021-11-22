@@ -15,9 +15,13 @@ function useSocketWrapper() {
             })
 
     }
+    function checkConnected() {
+        return socketWrapper.socket.connected
+    }
     return {
         initConnection: initConnection,
         socket: socketWrapper.socket,
+        checkConnected : checkConnected
     }
 }
 
@@ -25,10 +29,14 @@ class socketWrapper {
     constructor() {
 
     }
+    static isConnected = false;
     static feeder;
     static initiated = false;
     static socket = null;
     static initConnection(token) {
+        debugger
+        if (!token) return;
+        console.log("Initiating socket connection")
         if (!socketWrapper.initiated) {
             socketWrapper.socket = io("http://localhost:5000", {
                 reconnectionDelayMax: 10000,

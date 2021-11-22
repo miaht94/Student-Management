@@ -42,6 +42,7 @@ function App() {
     const classWrapper = useClassWrapper();
     const [drawerVisible, setDrawerVisible] = useRecoilState(classPickerVisibleAtom);
     const [loadingVisible, setLoadingVisible] = useRecoilState(loadingVisibleAtom);
+    
     const userActions = useUserActions();
     const showDrawer = () => {
         classWrapper.getClassList();
@@ -51,12 +52,13 @@ function App() {
     const onDrawerClose = () => {
         setDrawerVisible(false);
     };
+  
 
     return (
         <div className={'app-container' + (authWrapper.tokenValue ? ' bg-light' : '')}>
             {/* <div>{JSON.stringify(authWrapper.tokenValue)}</div> */}
             <Router history={history}>
-            <Socket></Socket>
+            {authWrapper.tokenValue && <Socket></Socket>}
             
             <Layout>
                 <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
@@ -111,7 +113,7 @@ function App() {
             <Notification></Notification>
             <LinearProgress sx={{position:"fixed", width: "100%", top: "0px", zIndex:2, visibility: (loadingVisible ? "visible" : "hidden")}} />
             </Router>
-        </div>        
+        </div>
     );
 }
 

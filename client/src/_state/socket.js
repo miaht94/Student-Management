@@ -8,4 +8,11 @@ const socketAtom = atom({
     },
     default: null
 });
-export { socketAtom };
+
+const socketConnected = atom( {
+    key: {
+        name: 'socket-connected'
+    },
+    default: false
+})
+export { socketAtom, socketConnected };

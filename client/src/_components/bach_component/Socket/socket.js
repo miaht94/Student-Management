@@ -7,16 +7,36 @@ import { socketWrapper } from '../../../_helpers/socket-wrapper';
 import { getRecoil, setRecoil } from "recoil-nexus";
 import useSocketAction from '_actions/socket.action';
 import { SportsHockey } from '@mui/icons-material';
+import { socketConnected } from '_state/socket';
+
 export default function Socket(props) {
     let [auth, setAuth] = useRecoilState(authAtom)
     let socketAction = useSocketAction();
     var onNewPost = socketAction.onNewPost;
     var onNewMessage = socketAction.onNewMessage;
+    var onConnected = socketAction.onConnected;
+    let [isSocketConnected, setSocketConnected] = useRecoilState(socketConnected)
     useEffect(() => {
-        socketWrapper.initConnection(auth);
+      debugger
+        if (!socketWrapper.initiated) {
+          socketWrapper.initConnection(auth);
+        } 
         console.log("Socket khoi tao");
+        socketWrapper.socket.removeAllListeners()
+        socketWrapper.socket.on("connect", onConnected)
         socketWrapper.socket.on("NewPost", onNewPost)
         socketWrapper.socket.on("NewMessage", onNewMessage)
+        let id = setInterval(() => {
+          
+          if (socketWrapper.isConnected){
+            debugger
+            console.log("Socket init status " + socketWrapper.initiated)
+            console.log("Socket connect status" + socketWrapper.isConnected)
+            setSocketConnected(true)
+            console.log("Connected")
+            clearInterval(id)
+          }
+        }, 300)
     }, [])
     
     return (

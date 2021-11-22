@@ -77,7 +77,17 @@ function useStudentInfoAction (param) {
         response.json().then(rawjson => { 
             if (rawjson.status == "Success") {
                 getStudentList(currentClass);
-                setAlert({message: "Thành công", description: "Thêm thành viên thành công !"});
+                var description;
+                var message = 'Thành công';
+                description = `Thêm các thành viên :${rawjson.message.added} thành công ! Không thể các thành viên :${rawjson.message.failed}`
+                if (rawjson.message.added.length === 0) {
+                    description = `Không thể các thành viên :${rawjson.message.failed}` ;
+                    message = "Thất bại";
+                }
+                if (rawjson.message.failed.length === 0){
+                    description = `Thêm các thành viên :${rawjson.message.added} thành công !`;
+                    } 
+                setAlert({message: message, description: description});
             }
             return rawjson;
           }); 

@@ -5,6 +5,7 @@ import { Table} from 'antd';
 export { Scoreboard };
 
 function Scoreboard(props) {
+    debugger
     const columns = [
         {
             title: 'Tên học phần',

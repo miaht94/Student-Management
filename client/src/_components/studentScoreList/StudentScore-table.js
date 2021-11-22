@@ -30,9 +30,7 @@ function StudentScoreTable(props){
         },
       });
 
-    useEffect(() =>{
-       
-     },[state.currentRow,data])
+   
     
     let handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -49,6 +47,7 @@ function StudentScoreTable(props){
       };
     
     let handleShowScoreboard = (record) =>{
+      console.log(record)
         setState({
           ...state,
           currentRow : record,
@@ -248,8 +247,8 @@ function StudentScoreTable(props){
           <Space size="middle">
             
             <Button
-            title="Xem bảng điểm"
-            onClick={() => handleShowScoreboard(record)}
+            title={"Xem bảng điểm " + record.name}
+            onClick={() => handleShowScoreboard(record)} 
             icon={<InfoCircleTwoTone />}
             size="small"
             style={{ width: 50 }}

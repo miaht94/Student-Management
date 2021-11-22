@@ -9,10 +9,11 @@ import { Scoreboard } from '_components/studentScoreList'
 export { StudentScore };
 
 function StudentScore(props) {
-    const [personalScore, setPersonalScore] = useRecoilState(pscoreAtom);
+    // const [personalScore, setPersonalScore] = useRecoilState(pscoreAtom);
     const studentScoreAction = useStudentScoreAction();
 
     const [scoreboard, setScoreboard] = useState([]);
+    const [personalScore, setPScore] = useState(null);
     const [scoreTotal, setScoreTotal] = useState({
         name: "Trần Xuân Bách",
         vnu_id: "12345678",
@@ -22,47 +23,63 @@ function StudentScore(props) {
     });
 
     useEffect(() => {
-        console.log(props.vnu_id);
-        studentScoreAction.getScoreByID(props.vnu_id).then(newData =>{
-            // console.log("newData");
-            console.log(personalScore);
-            var fetchedScore = personalScore.scores;
-            var convertedScore =[];
+        async function abc() {
+            console.log(props.vnu_id);
+        if (!props.vnu_id) {
+            return;
+        } else {
+            let newData = await studentScoreAction.getScoreByID(props.vnu_id)
+   
+                console.log(newData);
+                setPScore(newData);
+                var fetchedScore = newData.scores;
+                var convertedScore =[];
+    
+                var CPA = 0;
+                var totalCredit = 0;
+                var totalScore = 0;
+    
+    
+                fetchedScore.forEach(element => {
+                    convertedScore.push({
+                        subject_name : element.subject.subject_name,
+                        subject_code : element.subject.subject_code,
+                        credits_number : element.subject.credits_number,
+                        score : element.score
+                    })
+                    totalCredit += element.subject.credits_number;
+                    totalScore += element.subject.credits_number*element.score;
+                });
+               
+                setScoreboard(convertedScore);
+    
+                CPA = ((totalScore/totalCredit)/10*4).toFixed(2);
+                var state = (CPA > 2.5) ? ['Bình thường'] : ['Cảnh cáo'];
+                state = (CPA < 1) ? ['Đuổi học'] : state;
+    
+                setScoreTotal({
+                    name: personalScore.user_ref.name,
+                    vnu_id: personalScore.user_ref.vnu_id,
+                    total_credits : totalCredit,
+                    cpa: CPA,
+                    stt: state
+                }); console.log(personalScore)
 
-            var CPA = 0;
-            var totalCredit = 0;
-            var totalScore = 0;
-
-
-            fetchedScore.forEach(element => {
-                convertedScore.push({
-                    subject_name : element.subject.subject_name,
-                    subject_code : element.subject.subject_code,
-                    credits_number : element.subject.credits_number,
-                    score : element.score
-                })
-                totalCredit += element.subject.credits_number;
-                totalScore += element.subject.credits_number*element.score;
-            });
-
-            setScoreboard(convertedScore);
-
-            CPA = ((totalScore/totalCredit)/10*4).toFixed(2);
-            var state = (CPA > 2.5) ? ['Bình thường'] : ['Cảnh cáo'];
-            state = (CPA < 1) ? ['Đuổi học'] : state;
-
-            setScoreTotal({
-                name: personalScore.user_ref.name,
-                vnu_id: personalScore.user_ref.vnu_id,
-                total_credits : totalCredit,
-                cpa: CPA,
-                stt: state
-            });
-            // this.forceUpdate();
-            // console.log(scoreTotal);
+                // this.forceUpdate();
+                // console.log(scoreTotal);
         }
-    )
+        }
+        
+        abc();
     }, [props.vnu_id]);
+
+
+    return (
+        <div>
+            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal}></Scoreboard>
+        </div>
+    );
+}
 
 
     // const columns = [
@@ -90,10 +107,3 @@ function StudentScore(props) {
     // ]
 
     // console.log(scoreboard);
-
-    return (
-        <div>
-            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal}></Scoreboard>
-        </div>
-    );
-}

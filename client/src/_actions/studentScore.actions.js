@@ -33,10 +33,8 @@ function useStudentScoreAction (param) {
             console.log("No response.");
             return null;
         }
-        response.json().then(rawjson => { 
-            console.log(rawjson.status);
-            setpScore(rawjson.message);
-          }); 
+        let rawjson = await response.json();
+        return rawjson.message;
     }
 
     function setScoreData (rawjson) {

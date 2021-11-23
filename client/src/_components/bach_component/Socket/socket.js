@@ -33,7 +33,6 @@ export default function Socket(props) {
             console.log("Socket init status " + socketWrapper.initiated)
             console.log("Socket connect status" + socketWrapper.isConnected)
             setSocketConnected(true)
-            console.log("Connected")
             clearInterval(id)
           }
         }, 300)

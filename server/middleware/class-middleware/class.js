@@ -58,6 +58,16 @@ async function findClassByClassId(req, res, next) {
 }
 /** Tiên quyết đã findClassByClassId */
 async function fFindClassByClassId(req, res, next) {
+    console.log(req.query)
+    await req.classInstance.populate('class_teacher')
+    if (!req.query.without_member)
+        await req.classInstance.populate('class_members')
+    if (req.query.teacher) {
+        res.status(200)
+        res.json(req.classInstance.class_teacher)
+        return
+    }
+    
     res.status(200);
     res.json(req.classInstance);
 }

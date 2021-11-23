@@ -53,8 +53,49 @@ function useStudentInfoAction (param) {
           }); 
     }
 
+    async function AddStudent(emails) {
+        emails = emails.replace(/\s+/g, '');
+        var emailArr = emails.split(',');
+        var convertedEmails = '';
+        emailArr.forEach(function(element, idx, array){
+            
+            if (idx === array.length - 1){
+                convertedEmails +=  `\"${element}\"`;
+            } else {
+                convertedEmails +=  `\"${element}\",`;
+            }
+        });
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("members",`[${convertedEmails}]`);
+        console.log(urlencoded);
+        const response = await fetchWrapper.post(`http://localhost:3000/api/classes/${currentClass.class_id}/members/add`, "application/x-www-form-urlencoded", urlencoded);
+        if (response == null) {
+            console.log("No response.");
+            setAlert({message: "Lỗi", description: "Không thể thêm thành viên !"});
+            return null;
+        }
+        response.json().then(rawjson => { 
+            if (rawjson.status == "Success") {
+                getStudentList(currentClass);
+                var description;
+                var message = 'Thành công';
+                description = `Thêm các thành viên :${rawjson.message.added} thành công ! Không thể các thành viên :${rawjson.message.failed}`
+                if (rawjson.message.added.length === 0) {
+                    description = `Không thể các thành viên :${rawjson.message.failed}` ;
+                    message = "Thất bại";
+                }
+                if (rawjson.message.failed.length === 0){
+                    description = `Thêm các thành viên :${rawjson.message.added} thành công !`;
+                    } 
+                setAlert({message: message, description: description});
+            }
+            return rawjson;
+          }); 
+    }
+
     return {
         getStudentList : getStudentList,
         deleteStudent : deleteStudent,
+        AddStudent : AddStudent,
     }
 }

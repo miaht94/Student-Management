@@ -6,7 +6,7 @@ import { SearchOutlined, EditTwoTone, DeleteFilled, WechatOutlined} from '@ant-d
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-import {StudentProfile} from '_components/studentInfoList';
+import {StudentProfile, AddStudentForm} from '_components/studentInfoList';
 import {useStudentInfoAction} from '_actions';
 
 
@@ -31,6 +31,8 @@ function StudentInfoTable(props){
         searchText: '',
         searchedColumn: '',
         visible : false,
+        visible2: false
+        ,
         currentRow: {
           _id: '',
           key: 1,
@@ -81,6 +83,19 @@ function StudentInfoTable(props){
           ...state,
           visible : false,
       })
+    }
+
+    let handleCloseModal2 = () => {
+      setState({
+        ...state,
+        visible2 : false,
+    })
+  }
+    let handleAddStudent = () => {
+      setState({
+        ...state,
+        visible2 : true,
+    })
     }
 
     let handleMessage = (record) => {
@@ -174,38 +189,7 @@ function StudentInfoTable(props){
                 multiple: 5,
               },
         },
-        // {
-        //     title: 'State',
-        //     key: 'tags',
-        //     width: 100,
-        //     dataIndex: 'tags',
-        //     filters: [
-        //         {
-        //           text: 'Cảnh cáo',
-        //           value: 'Cảnh cáo',
-        //         },
-        //         {
-        //           text: 'Bình thường',
-        //           value: 'Bình thường',
-        //         },
-        //       ],
-        //       onFilter: (value, record) => record.tags.indexOf(value) === 0,
-        //     render: tags => (
-        //         <span>
-        //         {tags.map(tag => {
-        //             let color = 'red';
-        //             if (tag === 'Bình thường') {
-        //                 color = 'green';
-        //             }
-        //             return (
-        //                 <Tag color= {color} key = {tag}>
-        //                     {tag.toUpperCase()}
-        //                 </Tag>
-        //             );
-        //         })}
-        //         </span>
-        //     )
-        // },
+        
         {
             title: 'Giới tính',
             width: 50,
@@ -272,6 +256,9 @@ function StudentInfoTable(props){
     ]
     return (
         <div>
+            <Button type="primary"
+              onClick = {() => handleAddStudent()}
+              >Thêm sinh viên</Button>
             <Table
             columns={columns}
             dataSource={data}
@@ -279,12 +266,20 @@ function StudentInfoTable(props){
             scroll={{ x: "calc(700px + 50%)", y: 500 }}
             />
             <Modal
-              title="Detailed personal information"
+              title="Thông tin cá nhân"
               visible={state.visible}
               onCancel= {handleCloseModal}
               footer={[]}
             >
               <StudentProfile Id = {state.currentRow._id}/>
+            </Modal>
+            <Modal
+              title="Thêm sinh viên"
+              visible={state.visible2}
+              onCancel= {handleCloseModal2}
+              footer={[]}
+            >
+              <AddStudentForm/>
             </Modal>
         </div>
     )

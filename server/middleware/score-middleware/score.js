@@ -55,9 +55,12 @@ async function checkTargetAddScoreExist(req, res, next) {
 
     var instanceUser = await global.DBConnection.User.findOne({vnu_id : studentVNUId});
     var instanceSubject = await global.DBConnection.Subject.findOne({subject_code: subjectCode});
-    if (instanceUser && instanceSubject) {
+    var instanceSemester = await global.DBConnection.Semester.findOne({semester_id: req.body.semester_id})
+
+    if (instanceUser && instanceSubject && instanceSemester) {
         req.instanceUser = instanceUser;
         req.instanceSubject = instanceSubject;
+        req.instanceSemester = instanceSemester;
         var instanceTable = await global.DBConnection.ScoresTable.findOne({user_ref: instanceUser._id});
         if (instanceTable) {
             req.instanceTable = instanceTable;
@@ -78,7 +81,7 @@ async function checkTargetAddScoreExist(req, res, next) {
                 next();
             else {
                 res.status(400);
-                res.json(RES_FORM("Error", "Score for this subject is existed in user table score"))
+                res.json(RES_FORM("Error", "Điểm cho môn học này đã tồn tại trong bảng điểm"))
                 return;
             }
         } else {
@@ -92,14 +95,26 @@ async function checkTargetAddScoreExist(req, res, next) {
                 next();
             } catch (e) {
                 res.status(400);
-                res.json(RES_FORM("Error", "Error when create new scores table for user"));
+                res.json(RES_FORM("Error", "Lỗi khi khởi tạo bảng điểm lần đầu"));
                 return;
             }
             
         }
     } else {
         res.status(404);
-        res.json(RES_FORM("Error", "Target VNU-ID or Subject not found"))
+        if (!instanceUser){
+            res.json(RES_FORM("Error", "Không tìm được VNU-ID" + req.body.vnu_id))
+            return;
+        }
+        if (!instanceSemester) {
+            res.json(RES_FORM("Error", "Không tìm thấy kỳ học " + req.body.semester_id))
+            return
+        }
+        if (!instanceSubject) {
+            res.json(RES_FORM("Error", "Không tìm thấy môn học" + req.body.subject_code))
+        }
+            
+
         return;
     }
 }
@@ -114,21 +129,22 @@ async function fAddScoreToScoresTable(req, res) {
         var instanceScore = new global.DBConnection.Score({
             score: score,
             subject: instanceSubject._id,
+            semester_id: req.instanceSemester._id
         });
         await instanceScore.save();
     } catch (e) {
         res.status(400);
-        res.json(RES_FORM("Error", `Error when create instanceScore ${e}`));
+        res.json(RES_FORM("Error", `Lỗi khi khởi tạo dữ liệu điểm. Lỗi: ${e}`));
         return;
     }
     try {
         instanceTable.scores.push(instanceScore);
         await instanceTable.save();
         res.status(200);
-        res.json(RES_FORM("Success", `Added ${instanceSubject.subject_code} = ${score} to ${instanceUser.vnu_id} scoreboard`));
+        res.json(RES_FORM("Success", `Đã thêm môn học ${instanceSubject.subject_code} = ${score} vào bảng điểm ${instanceUser.vnu_id} `));
     } catch(e) {
         res.status(400);
-        res.json(RES_FORM("Error", `Error when push instanceScore to scoreboard ${e}`));
+        res.json(RES_FORM("Error", `Lỗi khi nhập dữ liệu điểm vào bảng điểm. Lỗi: ${e}`));
         return;
     }
     

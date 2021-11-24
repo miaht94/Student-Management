@@ -13,6 +13,7 @@ async function validateToken(req, res, next) {
             if (instance != null) {
                 req.authState = Configs.AUTH_STATE.AUTHORIZED;
                 req.senderVNUId = instance.user_ref.vnu_id;
+                req.isAdmin = instance.user_ref.role == "admin";
                 req.senderInstance = instance.user_ref;
                 if (req.senderInstance == null) throw Error("UserNotFound")
                 next();
@@ -46,6 +47,22 @@ async function validateToken(req, res, next) {
         next();
     }
 }
+
+/**
+ * Call After validate token (have isAdmin ?)
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+function checkIsAdmin(req, res, next) {
+    if (req.isAdmin) {
+        next()
+    } else {
+        req.status(400)
+        req.json(Configs.RES_FORM("Error", "Cần quyền của quản trị viên để thực hiện thao tác này"))
+    }
+}
+
 function validateLoginArgument(req, res, next) {
     const rUsername = req.body.username;
     const rPassword = req.body.password;
@@ -86,4 +103,4 @@ async function login(req, res) {
     })
 }
 
-module.exports = {validateToken, validateLoginArgument, login};
+module.exports = {checkIsAdmin, validateToken, validateLoginArgument, login};

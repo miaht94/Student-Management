@@ -28,6 +28,7 @@ const DBConnection = require('./module/DBModule/DBConnection');
 const IOConnection = require('./module/IOModule/IOConnection');
 const subjectRouter = require('./routers/subject');
 const scoreRouter = require('./routers/score');
+const semesterRouter = require('./routers/semester');
 var serverWS = require('http').createServer(app);
 
 app.use((req, res, next) => {
@@ -44,6 +45,7 @@ app.use(uploadRouter);
 app.use(publicRoute);
 app.use(scoreRouter);
 app.use(subjectRouter);
+app.use(semesterRouter);
 (async () => {
   await DBConnection.Init();
   var server = app.listen(8081, function () {

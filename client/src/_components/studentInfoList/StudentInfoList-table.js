@@ -31,7 +31,8 @@ function StudentInfoTable(props){
         searchText: '',
         searchedColumn: '',
         visible : false,
-        visible2: false
+        visibleAdding: false,
+        visiblePopup: false
         ,
         currentRow: {
           _id: '',
@@ -71,11 +72,12 @@ function StudentInfoTable(props){
           visible : true});
     }
 
-    let handleDelete = (record) => {
+    let handleDelete = () => {
         setState({
           ...state,
-          currentRow : record,});
-        studentInfoAction.deleteStudent(record.vnu_id);
+          visiblePopup : false,
+        })
+        studentInfoAction.deleteStudent(state.currentRow.vnu_id);
     }
 
     let handleCloseModal = () => {
@@ -85,18 +87,33 @@ function StudentInfoTable(props){
       })
     }
 
-    let handleCloseModal2 = () => {
+    let handleCloseModalAdding = () => {
       setState({
         ...state,
-        visible2 : false,
+        visibleAdding : false,
     })
   }
     let handleAddStudent = () => {
       setState({
         ...state,
-        visible2 : true,
+        visibleAdding : true,
     })
     }
+
+    let handlePopUpCancel = () => {
+      setState({
+        ...state,
+        visiblePopup : false,
+    })
+  }
+
+    let showPopconfirm = (record) => {
+      setState({
+        ...state,
+        currentRow : record,
+        visiblePopup : true,
+    })
+  }
 
     let handleMessage = (record) => {
         alert('gửi tin nhắn tới id ' + record.vnu_id);
@@ -188,6 +205,7 @@ function StudentInfoTable(props){
                 compare: (a, b) => a.vnu_id - b.vnu_id,
                 multiple: 5,
               },
+            defaultSortOrder: 'ascend',
         },
         
         {
@@ -231,15 +249,16 @@ function StudentInfoTable(props){
                 />
 
                 <Button
-                danger
-                type="primary"
-                title="Xóa thành viên"
-                onClick={() => handleDelete(record)}
-                icon={<DeleteFilled />}
-                size="small"
-                style={{ width: 50 }}
-                />
-                
+                  danger
+                  type="primary"
+                  title="Xóa thành viên"
+                  onClick={() =>showPopconfirm(record)}
+                  icon={<DeleteFilled />}
+                  size="small"
+                  style={{ width: 50 }}
+                  />
+
+                              
                 <Link to={`/chat/${record.vnu_id}`} className="btn btn-link">
                   <Button
                   type="primary"
@@ -275,11 +294,22 @@ function StudentInfoTable(props){
             </Modal>
             <Modal
               title="Thêm sinh viên"
-              visible={state.visible2}
-              onCancel= {handleCloseModal2}
+              visible={state.visibleAdding}
+              onCancel= {handleCloseModalAdding}
               footer={[]}
             >
               <AddStudentForm/>
+            </Modal>
+            <Modal
+              title="Bạn có chắc là xóa thành viên này?"
+              visible={state.visiblePopup}
+              onOk={() => handleDelete()}
+              onCancel={handlePopUpCancel}
+              okText="Xác nhận"
+              okType= 'danger'
+              cancelText="Hủy bỏ"
+            >
+              Xác nhận sẽ xóa thành viên {state.currentRow.name} ra khỏi lớp!
             </Modal>
         </div>
     )

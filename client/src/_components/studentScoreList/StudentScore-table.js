@@ -260,6 +260,7 @@ function StudentScoreTable(props){
     ]
     return (
         <div>
+            <h2>Bảng điểm sinh viên</h2>
             <Table
             columns={columns}
             dataSource={data}
@@ -273,7 +274,7 @@ function StudentScoreTable(props){
               footer={[]}
               width={1100}
             >
-              <StudentScore vnu_id = {state.currentRow.vnu_id}/>
+              <StudentScore vnu_id = {state.currentRow.vnu_id} isPersonal={false}/>
             </Modal>
         </div>
     )

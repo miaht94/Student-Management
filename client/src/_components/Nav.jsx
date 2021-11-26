@@ -75,12 +75,12 @@ function Nav(props) {
             }
             {classWrapper.curClass &&
             <>
-        <Menu.Item key={`/${classWrapper.curClass.class_id}/dashboard`}>
-          <DashboardOutlined />
-          <span>Dashboard</span>
-          <Link to={`/${classWrapper.curClass.class_id}/dashboard`}></Link>
-        </Menu.Item>
-        <Menu.Item key={`/${classWrapper.curClass.class_id}/studentinfo`}>
+            <Menu.Item key={`/${classWrapper.curClass.class_id}/dashboard`}>
+              <DashboardOutlined />
+              <span>Dashboard</span>
+              <Link to={`/${classWrapper.curClass.class_id}/dashboard`}></Link>
+            </Menu.Item>
+            <Menu.Item key={`/${classWrapper.curClass.class_id}/studentinfo`}>
               <InfoCircleOutlined />
               <span>Thông tin SV</span>
               <Link to={`/${classWrapper.curClass.class_id}/studentinfo`}></Link>
@@ -107,10 +107,15 @@ function Nav(props) {
             
             <Menu.Item key="/profile">
               <UserOutlined />
-              <span>Cá nhân</span>
+              <span>Hồ sơ cá nhân</span>
               <Link to="/profile"></Link>
             </Menu.Item>
-            <Menu.Item key="abc">
+            {/* <Menu.Item key="/personalscore">
+              <UserOutlined />
+              <span>Bảng điểm cá nhân</span>
+              <Link to="/personalscore"></Link>
+            </Menu.Item> */}
+            <Menu.Item key="nothing">
             </Menu.Item>
             <Menu.Item key="logout" onClick={userActions.logout}>
               <LoginOutlined />

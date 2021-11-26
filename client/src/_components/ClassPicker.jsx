@@ -34,12 +34,12 @@ function ClassPicker(props) {
     };
   
     const handleOk = (values) => {
-      console.log("Sending.");
+      // console.log("Sending.");
       setConfirmLoading(true);
       classWrapper.createClass(values.class_name);
       setVisible(false);
       setConfirmLoading(false);
-      console.log(classes);
+      // console.log(classes);
     };
 
     var drawerVisible = props.drawerVisible;
@@ -47,7 +47,7 @@ function ClassPicker(props) {
     var onDrawerClose = props.onDrawerClose;
     var input = classWrapper.classes;
   
-    console.log(input);
+    // console.log(input);
 
     let Cards = [];
     for(let i = 0; i < input.length; i++) {

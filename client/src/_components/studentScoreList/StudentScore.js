@@ -19,13 +19,13 @@ function StudentScore(props) {
     useEffect(() => {
         console.log("Reconstruct SScore")
         async function initScore() {
-            console.log(props.vnu_id);
+            // console.log(props.vnu_id);
         if (!props.vnu_id) {
             return;
         } else {
             let newData = await studentScoreAction.getScoreByID(props.vnu_id);
             let semesters = await studentScoreAction.getAllSemester();
-            console.log(semesters);
+            // console.log(semesters);
             setPScore(newData);
             var fetchedScore = newData.scores;
             
@@ -45,8 +45,8 @@ function StudentScore(props) {
                 // semester._id của scores là mã ID dạng hash
                 // còn element.semester_id của semesters là id kiểu 20201
                 semesters.forEach(semester => {
-                    console.log(semester._id);
-                    console.log(element.semester_id);
+                    // console.log(semester._id);
+                    // console.log(element.semester_id);
                     if (semester._id === element.semester_id) {
                         convertedSemester = {
                             semester_id : semester.semester_id,
@@ -93,8 +93,7 @@ function StudentScore(props) {
 
     return (
         <div>
-            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal}></Scoreboard>
-  
+            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal} isPersonal={props.isPersonal}></Scoreboard>
         </div>
     );
 }

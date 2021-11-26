@@ -61,6 +61,11 @@ function Scoreboard(props) {
         },
     ]
 
+    function configChatButton(){
+        return (<Link to={`/chat/${props.scoreTotal.vnu_id}`}>
+                    <Button type="primary" shape="round" icon={<WechatOutlined />} size="small" style={{marginBottom: "8px"}}> Nhắn tin </Button>
+                    </Link>);
+    }
     return (
         <div>
             <Row>
@@ -78,9 +83,7 @@ function Scoreboard(props) {
                     <br/>
                     {/* <Switch defaultChecked={scoreType.decimal} onChange={onChange} /> */}
                     <br/>
-                    <Link to={`/chat/${props.scoreTotal.vnu_id}`}>
-                    <Button type="primary" shape="round" icon={<WechatOutlined />} size="small" style={{marginBottom: "8px"}}> Nhắn tin </Button>
-                    </Link>
+                    {props.isPersonal === false ? configChatButton() : ""}
                     <br/>
                     <Button type="primary" shape="round" size="small" onClick={onChange} > {scoreType.decimal === true? "Xem điểm hệ 4" : "Xem điểm hệ 10"} </Button>
                 </div>

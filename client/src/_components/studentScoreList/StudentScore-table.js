@@ -239,7 +239,7 @@ function StudentScoreTable(props){
           key: 'F',
       },
       {
-        title: 'Action',
+        title: 'Chi tiết',
         key: 'action',
         fixed: "right",
         width: 100,
@@ -267,10 +267,11 @@ function StudentScoreTable(props){
             scroll={{ x: "calc(700px + 50%)", y: 500 }}
             />
             <Modal
-              title="Detailed personal information"
+              title="Bảng điểm sinh viên"
               visible={state.visible}
               onCancel= {handleCloseModal}
               footer={[]}
+              width={1100}
             >
               <StudentScore vnu_id = {state.currentRow.vnu_id}/>
             </Modal>

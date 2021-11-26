@@ -27,7 +27,7 @@ function useStudentScoreAction (param) {
     }
 
     async function getScoreByID(vnu_id){
-        console.log("get score by id called from studentInfo-action");
+        // console.log("get score by id called from studentInfo-action");
         const response = await fetchWrapper.get(`http://localhost:3000/api/scores/${vnu_id}`, null, null);
         if (response == null) {
             console.log("No response.");
@@ -36,6 +36,33 @@ function useStudentScoreAction (param) {
         let rawjson = await response.json();
         return rawjson.message;
     }
+
+    async function getSemesterByID(semesterId){
+        // console.log("get semester by id called from studentInfo-action");
+        const response = await fetchWrapper.get(`http://localhost:3000/api/semesters/${semesterId}`, null, null);
+        if (response == null) {
+            console.log("No response.");
+            return {
+                    "_id": "0000",
+                    "semester_id": "0000",
+                    "semester_name": "Kì học không xác định",
+                };
+        }
+        let rawjson = await response.json();
+        return rawjson.message;
+    }
+
+    async function getAllSemester(){
+        // console.log("get semester by id called from studentInfo-action");
+        const response = await fetchWrapper.get(`http://localhost:3000/api/semesters/all`, null, null);
+        if (response == null) {
+            console.log("No response.");
+            return [];
+        }
+        let rawjson = await response.json();
+        return rawjson.message;
+    }
+
 
     function setScoreData (rawjson) {
         let data = rawjson.message
@@ -87,6 +114,8 @@ function useStudentScoreAction (param) {
     return {
         getScoreList : getScoreList,
         getScoreByID : getScoreByID,
+        getSemesterByID : getSemesterByID,
+        getAllSemester : getAllSemester,
         handleData : handleData,
     }
 }

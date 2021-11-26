@@ -28,6 +28,7 @@ const API_PATH = {
     ADD_SCORE_BY_VNU_ID: "/api/scores/add",
     GET_SCORES_BY_ID : "/api/scores/:userId",
     GET_SEMESTER_BY_ID: "/api/semesters/:semesterId",
+    GET_ALL_SEMESTER_BY_ID: "/api/semesters/all",
     ADD_SEMESTER: "/api/semesters/add",
     UPLOAD_SEMESTER: "/api/semesters/upload",
     PUBLIC_DATA: "/public/data/:filename",

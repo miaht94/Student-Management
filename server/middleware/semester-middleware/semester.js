@@ -35,6 +35,19 @@ async function fGetSemester(req, res) {
 
 }
 
+async function fGetAllSemester(req, res) {
+    let semester_id = req.params.semesterId
+    let semesterInstance = await global.DBConnection.Semester.find({})
+    if (semesterInstance) {
+        res.status(200);
+        res.json(RES_FORM("Success", semesterInstance));
+    } else {
+        res.status(404);
+        res.json(RES_FORM("Error", "Mã kỳ học không tồn tại"))
+    }
+
+}
+
 /** Handle upload file first */
 async function fHandleUploadSemester(req, res) {
     let success = [];
@@ -76,4 +89,4 @@ async function fHandleUploadSemester(req, res) {
     res.json(RES_FORM("Success", {added : success, failed: fail}));
 }
 
-module.exports = {fAddSemester, fGetSemester, fHandleUploadSemester}
+module.exports = {fAddSemester, fGetSemester, fHandleUploadSemester, fGetAllSemester}

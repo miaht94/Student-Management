@@ -17,60 +17,83 @@ function StudentScore(props) {
     const [scoreTotal, setScoreTotal] = useState({});
 
     useEffect(() => {
-        async function abc() {
-            console.log(props.vnu_id);
+        console.log("Reconstruct SScore")
+        async function initScore() {
+            // console.log(props.vnu_id);
         if (!props.vnu_id) {
             return;
         } else {
-            let newData = await studentScoreAction.getScoreByID(props.vnu_id)
-   
-                console.log(newData);
-                setPScore(newData);
-                var fetchedScore = newData.scores;
-                var convertedScore =[];
-    
-                var CPA = 0;
-                var totalCredit = 0;
-                var totalScore = 0;
-    
-    
-                fetchedScore.forEach(element => {
-                    convertedScore.push({
-                        subject_name : element.subject.subject_name,
-                        subject_code : element.subject.subject_code,
-                        credits_number : element.subject.credits_number,
-                        score : element.score
-                    })
-                    totalCredit += element.subject.credits_number;
-                    totalScore += element.subject.credits_number*element.score;
+            let newData = await studentScoreAction.getScoreByID(props.vnu_id);
+            let semesters = await studentScoreAction.getAllSemester();
+            // console.log(semesters);
+            setPScore(newData);
+            var fetchedScore = newData.scores;
+            
+            
+            var convertedScore =[];
+
+            var CPA = 0;
+            var totalCredit = 0;
+            var totalScore = 0;
+
+            fetchedScore.forEach(element => {
+                var convertedSemester = {
+                    semester_id: '00000',
+                    semester_name: 'Kì học không xác định'
+                }
+
+                // semester._id của scores là mã ID dạng hash
+                // còn element.semester_id của semesters là id kiểu 20201
+                semesters.forEach(semester => {
+                    // console.log(semester._id);
+                    // console.log(element.semester_id);
+                    if (semester._id === element.semester_id) {
+                        convertedSemester = {
+                            semester_id : semester.semester_id,
+                            semester_name: semester.semester_name
+                        }
+                    }
                 });
-               
-                setScoreboard(convertedScore);
-    
-                CPA = ((totalScore/totalCredit)/10*4).toFixed(2);
-                var state = (CPA > 2.5) ? ['Bình thường'] : ['Cảnh cáo'];
-                state = (CPA < 1) ? ['Đuổi học'] : state;
-    
-                setScoreTotal({
-                    name: personalScore.user_ref.name,
-                    vnu_id: personalScore.user_ref.vnu_id,
-                    total_credits : totalCredit,
-                    cpa: CPA,
-                    stt: state
-                }); console.log(personalScore)
+
+                convertedScore.push({
+                    subject_name : element.subject.subject_name,
+                    subject_code : element.subject.subject_code,
+                    credits_number : element.subject.credits_number,
+                    score : element.score,
+                    scoref : Number.parseFloat(element.score*0.4).toFixed(2),
+                    semester_name : convertedSemester.semester_name,
+                })
+                
+                totalCredit += element.subject.credits_number;
+                totalScore += element.subject.credits_number*element.score;
+            });
+            
+            setScoreboard(convertedScore);
+
+            CPA = ((totalScore/totalCredit)/10*4).toFixed(2);
+            var state = (CPA > 2.5) ? ['Bình thường'] : ['Cảnh cáo'];
+            state = (CPA < 1) ? ['Đuổi học'] : state;
+
+            setScoreTotal({
+                name: newData.user_ref.name,
+                vnu_id: newData.user_ref.vnu_id,
+                total_credits : totalCredit,
+                cpa: CPA,
+                stt: state
+            });
 
                 // this.forceUpdate();
                 // console.log(scoreTotal);
         }
         }
         
-        abc();
+        initScore();
     }, [props.vnu_id]);
 
 
     return (
         <div>
-            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal}></Scoreboard>
+            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal} isPersonal={props.isPersonal}></Scoreboard>
         </div>
     );
 }

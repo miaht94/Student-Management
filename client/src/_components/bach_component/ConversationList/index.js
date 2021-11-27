@@ -54,7 +54,7 @@ export default function ConversationList(props) {
     return (
       <div className="conversation-list">
         <Toolbar
-          title="Messenger"
+          title="Nhắn tin"
           leftItems={[
             <ToolbarButton key="cog" icon="ion-ios-cog" />
           ]}

@@ -40,7 +40,8 @@ function AddStudentForm(props) {
             >
             <Input />
           </Form.Item>
-          <p>Thêm nhiều sinh viên cách nhau bằng dấu ','  </p>
+          <p>Thêm nhiều sinh viên cách nhau bằng dấu ',' </p>
+          <p>Sinh viên được thêm vào lớp phải có tài khoản VNU được cấp bởi admin của hệ thống. </p>
           <Form.Item label=" " colon={false}>
                         <Button type="primary" htmlType="submit" onClick = {handleSubmit}>
                             Thêm sinh viên

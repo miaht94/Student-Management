@@ -1,6 +1,6 @@
 import React ,{useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import { Table, Button, Space , Modal, Input} from 'antd';
+import { Table, Button, Space , Modal, Input, Row, Col} from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined, EditTwoTone, DeleteFilled, WechatOutlined} from '@ant-design/icons';
 import moment from 'moment';
@@ -233,7 +233,7 @@ function StudentInfoTable(props){
           key: 'phone_number',
         },
         {
-            title: 'Action',
+            title: 'Thao tác',
             key: 'action',
             fixed: "right",
             width: 100,
@@ -275,9 +275,18 @@ function StudentInfoTable(props){
     ]
     return (
         <div>
-            <Button type="primary"
-              onClick = {() => handleAddStudent()}
+            <Row>
+            <Col flex="auto">
+              <h2>Thông tin liên hệ sinh viên</h2>
+            </Col>
+            <Col flex="250px">
+            <p align="right">
+              <Button type="primary"
+                onClick = {() => handleAddStudent()}
               >Thêm sinh viên</Button>
+            </p> 
+            </Col>
+            </Row>
             <Table
             columns={columns}
             dataSource={data}

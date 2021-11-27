@@ -16,7 +16,7 @@ import { Feed } from '_components/feed';
 import { Chat } from '_components/chat';
 import { Profile } from '_components/profile';
 import { StudentInfoList } from '_components/studentInfoList';
-import { StudentScoreList } from '_components/studentScoreList';
+import { StudentScoreList, PersonalScore } from '_components/studentScoreList';
 
 import { useAuthWrapper, useClassWrapper } from '_helpers';
 import { authAtom, classPickerVisibleAtom } from '_state';
@@ -81,7 +81,7 @@ function App() {
                             
                             <div style={{'marginLeft': 'auto','marginRight': 'auto' }}>
                                 <Button type="primary" style={{'marginLeft': 'auto','marginRight': 'auto' }} onClick={showDrawer}>
-                                    Đổi lớp
+                                    Chọn lớp
                                 </Button>
                             </div>
                             </Col>
@@ -100,6 +100,7 @@ function App() {
                           <Route path="/account" component={Account} />
                           <PrivateRoute path="/chat" component={Chat} />
                           <PrivateRoute path="/profile" component={Profile} />
+                          {/* <PrivateRoute path="/personalscore" component={PersonalScore}/> */}
                           <PrivateRoute path="/:classID" component={Child} />
                           <Redirect from="*" to="/" />
                         </Switch>
@@ -129,7 +130,6 @@ function Child(props) {
     useEffect(() => {
         classWrapper.chooseClassById(classID).then(data => {
             setloaded(true)
-            
         });
         console.log("Child component construct, classID: ", classID)
     },[])

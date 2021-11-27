@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import {useEffect, useState} from 'react'
 import { authAtom } from '_state';
 import { useClassWrapper } from '_helpers';
+import { classPickerVisibleAtom } from '_state';
 import {Redirect} from 'react-router-dom';
 export { Home };
 
 function Home() {
+    const [drawerVisible, setDrawerVisible] = useRecoilState(classPickerVisibleAtom);
 
     const userData = JSON.parse(localStorage.getItem("userData"));
     const [studentFirstClassLoaded, setStudentFirstClassLoaded] = useState(false);

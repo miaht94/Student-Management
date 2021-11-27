@@ -1,4 +1,3 @@
-
 const Configs = require('./../../configs/Constants')
 
 /** Trả về các cuộc hội thoại của current user theo order Date và kèm theo tin nhắn mới nhất.

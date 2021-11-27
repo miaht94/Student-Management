@@ -4,7 +4,7 @@ export { currentClassAtom };
 
 const currentClassAtom = atom({
     key: {
-        name: 'curclass'
+        name: 'currentclass'
     },
     default: JSON.parse(localStorage.getItem('currentClass'))
 });

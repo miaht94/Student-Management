@@ -20,17 +20,17 @@ function useAuthWrapper(param) {
             console.log("No response");
           }
           console.log(response);
-          response.json().then(rawjson => { 
+          let rawjson = await response.json()
             console.log(rawjson);
             if (rawjson.status == "Logged In Success"){
               console.log(rawjson.status);
               setLoginToken(rawjson.message.token);
-              loadUser();
+              // await loadUser();
             } else {
               alertActions.error("Không thể đăng nhập. Vui lòng kiểm tra lại tên và mật khẩu");
             }
             console.log("Token registered in Recoil is: " + auth);
-          }); 
+
         }
 
         async function logout(){
@@ -61,20 +61,19 @@ function useAuthWrapper(param) {
             console.log("No response.");
           }
           // console.log(response);
-          await response.json().then(rawjson => { 
-            console.log(rawjson);
-            rawjson = rawjson.message
-            var userProfile = {
-              name: rawjson.name,
-              role: rawjson.role,
-              date_of_birth: rawjson.date_of_birth,
-              email: rawjson.email,
-              vnu_id: rawjson.vnu_id
-            }
-            console.log(userProfile)
-            profileAction.getMyProfile();
-            localStorage.setItem('userData', JSON.stringify(userProfile));
-          }); 
+          let rawjson = await response.json()
+          console.log(rawjson);
+          rawjson = rawjson.message
+          var userProfile = {
+            name: rawjson.name,
+            role: rawjson.role,
+            date_of_birth: rawjson.date_of_birth,
+            email: rawjson.email,
+            vnu_id: rawjson.vnu_id
+          }
+          console.log(userProfile)
+          profileAction.getMyProfile();
+          localStorage.setItem('userData', JSON.stringify(userProfile));
         }
 
         async function getUserInfo() {
@@ -111,7 +110,8 @@ function useAuthWrapper(param) {
           getUserInfo : getUserInfo,
           // user: user,
           // loadUserAtom: loadUserAtom,
-          loadLoginToken: loadLoginToken
+          loadLoginToken: loadLoginToken,
+          loadUser
        };
       }
       

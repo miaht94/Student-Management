@@ -1,5 +1,5 @@
 import {  Form, Input, Button, Checkbox  } from 'antd';
-
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,11 +9,14 @@ import { useUserActions } from '_actions';
 import { Redirect } from 'react-router-dom';
 import { authAtom } from '_state';
 import { useRecoilValue } from 'recoil';
+import { useAuthWrapper } from '_helpers';
 export { Login };
 
 function Login(props) {
     const userActions = useUserActions();
     const auth = useRecoilValue(authAtom);
+    const authWrapper = useAuthWrapper();
+    const [loginDone, setLoginDone] = useState(false)
     // form validation rules 
     const validationSchema = Yup.object().shape({
         username: Yup.string().required('Username is required'),
@@ -24,8 +27,16 @@ function Login(props) {
     // get functions to build form with useForm() hook
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
-
-    return (auth ? 
+    useEffect(() => {
+        
+        async function loadUser(){
+            await authWrapper.loadUser();
+            setLoginDone(true);
+        }
+        if (auth)
+            loadUser();
+    }, [auth])
+    return (loginDone ? 
             // logged in 
             <Redirect to={{ pathname: '/', state: { from: props.location } }} />
         :

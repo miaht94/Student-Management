@@ -9,6 +9,7 @@ function useUserActions () {
     const baseUrl = `${process.env.REACT_APP_API_URL}/users`;
     const fetchWrapper = useFetchWrapper();
     const authWrapper = useAuthWrapper();
+    
     const [auth, setAuth] = useRecoilState(authAtom);
     const setUsers = useSetRecoilState(usersAtom);
     const setUser = useSetRecoilState(userAtom);
@@ -32,11 +33,10 @@ function useUserActions () {
         var urlencoded = new URLSearchParams();
         urlencoded.append("username", username);
         urlencoded.append("password", password);
-        authWrapper.login(urlencoded).then(response => {
-            console.log(response);
-            const { from } = history.location.state || { from: { pathname: '/' } };
-            history.push(from);
-        });
+        let response = await authWrapper.login(urlencoded)
+        console.log(response);
+        const { from } = history.location.state || { from: { pathname: '/' } };
+        history.push(from);
     }
 
     async function logout() {

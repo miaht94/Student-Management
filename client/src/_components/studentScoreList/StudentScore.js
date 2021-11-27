@@ -17,7 +17,6 @@ function StudentScore(props) {
     const [scoreTotal, setScoreTotal] = useState({});
 
     useEffect(() => {
-        console.log("Reconstruct SScore")
         async function abc() {
             console.log(props.vnu_id);
         if (!props.vnu_id) {
@@ -53,12 +52,12 @@ function StudentScore(props) {
                 state = (CPA < 1) ? ['Đuổi học'] : state;
     
                 setScoreTotal({
-                    name: newData.user_ref.name,
-                    vnu_id: newData.user_ref.vnu_id,
+                    name: personalScore.user_ref.name,
+                    vnu_id: personalScore.user_ref.vnu_id,
                     total_credits : totalCredit,
                     cpa: CPA,
                     stt: state
-                });
+                }); console.log(personalScore)
 
                 // this.forceUpdate();
                 // console.log(scoreTotal);
@@ -72,7 +71,6 @@ function StudentScore(props) {
     return (
         <div>
             <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal}></Scoreboard>
-  
         </div>
     );
 }

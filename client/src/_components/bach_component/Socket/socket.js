@@ -17,7 +17,6 @@ export default function Socket(props) {
     var onConnected = socketAction.onConnected;
     let [isSocketConnected, setSocketConnected] = useRecoilState(socketConnected)
     useEffect(() => {
-      debugger
         if (!socketWrapper.initiated) {
           socketWrapper.initConnection(auth);
         } 
@@ -29,7 +28,6 @@ export default function Socket(props) {
         let id = setInterval(() => {
           
           if (socketWrapper.isConnected){
-            debugger
             console.log("Socket init status " + socketWrapper.initiated)
             console.log("Socket connect status" + socketWrapper.isConnected)
             setSocketConnected(true)

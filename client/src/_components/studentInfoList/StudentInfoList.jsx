@@ -11,6 +11,7 @@ function StudentInfoList() {
     const [student, setstudent] = useRecoilState(studentsAtom);
     return (
         <div className="p-4">
+            
             <StudentInfoTable data={student}/>
         </div>
     );

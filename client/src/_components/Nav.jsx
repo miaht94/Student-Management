@@ -35,6 +35,7 @@ function Nav(props) {
     const classWrapper = useClassWrapper();
     const auth = props.auth;
     const onLogout = props.onLogout;
+    const userData = JSON.parse(localStorage.getItem("userData"));
     // only show nav when logged in
 
     useEffect(()=> {
@@ -48,8 +49,7 @@ function Nav(props) {
     // const currentClassID = JSON.parse(localStorage.getItem('currentClass')).class_id;
 
     return (
-        <Sider 
-        style={{
+        <Sider style={{
           overflow: 'auto',
           height: '90vh',
           left: 0,
@@ -64,39 +64,45 @@ function Nav(props) {
             theme="dark"
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
-			selectedKeys={[location.pathname]}
+			      selectedKeys={[location.pathname]}
           >
             {!classWrapper.curClass && 
               <Menu.Item key="/">
-              <HomeOutlined />
-              <span>Trang chủ</span>
-              <Link to="/"></Link>
-            </Menu.Item>
+                <HomeOutlined />
+                <span>Trang chủ</span>
+                <Link to="/"></Link>
+              </Menu.Item>
             }
-            {classWrapper.curClass &&
-            <>
-        <Menu.Item key={`/${classWrapper.curClass.class_id}/dashboard`}>
-          <DashboardOutlined />
-          <span>Dashboard</span>
-          <Link to={`/${classWrapper.curClass.class_id}/dashboard`}></Link>
-        </Menu.Item>
-        <Menu.Item key={`/${classWrapper.curClass.class_id}/studentinfo`}>
-              <InfoCircleOutlined />
-              <span>Thông tin SV</span>
-              <Link to={`/${classWrapper.curClass.class_id}/studentinfo`}></Link>
-            </Menu.Item>
-            <Menu.Item key={`/${classWrapper.curClass.class_id}/feed`}>
-              <TableOutlined />
-              <span>Bảng tin</span>
-              <Link to={`/${classWrapper.curClass.class_id}/feed`}></Link>
-            </Menu.Item>
-            <Menu.Item key={`/${classWrapper.curClass.class_id}/studentscore`}>
-              <TableOutlined />
-              <span>Bảng điểm SV</span>
-              <Link to={`/${classWrapper.curClass.class_id}/studentscore`}></Link>
-            </Menu.Item>
-        </>
-      }
+            {(classWrapper.curClass) &&
+              <>
+              
+              {(userData.role == "teacher") &&
+                <Menu.Item key={`/${classWrapper.curClass.class_id}/dashboard`}>
+                  <DashboardOutlined />
+                  <span>Dashboard</span>
+                  <Link to={`/${classWrapper.curClass.class_id}/dashboard`}></Link>
+                </Menu.Item>
+              }
+                <Menu.Item key={`/${classWrapper.curClass.class_id}/studentinfo`}>
+                  <InfoCircleOutlined />
+                  <span>Thông tin SV</span>
+                  <Link to={`/${classWrapper.curClass.class_id}/studentinfo`}></Link>
+                </Menu.Item>
+
+                <Menu.Item key={`/${classWrapper.curClass.class_id}/feed`}>
+                  <TableOutlined />
+                  <span>Bảng tin</span>
+                  <Link to={`/${classWrapper.curClass.class_id}/feed`}></Link>
+                </Menu.Item>
+
+                <Menu.Item key={`/${classWrapper.curClass.class_id}/studentscore`}>
+                  <TableOutlined />
+                  <span>Bảng điểm SV</span>
+                  <Link to={`/${classWrapper.curClass.class_id}/studentscore`}></Link>
+                </Menu.Item>
+
+              </>
+            }
             
             
             <Menu.Item key="/chat">

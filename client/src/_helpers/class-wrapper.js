@@ -48,7 +48,7 @@ function useClassWrapper(param) {
 
     function chooseClass(cls) {
       setCurClass(cls);
-      localStorage.setItem('currentClass', JSON.stringify(cls));
+      localStorage.setItem('currentClass', JSON.stringify(cls).toString());
       console.log("Choosen class :", cls)
       if (cls !== undefined) {
         studentInfoAction.getStudentList(cls);
@@ -61,12 +61,15 @@ function useClassWrapper(param) {
       	response = await response.json();
 		    console.log(response)
 		  for (var myClass of response) {
+        if (classId == null) {
+          chooseClass(myClass)
+          break;
+        }
     		if(classId == myClass.class_id) {
-          
-				chooseClass(myClass);
-				break;
-			}
-      	}
+				  chooseClass(myClass);
+				  break;
+			  }
+      }
 
     } 
 

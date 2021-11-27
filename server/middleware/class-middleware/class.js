@@ -175,7 +175,6 @@ async function fGetCurClasses(req, res) {
         var classes = await global.DBConnection.Class.find({
             class_members: sender._id
         })
-        if (classes.length == 1) classes = classes[0];
         res.status(200);
         res.json(classes);
     }

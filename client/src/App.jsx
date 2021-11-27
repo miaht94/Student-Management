@@ -119,6 +119,7 @@ function App() {
 
 function Child(props) {
     let {classID} = useParams();
+    const userData = JSON.parse(localStorage.getItem("userData"));
     const classWrapper = useClassWrapper();
     const [loaded, setloaded] = useState(false);
     console.log('hello');
@@ -136,14 +137,36 @@ function Child(props) {
     return (
     (!classWrapper.curClass && loaded) ? <Redirect from="*" to="/" /> :
         <>
-            {(classWrapper.curClass) &&  <>
-                    <Switch>
-                    <PrivateRoute exact path="/:classID/dashboard" component={Dashboard} />
-                    <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
-                    <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
-                    <PrivateRoute exact path="/:classID/feed" component={Feed} />
-                    <Redirect from="*" to={`/${classWrapper.curClass.class_id}/dashboard`} />
-                    </Switch>
+            {(classWrapper.curClass) &&  
+                <>
+                    {(userData.role == "teacher") &&
+                        <>
+                            <Switch>
+                            <PrivateRoute exact path="/:classID/dashboard" component={Dashboard} />
+                            <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
+                            <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
+                            <PrivateRoute exact path="/:classID/feed" component={Feed} />
+                            <Redirect from="*" to={`/${classWrapper.curClass.class_id}/dashboard`} />
+                            </Switch>
+                        </>
+                    }
+                    {(userData.role == "student") &&
+                        <>
+                            <Switch>
+                            <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
+                            <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
+                            <PrivateRoute exact path="/:classID/feed" component={Feed} />
+                            <Redirect from="*" to={`/${classWrapper.curClass.class_id}/feed`} />
+                            </Switch>
+                        </>
+                    }
+                    {(userData.role == "admin") &&
+                        <>
+                            <Switch>
+                            {/* route admin here */}
+                            </Switch>
+                        </>
+                    }
                 </>
             }
             

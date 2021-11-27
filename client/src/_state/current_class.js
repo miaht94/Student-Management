@@ -6,8 +6,7 @@ const currentClassAtom = atom({
     key: {
         name: 'curclass'
     },
-    default: null
+    default: JSON.parse(localStorage.getItem('currentClass'))
 });
-
 
 

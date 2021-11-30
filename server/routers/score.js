@@ -10,4 +10,5 @@ scoreRouter.get(Configs.API_PATH.GET_SCORES_BY_ID, validateToken, checkTeacherOf
 scoreRouter.post(Configs.API_PATH.ADD_SCORE_BY_VNU_ID, checkTargetAddScoreExist, fAddScoreToScoresTable);
 scoreRouter.post(Configs.API_PATH.UPLOAD_SV_MH_SCORE, handleUploadFile, fHandleUploadScore);
 scoreRouter.get(Configs.API_PATH.GET_SCORES_CLASS, validateToken, findClassByClassId,  validateClassTeacher, fGetScoresClassByClassId)
+
 module.exports = scoreRouter;

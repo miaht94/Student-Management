@@ -4,47 +4,51 @@ const hash = require('sha256')
 /** Xác định trạng thái của token có hợp lệ chưa
     req.authState được truyền vào req cùng senderVNUId và senderInstance*/
 async function validateToken(req, res, next) {
-    if (req.cookies.token) {
-        let token = req.cookies.token;
-        try {
-            var decoded = jwt.verify(token, Configs.SECRET_KEY);
-            var instance = await global.DBConnection.LoginInfo.findOne({current_token : token}).populate("user_ref");
-            // console.log(instance.user_ref.name);
-            if (instance != null) {
-                req.authState = Configs.AUTH_STATE.AUTHORIZED;
-                req.senderVNUId = instance.user_ref.vnu_id;
-                req.isAdmin = instance.user_ref.role == "admin";
-                req.senderInstance = instance.user_ref;
-                if (req.senderInstance == null) throw Error("UserNotFound")
-                next();
-            } else {
-                req.authState = Configs.AUTH_STATE.INVALID_AUTHORIZED;
-                req.token = token;
-                // next();
-                throw Error("TokenInvalid");
-            }
-        
-          } catch(err) {
-            if (err.name == "TokenExpiredError") {
-                res.status(410);
-                res.send(Configs.RES_FORM("Error", {name : "TokenExpiredError", description: ""}));
-            } else if (err.name == "JsonWebTokenError") {
-                res.status(400);
-                res.send(Configs.RES_FORM("Error", {name : err.name, description: err.message}));
-                res.send(`${err.name} : ${err.message}`)
-            } else if (err.name="UserNotFound") {
-                res.status(400)
-                res.send(Configs.RES_FORM("Error", {name : err.name,description: ""}));
-                
-            } 
-            else {
-                res.status(400);
-                res.send(Configs.RES_FORM("Error", {name : "UnknownError",description: err.toString()}));
-            }
+    let token = req.cookies.token;
+    try {
+        // var decoded = jwt.verify(token, Configs.SECRET_KEY);
+        if (!token) throw Error("TokenNotFound")
+        var instance = await global.DBConnection.LoginInfo.findOne({current_token : token}).populate("user_ref");
+        // console.log(instance.user_ref.name);
+        if (instance != null) {
+            req.authState = Configs.AUTH_STATE.AUTHORIZED;
+            req.senderVNUId = instance.user_ref.vnu_id;
+            req.isAdmin = instance.user_ref.role == "admin";
+            req.senderInstance = instance.user_ref;
+            if (req.senderInstance == null) throw Error("UserNotFound")
+            next();
+        } else {
+            req.authState = Configs.AUTH_STATE.INVALID_AUTHORIZED;
+            req.token = token;
+            // next();
+            throw Error("TokenInvalid");
         }
-    } else {
-        req.authState = Configs.AUTH_STATE.UNAUTHORIZED
-        next();
+    
+        } catch(err) {
+        if (err.name == "TokenExpiredError") {
+            res.status(410);
+            res.send(Configs.RES_FORM("Error", {name : "TokenExpiredError", description: ""}));
+            return;
+        } else if (err.name == "JsonWebTokenError") {
+            res.status(400);
+            res.send(Configs.RES_FORM("Error", {name : err.name, description: err.message}));
+            res.send(`${err.name} : ${err.message}`)
+            return;
+        } else if (err.name="TokenNotFound") {
+            res.status(404)
+            res.send(Configs.RES_FORM("Error", {name : err.name,description: ""}));
+            return;
+        }
+        else if (err.name="UserNotFound") {
+            res.status(400)
+            res.send(Configs.RES_FORM("Error", {name : err.name,description: ""}));  
+            return;
+        } 
+        else {
+            res.status(400);
+            res.send(Configs.RES_FORM("Error", {name : "UnknownError",description: err.toString()}));
+            return;
+        }
     }
 }
 

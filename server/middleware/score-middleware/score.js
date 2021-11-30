@@ -47,6 +47,10 @@ async function fGetScoresByVNUId(req, res) {
         return
     }
 }
+/** Validated token (have senderInstance) */
+async function fGetMyScore(req, res) {
+
+}
 
 async function checkTargetAddScoreExist(req, res, next) {
     let studentVNUId = req.body.vnu_id;

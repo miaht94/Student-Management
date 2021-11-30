@@ -32,6 +32,7 @@ const API_PATH = {
     ADD_SEMESTER: "/api/semesters/add",
     UPLOAD_SEMESTER: "/api/semesters/upload",
     PUBLIC_DATA: "/public/data/:filename",
+    ADMIN_GET_ALL_USERS: "/api/admin/users",
 };
 
 const AUTH_STATE = {

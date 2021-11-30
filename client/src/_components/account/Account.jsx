@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { useRecoilValue, RecoilRoot } from 'recoil';
 
 import { authAtom, initClassAtom } from '_state';
-import { Login, Register } from './';
+import { Login, PasswordRecover } from './';
 
 export { Account };
 
@@ -23,7 +23,7 @@ function Account({ history, match }) {
                 <div className="col-sm-8 offset-sm-2 mt-5">
                     <Switch>
                         <Route path={`${path}/login`} component={Login} />
-                        <Route path={`${path}/register`} component={Register} />
+                        <Route path={`${path}/passwordrecover`} component={PasswordRecover} />
                     </Switch>
                 </div>
             </div>

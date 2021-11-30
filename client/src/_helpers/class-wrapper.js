@@ -60,7 +60,10 @@ function useClassWrapper(param) {
       	let response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
       	response = await response.json();
 		    console.log(response)
-		  for (var myClass of response) {
+        if (response == null) {
+          console.log("No response");
+        } 
+		    for (var myClass of response) {
         if (classId == null) {
           chooseClass(myClass)
           break;

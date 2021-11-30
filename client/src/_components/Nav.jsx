@@ -83,24 +83,33 @@ function Nav(props) {
                   <Link to={`/${classWrapper.curClass.class_id}/dashboard`}></Link>
                 </Menu.Item>
               }
+               <Menu.Item key={`/${classWrapper.curClass.class_id}/feed`}>
+                  <TableOutlined />
+                  <span>Bảng tin</span>
+                  <Link to={`/${classWrapper.curClass.class_id}/feed`}></Link>
+                </Menu.Item>
+              {(userData.role == "teacher") &&
                 <Menu.Item key={`/${classWrapper.curClass.class_id}/studentinfo`}>
                   <InfoCircleOutlined />
                   <span>Thông tin SV</span>
                   <Link to={`/${classWrapper.curClass.class_id}/studentinfo`}></Link>
                 </Menu.Item>
-
-                <Menu.Item key={`/${classWrapper.curClass.class_id}/feed`}>
-                  <TableOutlined />
-                  <span>Bảng tin</span>
-                  <Link to={`/${classWrapper.curClass.class_id}/feed`}></Link>
-                </Menu.Item>
-
+              }
+               
+              {(userData.role == "teacher") &&
                 <Menu.Item key={`/${classWrapper.curClass.class_id}/studentscore`}>
                   <TableOutlined />
                   <span>Bảng điểm SV</span>
                   <Link to={`/${classWrapper.curClass.class_id}/studentscore`}></Link>
                 </Menu.Item>
-
+              }
+              {(userData.role == "student") &&
+                <Menu.Item key={`/personalscore`}>
+                  <UserOutlined />
+                  <span>Bảng điểm cá nhân</span>
+                  <Link to={`/personalscore`}></Link>
+                </Menu.Item>
+              }
               </>
             }
             <Menu.Item key="/chat">
@@ -108,17 +117,11 @@ function Nav(props) {
               <span>Tin nhắn</span>
               <Link to="/chat"></Link>
             </Menu.Item>
-            
             <Menu.Item key="/profile">
               <UserOutlined />
               <span>Hồ sơ cá nhân</span>
               <Link to="/profile"></Link>
             </Menu.Item>
-            {/* <Menu.Item key="/personalscore">
-              <UserOutlined />
-              <span>Bảng điểm cá nhân</span>
-              <Link to="/personalscore"></Link>
-            </Menu.Item> */}
             <Menu.Item key="nothing">
             </Menu.Item>
             <Menu.Item key="logout" onClick={userActions.logout}>

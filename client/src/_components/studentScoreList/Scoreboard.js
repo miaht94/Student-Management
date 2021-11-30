@@ -10,7 +10,7 @@ export { Scoreboard };
 
 function Scoreboard(props) {
 
-    console.log(props);
+    // console.log(props);
     const [scoreType, setScoreType] = useState({
         decimal: true
     });

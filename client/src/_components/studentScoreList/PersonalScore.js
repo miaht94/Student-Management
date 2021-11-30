@@ -14,7 +14,7 @@ function PersonalScore() {
 
     return (
         <div>
-            <StudentScore vnu_id = {"19020001"} isPersonal={true} />
+            <StudentScore vnu_id = {19020001} isPersonal={true} />
         </div>
     )
    

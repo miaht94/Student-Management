@@ -100,7 +100,6 @@ function App() {
                           <Route path="/account" component={Account} />
                           <PrivateRoute path="/chat" component={Chat} />
                           <PrivateRoute path="/profile" component={Profile} />
-                          {/* <PrivateRoute path="/personalscore" component={PersonalScore}/> */}
                           <PrivateRoute path="/:classID" component={Child} />
                           <Redirect from="*" to="/" />
                         </Switch>
@@ -153,9 +152,10 @@ function Child(props) {
                     {(userData.role == "student") &&
                         <>
                             <Switch>
-                            <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
-                            <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
+                            {/* <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
+                            <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} /> */}
                             <PrivateRoute exact path="/:classID/feed" component={Feed} />
+                            <PrivateRoute path="/personalscore" component={PersonalScore}/>
                             <Redirect from="*" to={`/${classWrapper.curClass.class_id}/feed`} />
                             </Switch>
                         </>

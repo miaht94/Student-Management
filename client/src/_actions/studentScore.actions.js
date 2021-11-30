@@ -37,6 +37,17 @@ function useStudentScoreAction (param) {
         return rawjson.message;
     }
 
+    async function getMyScore(){
+        // console.log("get score by id called from studentInfo-action");
+        const response = await fetchWrapper.get(`http://localhost:3000/api/scores/me`, null, null);
+        if (response == null) {
+            console.log("No response.");
+            return null;
+        }
+        let rawjson = await response.json();
+        return rawjson.message;
+    }
+
     async function getSemesterByID(semesterId){
         // console.log("get semester by id called from studentInfo-action");
         const response = await fetchWrapper.get(`http://localhost:3000/api/semesters/${semesterId}`, null, null);
@@ -114,6 +125,7 @@ function useStudentScoreAction (param) {
     return {
         getScoreList : getScoreList,
         getScoreByID : getScoreByID,
+        getMyScore : getMyScore,
         getSemesterByID : getSemesterByID,
         getAllSemester : getAllSemester,
         handleData : handleData,

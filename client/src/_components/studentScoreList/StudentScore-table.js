@@ -47,7 +47,7 @@ function StudentScoreTable(props){
       };
     
     let handleShowScoreboard = (record) =>{
-      console.log(record)
+      // console.log(record)
         setState({
           ...state,
           currentRow : record,

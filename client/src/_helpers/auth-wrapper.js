@@ -36,9 +36,9 @@ function useAuthWrapper(param) {
         async function logout(){
             console.log("Logout in authWrapper called")
             setLoginToken("");
-            localStorage.removeItem('userData');
+            // localStorage.removeItem('userData');
+            localStorage.clear();
             printLoginToken();
-            
         }
   
         function setLoginToken(token){

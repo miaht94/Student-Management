@@ -52,7 +52,8 @@ function useFetchWrapper() {
                 if (rawjson.message.name === "TokenNotFound" || rawjson.message.name === "UserNotFound"){
                     console.log(rawjson.status);
                     setAuth(null);
-                    localStorage.removeItem('userData');
+                    // localStorage.removeItem('userData');
+                    localStorage.clear();
                 }
             }
             return response;

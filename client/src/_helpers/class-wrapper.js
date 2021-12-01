@@ -57,9 +57,10 @@ function useClassWrapper(param) {
   }
 
     async function chooseClassById(classId) {
-      	let response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
-      	response = await response.json();
-		    console.log(response)
+      let response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
+      response = await response.json();
+      response = response.message
+      console.log(response)
 		  for (var myClass of response) {
         if (classId == null) {
           chooseClass(myClass)

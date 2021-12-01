@@ -19,7 +19,7 @@ function useClassWrapper(param) {
             console.log("No response.");
         }
         response.json().then(rawjson => { 
-            setClasses(rawjson);
+            setClasses(rawjson.message);
           });
     }
 

@@ -168,16 +168,16 @@ async function fGetCurClasses(req, res) {
         var classes = await global.DBConnection.Class.find({
             class_teacher: sender._id
         })
-        res.status(200);
-        res.json(Configs.RES_FORM("Success", classes));
+
 
     } else if (sender.role == "student") {
         var classes = await global.DBConnection.Class.find({
             class_members: sender._id
         })
-        res.status(200);
-        res.json(Configs.RES_FORM("Success", classes));
+        
     }
+    res.status(200);
+    res.json(Configs.RES_FORM("Success", classes));
 }
 
 /**Tiên quyết : findClassByClassId => validateClassTeacher */

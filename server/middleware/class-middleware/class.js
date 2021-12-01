@@ -169,7 +169,7 @@ async function fGetCurClasses(req, res) {
             class_teacher: sender._id
         })
         res.status(200);
-        res.json(classes);
+        res.json(Configs.RES_FORM("Success", classes));
 
     } else if (sender.role == "student") {
         var classes = await global.DBConnection.Class.find({

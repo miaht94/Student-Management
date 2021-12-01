@@ -22,10 +22,10 @@ function useAuthWrapper(param) {
           console.log(response);
           let rawjson = await response.json()
             console.log(rawjson);
-            if (rawjson.status == "Logged In Success"){
+            if (rawjson.status === "Logged In Success"){
               console.log(rawjson.status);
               setLoginToken(rawjson.message.token);
-              // await loadUser();
+              await loadUser();
             } else {
               alertActions.error("Không thể đăng nhập. Vui lòng kiểm tra lại tên và mật khẩu");
             }
@@ -36,9 +36,9 @@ function useAuthWrapper(param) {
         async function logout(){
             console.log("Logout in authWrapper called")
             setLoginToken("");
-            localStorage.removeItem('userData');
+            // localStorage.removeItem('userData');
+            localStorage.clear();
             printLoginToken();
-            
         }
   
         function setLoginToken(token){
@@ -114,9 +114,6 @@ function useAuthWrapper(param) {
           loadUser
        };
       }
-      
-      
 
-      //redirect về login và xoá state
 
 

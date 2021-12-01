@@ -2,14 +2,12 @@ import { BrowserRouter as Router,
     Switch,
     Route, 
     Redirect,
-    Link,
     useParams, useLocation} from 'react-router-dom';
 import { useRecoilValue, useRecoilState } from 'recoil';
 
-import { Nav, Alert, PrivateRoute, ClassPicker } from '_components';
+import { Nav, PrivateRoute, ClassPicker } from '_components';
 import { history } from '_helpers';
 import { Home } from 'home';
-import { Users } from 'users';
 import { Account } from '_components/account';
 import { Dashboard } from '_components/dashboard';
 import { Feed } from '_components/feed';
@@ -20,12 +18,11 @@ import { StudentScoreList, PersonalScore } from '_components/studentScoreList';
 
 import { useAuthWrapper, useClassWrapper } from '_helpers';
 import { authAtom, classPickerVisibleAtom } from '_state';
-import { Layout, Menu, Button, Row, Col, Drawer } from 'antd';
+import { Layout, Button, Row, Col, } from 'antd';
 
 import React, { useEffect, useState } from 'react';
 import { loadingVisibleAtom } from '_state';
 import Title from 'antd/lib/typography/Title';
-import SubMenu from 'antd/lib/menu/SubMenu';
 import { useUserActions } from '_actions';
 import {Notification} from './_components/bach_component/Notification/Notification'
 import { socketWrapper } from '_helpers/socket-wrapper';
@@ -100,7 +97,6 @@ function App() {
                           <Route path="/account" component={Account} />
                           <PrivateRoute path="/chat" component={Chat} />
                           <PrivateRoute path="/profile" component={Profile} />
-                          {/* <PrivateRoute path="/personalscore" component={PersonalScore}/> */}
                           <PrivateRoute path="/:classID" component={Child} />
                           <Redirect from="*" to="/" />
                         </Switch>
@@ -153,9 +149,10 @@ function Child(props) {
                     {(userData.role == "student") &&
                         <>
                             <Switch>
-                            <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
-                            <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
+                            {/* <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
+                            <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} /> */}
                             <PrivateRoute exact path="/:classID/feed" component={Feed} />
+                            <PrivateRoute path="/personalscore" component={PersonalScore}/>
                             <Redirect from="*" to={`/${classWrapper.curClass.class_id}/feed`} />
                             </Switch>
                         </>

@@ -23,7 +23,7 @@ function StudentInfoTable(props){
       }
     })});
 
-    console.log(data);
+    // console.log(data);
 
     const studentInfoAction = useStudentInfoAction();
 

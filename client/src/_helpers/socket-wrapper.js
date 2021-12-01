@@ -34,7 +34,7 @@ class socketWrapper {
     static initiated = false;
     static socket = null;
     static initConnection(token) {
-        debugger
+        // debugger
         if (!token) return;
         console.log("Initiating socket connection")
         if (!socketWrapper.initiated) {

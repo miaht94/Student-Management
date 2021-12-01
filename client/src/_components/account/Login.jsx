@@ -19,8 +19,8 @@ function Login(props) {
     const [loginDone, setLoginDone] = useState(false)
     // form validation rules 
     const validationSchema = Yup.object().shape({
-        username: Yup.string().required('Username is required'),
-        password: Yup.string().required('Password is required')
+        username: Yup.string().required('Vui lòng điền tên người dùng'),
+        password: Yup.string().required('Vui lòng điền mật khẩu')
     });
     const formOptions = { resolver: yupResolver(validationSchema) };
 
@@ -59,7 +59,9 @@ function Login(props) {
                         {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
                         Đăng nhập
                     </button>
+                    <Link to="passwordrecover" className="btn btn-link">Quên mật khẩu</Link>
                 </form>
+                
             </div>
         </div>
 

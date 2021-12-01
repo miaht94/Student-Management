@@ -11,14 +11,6 @@ function PrivateRoute({ component: Component, ...rest }) {
         <Route {...rest} render={props => {
     
             if (authWrapper.tokenValue) {
-                // if (JSON.parse(localStorage.getItem('userData')).role == 'teacher'){
-                //     console.log("Teacher session initialized.");
-                //     return <Component {...props} />
-                // }
-                // else if (JSON.parse(localStorage.getItem('userData')).role == 'student'){
-                //     console.log("Student session initialized.");
-                //     return <Component {...props} />
-                // }
                 return <Component {...props} />
             } else
             

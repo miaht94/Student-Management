@@ -5,7 +5,7 @@ import { BachComponent } from '_components/subcomponents';
 
 import { GPADash } from '_components/dashboard';
 
-import { Button } from 'antd';
+import { Card, Button } from 'antd';
 
 export { Dashboard };
 
@@ -14,9 +14,13 @@ function Dashboard() {
     
     return (
         <div className="p-4">
-            <h2>Dashboard</h2>
-            <GPADash>
-            </GPADash>
+            <center>
+            <Card title="Bảng theo dõi" style={{ width: 1000 }}>
+                <GPADash>
+                </GPADash>
+            </Card>
+            </center>
+            
         </div>
     )
 }

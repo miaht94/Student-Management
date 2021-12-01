@@ -23,7 +23,13 @@ function StudentScore(props) {
         if (!props.vnu_id) {
             return;
         } else {
-            let newData = await studentScoreAction.getScoreByID(props.vnu_id);
+            let newData = null ;
+            if (props.isPersonal === true) {
+                newData = await studentScoreAction.getMyScore();
+            }
+            else {
+                newData = await studentScoreAction.getScoreByID(props.vnu_id);
+            }
             let semesters = await studentScoreAction.getAllSemester();
             // console.log(semesters);
             setPScore(newData);

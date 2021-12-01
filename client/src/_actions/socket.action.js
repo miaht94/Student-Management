@@ -1,4 +1,4 @@
-import { useSetRecoilState, useResetRecoilState, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { alertBachAtom } from '../_state/alert_bach';
 import useChatWrapper from '_helpers/chat-wrapper';
 import { useAuthWrapper } from '_helpers';
@@ -14,7 +14,7 @@ function useSocketAction() {
     let [alert, setAlert] = useRecoilState(alertBachAtom);
 
     function onConnected() {
-        debugger
+        // debugger
         socketWrapper.isConnected = true
     }
     function onNewPost(newPost) {
@@ -26,7 +26,7 @@ function useSocketAction() {
     }
 
     function onNewMessage(message) {
-        debugger
+        // debugger
         if (!message.selfSend) {
             setAlert({message: `Tin nhan moi tu : ${message.from.name}`, description: message.message})
         }
@@ -48,7 +48,7 @@ function useSocketAction() {
             latest_message: message,
             latest_sender:  message.isSender ? "isMe" : "notMe"
         }
-        debugger
+        // debugger
         let listUpdating = getRecoil(waitForUpdateLatestMsgAtom) ? [...(getRecoil(waitForUpdateLatestMsgAtom))] : [];
         listUpdating.push(newUpdate);
         setRecoil(waitForUpdateLatestMsgAtom, listUpdating)

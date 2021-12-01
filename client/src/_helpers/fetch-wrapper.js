@@ -9,6 +9,7 @@ export { useFetchWrapper };
 
 
 function useFetchWrapper() {
+    // const authWrapper = useAuthWrapper();
     const [auth, setAuth] = useRecoilState(authAtom);
     const alertActions = useAlertActions();
 
@@ -20,8 +21,8 @@ function useFetchWrapper() {
     };
 
     function request(method) {
-     
-        return (url, header, body) => {
+
+        async function requestor(url, header, body) {
             var myHeaders = new Headers();
             if (header) myHeaders.append("Content-Type", header);
             const requestOptions = {
@@ -37,9 +38,29 @@ function useFetchWrapper() {
                 requestOptions.headers['Content-Type'] = header;
                 requestOptions.body = body;
             }
-            return fetch(url, requestOptions);
+            return await fetch(url, requestOptions);
+        }
+     
+         return async (url, header, body) => {
+            let response = await requestor(url, header, body);
+            let rawjson = await response.clone().json();
+            console.log("Response of request:");
+            console.log(rawjson);
+            if ("message" in rawjson) {
+                console.log("Response of message name:");
+                console.log(rawjson.message.name);
+                if (rawjson.message.name === "TokenNotFound" || rawjson.message.name === "UserNotFound"){
+                    console.log(rawjson.status);
+                    setAuth(null);
+                    // localStorage.removeItem('userData');
+                    localStorage.clear();
+                }
+            }
+            return response;
         }
     }
+
+     
 
     // function loginrequest(method){
     //     console.log("Test Login request");

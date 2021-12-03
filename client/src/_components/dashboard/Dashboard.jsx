@@ -1,17 +1,32 @@
 import { useRecoilState } from 'recoil';
 import React ,{useEffect } from 'react';
-import { dashboardGPAAtom } from '_state';
+import { dashboardGPAAtom, studentsAtom, scoreAtom } from '_state';
 import { BachComponent } from '_components/subcomponents';
 
 import { GPADash } from '_components/dashboard';
 import { StatisticBoard } from '_components/dashboard';
 import { Row, Col, Card, Button } from 'antd';
+import { useStudentScoreAction } from '_actions';
 
 export { Dashboard };
 
 
 function Dashboard() {
-    
+    const [student, setstudent] = useRecoilState(studentsAtom);
+    const [score, setScore] = useRecoilState(scoreAtom);
+
+    const studentScoreAction = useStudentScoreAction();
+
+    useEffect(() =>{
+        console.log("Reconstruct GPADash")
+        async function initDashboard() {
+            
+        };
+
+        initDashboard();
+
+    },[]);
+
     return (
         <div className="p-4" style = {{overflow : "auto"}}>
             <center style =  {{padding : -0.25}}>
@@ -32,7 +47,7 @@ function Dashboard() {
                     </Row>
                     <Row justify = 'center'>
                         <Col>
-                            <GPADash>
+                            <GPADash score = {score}>
                             </GPADash>
                         </Col>
                         <Col>

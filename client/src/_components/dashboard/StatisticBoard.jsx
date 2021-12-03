@@ -11,10 +11,14 @@ export { StatisticBoard };
 
 
 function StatisticBoard() {
-  const [GPAstate, setGPAState] = useRecoilState(dashboardGPAAtom);
-  const [levelGPAstate, setlevelGPAState] = useRecoilState(dashboardLevelGPAAtom);
-  const [filterState, setFilterState] = useRecoilState(dashboardFilterGPAAtom);
-  const resetLevelGPAState = useResetRecoilState(dashboardLevelGPAAtom);
+//   const [GPAstate, setGPAState] = useRecoilState(dashboardGPAAtom);
+//   const [levelGPAstate, setlevelGPAState] = useRecoilState(dashboardLevelGPAAtom);
+//   const [filterState, setFilterState] = useRecoilState(dashboardFilterGPAAtom);
+//   const resetLevelGPAState = useResetRecoilState(dashboardLevelGPAAtom);
+
+    const [GPAStatus, setGPAStatus] =  useRecoilState(dashboardGPAStatusAtom);
+    const [levelStatus, setlevelStatus] = useRecoilState(dashboardLevelStatusAtom);
+
     // Data for GPA state setting
     var refinedData = [];
 
@@ -22,7 +26,7 @@ function StatisticBoard() {
       // Normal: Bình thường
       // Warning: Canh cáo
       // Expelling: Đuổi học
-      var tempLevel = {Normal: 0, Warning: 0, Expelling: 0}
+      var tempStatus = {Normal: 0, Warning: 0, Expelling: 0}
       
       data.forEach(object => {
         var vnu_id = object.user_ref.vnu_id;
@@ -48,28 +52,32 @@ function StatisticBoard() {
         })
 
         console.log(GPA);
-        tempLevel.Normal = (GPA<=4.0 && GPA> 2.51) ? tempLevel.Normal+1 : tempLevel.Normal;
-        tempLevel.Warning = (GPA<=2.5 && GPA> 1) ? tempLevel.Warning+1 : tempLevel.Warning;
-        tempLevel.Expelling = (GPA<=1 && GPA!= 0 ) ? tempLevel.Expelling+1 : tempLevel.Expelling;
+        tempStatus.Normal = (GPA<=4.0 && GPA> 3.2) ? tempStatus.Normal+1 : tempStatus.Normal;
+        tempStatus.Warning = (GPA<=3.2 && GPA> 2.5) ? tempStatus.Warning+1 : tempStatus.Warning;
+        tempStatus.Expelling = (GPA<=2.5 && GPA!= 0 ) ? tempStatus.Expelling+1 : tempStatus.Expelling;
         });
-      var levelVisualized = [];
-      levelVisualized.push({name: 'Bình thường', value: tempLevel.Normal});
-      levelVisualized.push({name: 'Cảnh cáo', value: tempLevel.Warning});
-      levelVisualized.push({name: 'Đuổi học', value: tempLevel.Expelling});
+      var statusVisualized = [];
+      statusVisualized.push({name: 'Bình thường', BinhThuong: tempStatus.Normal});
+      statusVisualized.push({name: 'Cảnh cáo', CanhCao: tempStatus.Warning});
+      statusVisualized.push({name: 'Đuổi học', DuoiHoc: tempStatus.Expelling});
 
-      var levelPush = {
-        data: levelVisualized
+      var statusPush = {
+        data: statusVisualized
       }
+      setlevelStatus(statusPush)
+      setGPAStatus(refinedData)
       //setlevelGPAState(levelPush);
       //setGPAState(refinedData);
       console.log();
+      console.log("levelStatus:" );
+      console.log(levelStatus)
     });
     return (
         <div className="p-4">
             <Card title = "Thống kê tình hình học tập" style={{width: 960, height: 400,}}>
                 <Row justify="center">
                     <BarChart   width={640} height={300} 
-                                data={data}>
+                                data={levelStatus.data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
@@ -77,8 +85,14 @@ function StatisticBoard() {
                         <Legend />
                         {/* Phần này t chưa thử điều chỉnh param của bar,
                         m cứ load data bằng cái atom vào cho t đã rồi t làm tiếp */}
-                        <Bar dataKey="pv" fill="#8884d8" />
-                        <Bar dataKey="uv" fill="#82ca9d" />
+                        {/* <Bar dataKey="pv" fill="#8884d8" />
+                        <Bar dataKey="uv" fill="#82ca9d" /> */}
+                        <Bar    dataKey="BinhThuong" fill="#32cd32" legendType="square" 
+                                name="Bình thường"/>
+                        <Bar dataKey="CanhCao" fill="#FF4500" legendType="square" 
+                                name="Cảnh cáo"/>
+                        <Bar dataKey="DuoiHoc" fill="#8B0000" legendType="square" 
+                                name="Đuổi học"/>
                     </BarChart>
                 </Row>
             </Card>

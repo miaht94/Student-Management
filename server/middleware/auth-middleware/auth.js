@@ -1,6 +1,9 @@
 const Configs = require('./../../configs/Constants')
 const jwt = require('jsonwebtoken');
 const hash = require('sha256')
+const nodemailer = require('nodemailer')
+const smtpTransport = require('nodemailer-smtp-transport');
+const { v4: uuidv4 } = require('uuid');
 /** Xác định trạng thái của token có hợp lệ chưa
     req.authState được truyền vào req cùng senderVNUId và senderInstance*/
 async function validateToken(req, res, next) {
@@ -106,5 +109,49 @@ async function login(req, res) {
         }
     })
 }
-
-module.exports = {checkIsAdmin, validateToken, validateLoginArgument, login};
+async function fForgetPassword(req, res) {
+    var email = req.body.email;
+    var email_owner = await global.DBConnection.User.findOne({email: email});
+    if (!email_owner) {
+        res.status(404);
+        res.json(Configs.RES_FORM("Error", "Email không tồn tại trong hệ thống"))
+        return
+    }
+    var transporter = nodemailer.createTransport(smtpTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        auth: {
+          user: 'vakoyomi@gmail.com',
+          pass: 'Vietanh0911cc'
+        }
+      }));
+      
+      var newPassword = uuidv4();
+      var mailOptions = {
+        from: 'vakoyomi@gmail.com',
+        to: email,
+        subject: 'Website cố vấn học tập',
+        text: 'Password mới của bạn là:' + newPassword
+      };
+      let temp = await global.DBConnection.LoginInfo.findOneAndUpdate({user_ref: email_owner._id},{password: newPassword}, {
+        new: true
+      });
+      if (!temp) {
+        res.status(404);
+        res.json(Configs.RES_FORM("Error", "Có lỗi xảy ra"))
+        return
+      }
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+          res.status(404);
+          res.json(Configs.RES_FORM("Error", "Có lỗi xảy ra"))
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.status(200);
+          res.json(Configs.RES_FORM("Success", "Khôi phục thành công"))
+        }
+      });  
+    
+}
+module.exports = {checkIsAdmin, validateToken, validateLoginArgument, login, fForgetPassword};

@@ -33,6 +33,7 @@ const API_PATH = {
     UPLOAD_SEMESTER: "/api/semesters/upload",
     PUBLIC_DATA: "/public/data/:filename",
     ADMIN_GET_ALL_USERS: "/api/admin/users",
+    FORGET_PASSWORD: "/api/auth/forget_password"
 };
 
 const AUTH_STATE = {

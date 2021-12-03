@@ -11,7 +11,8 @@ const PostSchema = new Schema({
     from: {type: ObjectId, required: true, ref: Configs.DB_SCHEMA.USER},
     content: {type: String, default: "Posted"},
     comments: [{type: [ObjectId], ref: Configs.DB_SCHEMA.COMMENT, default: []}],
-    created_date : {type: Number, default: new Date().getTime()}
+    created_date : {type: Number, default: new Date().getTime()},
+    liked: [{type: [ObjectId], ref: Configs.DB_SCHEMA.USER, default: []}]
 })
 
 const CommentSchema = new Schema({

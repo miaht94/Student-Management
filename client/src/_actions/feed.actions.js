@@ -24,7 +24,28 @@ function useFeedActions() {
         
         callback();
     }
+    async function sendComment(commentContent, postId) {
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("content", commentContent);
+        debugger
+        let response = await fetcher.post(Configs.HOST_NAME + Configs.API_PATH.COMMENT_TO_POST.replace(":classId", classWrapper.curClass.class_id).replace(":postId", postId), "application/x-www-form-urlencoded", urlencoded);
+        response = await response.json();
+        if (response.status != "Success") {
+            setNotification(response.status, response.message);
+        }
+    }
+
+    async function likePost(postId) {
+        var urlencoded = new URLSearchParams();
+        let response = await fetcher.post(Configs.HOST_NAME + Configs.API_PATH.LIKE_POST.replace(":classId", classWrapper.curClass.class_id).replace(":postId", postId), null, null);
+        response = await response.json();
+        if (response.status != "Success") {
+            setNotification(response.status, response.message);
+        }
+    }
     return {
-        sendPost: sendPost
+        sendPost: sendPost,
+        sendComment: sendComment,
+        likePost: likePost
     }
 }

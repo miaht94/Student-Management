@@ -14,6 +14,7 @@ const API_PATH = {
     GET_POST_BY_ID: "/api/classes/:classId/feed/:postId",
     GET_ALL_POSTS: "/api/classes/:classId/feed/posts/get",
     COMMENT_TO_POST: "/api/classes/:classId/feed/:postId/comments/add",
+    LIKE_POST: "/api/classes/:classId/feed/:postId/likes/toogle",
     GET_COMMENT_POST: "/api/classes/:classId/feed/:postId/comments/get",
     RECENT_CHAT: "/api/chat/recent",
     RECENT_CONTACT: "/api/chat/recentcontact",

@@ -27,6 +27,7 @@ const API_PATH = {
     ADD_SCORE_BY_VNU_ID: "/api/scores/add",
     GET_SCORES_BY_ID : "/api/scores/:userId",
     PUBLIC_DATA: "/public/data/:filename",
+    LIKE_POST: "/api/classes/:classId/feed/:postId/likes/toogle",
 };
 const HOST_NAME = "http://localhost:3000";
 export {API_PATH, HOST_NAME};

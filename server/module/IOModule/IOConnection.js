@@ -6,11 +6,13 @@ const ObjectId = mongoose.Types.ObjectId
 const jwtAuth = require("socketio-jwt-auth");
 const handleChatMessage = require("./HandleChatMessage");
 const {checkLoginInfo, checkTokenValid} = require('./IOAuthentication');
-const {notifyNewPost} = require('./HandleNotification');
+const {notifyNewPost, notifyNewComment, notifyUpdatePost} = require('./HandleNotification');
 class IOConnection {
     constructor(server) {
         this.handleChatMessage = handleChatMessage;
         this.notifyNewPost = notifyNewPost.bind(this);
+        this.notifyNewComment = notifyNewComment.bind(this);
+        this.notifyUpdatePost = notifyUpdatePost.bind(this);
         this.io = io(server, {
             cors: {
                 origin: "http://localhost:3000",

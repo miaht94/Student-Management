@@ -32,6 +32,36 @@ async function getFeedInstanceFromClassInstance(req, res, next) {
     }
 }
 
+
+
+/** Tien quyet: validateToken, validateClassMember, findClassByClassId, findFeed
+ * req.senderInstance, req.body.content, req.feedInstance
+*/
+async function getPostInstance(req, res, next) {
+    let sender = req.senderInstance;
+    let postId = req.params.postId;
+    let postInstance = await global.DBConnection.Post.findOne({_id : postId});
+    if (!postInstance) {
+        res.status(404);
+        res.json(Configs.RES_FORM("Error", "Post not found"));
+        return;
+    }
+    // await req.classInstance.populate('feed_ref');
+    var foundInClass = false;
+    for (var i of req.feedInstance.posts) {
+        if (i.toHexString() == postInstance._id.toHexString()) {
+            foundInClass = true;
+            break;
+        }
+    }
+    if (!foundInClass) {
+        res.status(404);
+        res.json(Configs.RES_FORM("Error", "Post found but not in your class"));
+    }
+    req.postInstance = postInstance;
+    next();
+}
+
 /** Tien quyet: validateToken, validateClassMember, findClassByClassId, getFeedInstanceFromClassInstance
  * req.senderInstance, feedInstance, req.body.content
 */
@@ -72,34 +102,6 @@ async function fPostToFeed(req, res) {
     
 }
 
-/** Tien quyet: validateToken, validateClassMember, findClassByClassId, findFeed
- * req.senderInstance, req.body.content, req.feedInstance
-*/
-async function getPostInstance(req, res, next) {
-    let sender = req.senderInstance;
-    let postId = req.params.postId;
-    let postInstance = await global.DBConnection.Post.findOne({_id : postId});
-    if (!postInstance) {
-        res.status(404);
-        res.json(Configs.RES_FORM("Error", "Post not found"));
-        return;
-    }
-    // await req.classInstance.populate('feed_ref');
-    var foundInClass = false;
-    for (var i of req.feedInstance.posts) {
-        if (i.toHexString() == postInstance._id.toHexString()) {
-            foundInClass = true;
-            break;
-        }
-    }
-    if (!foundInClass) {
-        res.status(404);
-        res.json(Configs.RES_FORM("Error", "Post found but not in your class"));
-    }
-    req.postInstance = postInstance;
-    next();
-}
-
 /** Tien quyet: validateToken, validateClassMember, findClassByClassId, getPostInstance
  * req.senderInstance, req.body.content, req.postInstance
 */
@@ -113,6 +115,7 @@ async function fCommentToPost(req, res) {
             content: req.body.content,
         })
         await newComment.save();
+        await newComment.populate('from');
     } catch (e) {
         res.status(400);
         res.json(Configs.RES_FORM("Error", "Error when creating comment. Err: " + e.toString()));
@@ -122,6 +125,7 @@ async function fCommentToPost(req, res) {
         post.comments.push(newComment);
         await post.save();
         await post.populate('comments');
+        global.IOConnection.notifyNewComment(newComment, req.params.postId, req.classInstance.class_id);
     } catch (e) {
         res.status(400);
         res.json(Configs.RES_FORM("Error", "Error when pushing comment to post. Err: " + e.toString()));
@@ -130,6 +134,50 @@ async function fCommentToPost(req, res) {
 
     res.status(200);
     res.json(Configs.RES_FORM("Success", post));
+
+}
+async function fLikePost(req, res) {
+    let sender = req.senderInstance;
+    let post = req.postInstance;
+    try {
+        // post.comments.push(newComment);
+        // await post.save();
+        // await post.populate('comments');
+        // global.IOConnection.notifyNewComment(newComment, req.params.postId, req.classInstance.class_id);
+        var set = new Set();
+        let temp = post.liked;
+        let liked = false;
+        new_liked = [];
+        for (i of temp) {
+            if (i.toHexString() == sender._id.toHexString()) {
+                liked = true;
+                continue;
+            }
+            set.add(i.toHexString());
+        }
+        if (!liked) set.add(sender._id)
+        for (i of set) {
+            new_liked.push(ObjectId(i));
+        }
+        post.liked = new_liked;
+        await post.save();
+        await post.populate({
+            path: 'comments',
+            populate: {
+                path: 'from'
+            }
+        });
+        await post.populate('liked');
+        await post.populate('from');
+        global.IOConnection.notifyUpdatePost(post, req.classInstance.class_id);
+    } catch (e) {
+        res.status(400);
+        res.json(Configs.RES_FORM("Error", "Lỗi khi like post. Err: " + e.toString()));
+        return;
+    }
+
+    res.status(200);
+    res.json(Configs.RES_FORM("Success", ""));
 
 }
 
@@ -174,13 +222,25 @@ async function fGetAllPost(req, res) {
     //         }
     //     }
     // });
-    await req.feedInstance.populate({
+    let feed = await req.feedInstance.populate({
         path: "posts",
         populate: {
             path: "from",
         }
     })
+    feed = feed.posts
+    for (i of feed) {
+        await i.populate({
+            path :'comments',
+            populate: {
+                path: 'from',
+            }
+        })
+        await i.populate({
+            path: 'liked'
+        })
+    }
     res.status(200);
     res.json(Configs.RES_FORM("Sucess", req.feedInstance.posts))
 }
-module.exports = {fGetAllPost, fGetPostById, fGetCommentsInPost, getFeedInstanceFromClassInstance, getPostInstance, fPostToFeed, fCommentToPost};
+module.exports = {fLikePost, fGetAllPost, fGetPostById, fGetCommentsInPost, getFeedInstanceFromClassInstance, getPostInstance, fPostToFeed, fCommentToPost};

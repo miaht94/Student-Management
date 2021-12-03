@@ -32,20 +32,76 @@ const defaultPost =
 		"created_date": 1635520270450,
 		"__v": 3
 	}
-
-const Post = ({ postInstance, onClickComment_ }) => {
+const Comment = (props) => {
+	return (
+	<>
+		<Grid item xs={0.1}></Grid>
+		<Grid item xs={11.9}>
+			<Grid container className="commentCtn">
+				<Grid item xs={1} className="avatarComment">
+					<Avatar {... stringAvatar(props.senderName)}  className="commentAvatar" />
+				</Grid>
+				<Grid item xs={10.9} className="postTopInfo">
+					<Grid container >
+						<div className="commentInfo">
+							<h3 className='commentUsername'>{props.senderName}</h3>
+							<p className='commentContent'>{props.commentContent}</p>
+						</div>
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
+	</>)
+}
+const Post = ({ postInstance, onSendComment, liked, onLikePost, showListLiked}) => {
     const itemData = [];
-	const post = postInstance ? postInstance : defaultPost;
+	const post = postInstance;
+	const likedList = postInstance.liked;
+	var likedForRender = "";
+	const showListLiked_ = () => {
+		showListLiked(post.liked);
+	}
+	var count = 0;
+	for (var i of likedList) {
+		count++;
+		if (count < 3) {
+			likedForRender+=i.name;
+			likedForRender+=", "
+		} else break;
+	}
+	if (likedList.length > 2)
+		likedForRender += "... + " + (likedList.length - 2)
+	if (likedForRender != "") {
+		likedForRender+="đã thích";
+	}
+	
+	const comments = post.comments;
+	const textInput = React.useRef(null);
 	const [hiddenComment, setHiddenComment] = React.useState(true);
-	const likeOnClick = null;
-	const onClickComment = onClickComment_ ? onClickComment_ : ((postId) =>{}) // (postId) => {etc ...}
+	const likeOnClick = () => {
+		console.log("Like post: " + post._id)
+		onLikePost(post._id)
+	};
+	const [newCommentContent, setNewCommentContent] = React.useState("");
 	const commentOnClick = () => {
 		setHiddenComment(!hiddenComment);
-		onClickComment(post._id)
+	}
+	const onKeyPressNewComment = (e) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			onSendComment(textInput.current.innerHTML, post._id)
+			textInput.current.innerHTML = "";
+			// console.log(textInput.current.innerHTML)
+		}
 	}
 	useEffect(() => {
 		console.log(hiddenComment);
 	}, [hiddenComment])
+	var renderComment = [];
+	for (var comment of comments) {
+
+		renderComment.push(<Comment senderName={comment.from.name} commentContent={comment.content}></Comment>)
+	}
     return (
         <Grid container className="post">
 			<Grid item xs={0.1}></Grid>
@@ -64,6 +120,8 @@ const Post = ({ postInstance, onClickComment_ }) => {
 					<p>{post.content}</p>
 				</div>
 			</Grid>
+			<Grid item xs={0.5}></Grid>
+			<Grid item xs={11.5} onClick={showListLiked_} style={{ color: "gray"}}>{likedForRender}</Grid>
 			<Grid item xs={12}>
 			<ImageList className='bach_imagelist' cols={3} rowHeight={164}>
               {itemData.map((item) => (
@@ -81,7 +139,7 @@ const Post = ({ postInstance, onClickComment_ }) => {
             
 			<Grid item xs={6} className="postOptions">
 				<div className="postOption" onClick={likeOnClick}>
-                    <ThumbUp style={{marginLeft:"2px"}}/>
+					{liked ? <ThumbUp className="like_post_btn" style={{marginLeft:"2px", color: "blue"}}/> : <ThumbUp className="like_post_btn" style={{marginLeft:"2px", color: "gray"}}/>}
                     <p style={{margin:"0px"}}>Like</p>
                 </div>
 			</Grid>
@@ -92,47 +150,15 @@ const Post = ({ postInstance, onClickComment_ }) => {
                 </div>
 			</Grid>
 			{!hiddenComment && <>
-				<Grid item xs={0.1}></Grid>
-				<Grid item xs={11.9}>
-					<Grid container className="commentCtn">
-						<Grid item xs={1} className="avatarComment">
-							<Avatar {... stringAvatar("abc")}  className="commentAvatar" />
-						</Grid>
-						<Grid item xs={10.9} className="postTopInfo">
-							<Grid container >
-								<div className="commentInfo">
-									<h3 className='commentUsername'>abc</h3>
-									<p className='commentContent'>{123} giờ đó là quá sớm rồi.</p>
-								</div>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-				<Grid item xs={0.1}></Grid>
-				<Grid item xs={11.9}>
-					<Grid container className="commentCtn">
-						<Grid item xs={1} className="avatarComment">
-							<Avatar {... stringAvatar("abc")} className="commentAvatar" />
-						</Grid>
-						<Grid item xs={10.9} className="postTopInfo">
-							<Grid container >
-								<div className="commentInfo">
-									<h3 className='commentUsername'>abc</h3>
-									<p className='commentContent'>{123} giờ đó là quá sớm rồi.</p>
-								</div>
-								
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
+				{renderComment}
 				<Grid item xs={0.1}></Grid>
 				<Grid item xs={11.9}>
 					<Grid container className="commentCtn">
 						<Grid item xs={1} className="avatarCommentInput">
-							<Avatar {... stringAvatar("Y o u")} className="commentAvatar" />
+							<Avatar {... stringAvatar("You")} className="commentAvatar" />
 						</Grid>
 						<Grid item xs={10.9} className="inputCommentCtn">
-							<Grid item xs={12} className="inputComment" placeholder={"Viết bình luận"} contentEditable={true}></Grid>
+							<Grid item xs={12} className="inputComment" placeholder={"Viết bình luận"} contentEditable={true} onKeyPress={onKeyPressNewComment} ref={textInput}></Grid>
 						</Grid>
 					</Grid>
 				</Grid>

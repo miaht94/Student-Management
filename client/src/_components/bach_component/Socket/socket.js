@@ -14,7 +14,9 @@ export default function Socket(props) {
     let socketAction = useSocketAction();
     var onNewPost = socketAction.onNewPost;
     var onNewMessage = socketAction.onNewMessage;
+    var onNewComment = socketAction.onNewComment;
     var onConnected = socketAction.onConnected;
+    var onUpdatePost = socketAction.onUpdatePost;
     let [isSocketConnected, setSocketConnected] = useRecoilState(socketConnected)
     useEffect(() => {
         if (!socketWrapper.initiated) {
@@ -24,7 +26,9 @@ export default function Socket(props) {
         socketWrapper.socket.removeAllListeners()
         socketWrapper.socket.on("connect", onConnected)
         socketWrapper.socket.on("NewPost", onNewPost)
+        socketWrapper.socket.on("NewComment", onNewComment)
         socketWrapper.socket.on("NewMessage", onNewMessage)
+        socketWrapper.socket.on("UpdatePost", onUpdatePost)
         let id = setInterval(() => {
           
           if (socketWrapper.isConnected){

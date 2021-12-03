@@ -54,11 +54,11 @@ const { TextArea } = Input;
         <Button onClick={handleClickOpen} style={{margin: 0,top: 'auto',right: 20,bottom: 20,left: 'auto',position: 'fixed',}} variant="contained" endIcon={<PostAddIcon />}>
                 Đăng bài mới
         </Button>
-        <Modal style={{borderRadius: "10px"}} title="Basic Modal" visible={open} onOk={handleClickOk} onCancel={handleClose} footer={null}>
+        <Modal style={{borderRadius: "10px"}} title="Tạo bài đăng mới" visible={open} onOk={handleClickOk} onCancel={handleClose} footer={null}>
         <TextArea
           value={postContent}
           onChange={onChange}
-          placeholder="Controlled autosize"
+          placeholder="Nhập nội dung bài đăng"
           autoSize={{ minRows: 3, maxRows: 5 }}
           disabled={disableInput}
         />

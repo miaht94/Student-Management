@@ -130,3 +130,7 @@
 [placeholder]:empty:focus::before {
     content: "";
 }
+
+.commentUsername {
+    font-size: medium;
+}

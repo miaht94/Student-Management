@@ -13,7 +13,6 @@ function fHandleUploadFile (req, res) {
 function handleUploadFile(req, res, next) {
     let sampleFile;
     let uploadPath;
-    console.log("Rn")
     
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send('No files were uploaded.');

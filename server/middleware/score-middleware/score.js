@@ -49,7 +49,21 @@ async function fGetScoresByVNUId(req, res) {
 }
 /** Validated token (have senderInstance) */
 async function fGetMyScore(req, res) {
-
+    let scores = await global.DBConnection.ScoresTable.findOne({user_ref: req.targetInstance._id}).populate({
+        path: "scores",
+        populate: {
+            path: "subject"
+        }
+    }).populate("user_ref");
+    res.status(200);
+    if (scores) {
+        res.json(RES_FORM("Success", scores));
+        return;
+    }
+    else {
+        res.json(RES_FORM("Success", []));
+        return
+    }
 }
 
 async function checkTargetAddScoreExist(req, res, next) {
@@ -123,6 +137,8 @@ async function checkTargetAddScoreExist(req, res, next) {
     }
 }
 
+
+
 /** Call checkTargetAddScoreExist first */
 async function fAddScoreToScoresTable(req, res) {
     var instanceUser = req.instanceUser;
@@ -176,6 +192,76 @@ async function fGetScoresClassByClassId(req, res) {
     }
 }
 
+async function fUpdateStatus(req, res) {
+    var status = req.body.status;
+    status = status.split(",")
+    var instanceUser = await global.DBConnection.User.findOne({vnu_id : req.body.vnu_id});
+    if (!instanceUser) {
+        res.status(404);
+        res.json(RES_FORM("Error", "Không tìm thấy sinh viên có VNU-ID: " + req.body.vnu_id))
+        return;
+    }
+    var instanceTable = await global.DBConnection.ScoresTable.findOne({user_ref: instanceUser._id});
+    if (!instanceTable) {
+        try {
+            instanceTable = new global.DBConnection.ScoresTable({
+                user_ref : new ObjectId(instanceUser._id),
+                scores : [],
+            })
+            await instanceTable.save()
+        } catch (e) {
+            res.status(400);
+            res.json(RES_FORM("Error", "Lỗi khi khởi tạo bảng điểm lần đầu"));
+            return;
+        }
+    }
+    instanceTable.status = status;
+    await instanceTable.save()
+    res.status(200);
+    res.json(RES_FORM("Success", "Thêm status thành công"))
+}
+
+/** Handle upload file first */
+async function fHandleUploadStatus(req, res) {
+    let success = [];
+    let fail = [];
+    const jsonArray = await csv().fromFile(req.fileUploadPath);
+        // let res = await global.DBConnection.Test.insertMany(jsonArray, { ordered: false })
+    class fakeRes {
+        statusCode = null;
+        responseJson = null;
+        json = (obj) => {
+            this.responseJson = obj;
+        };
+        status = (status) => {
+            this.statusCode = status;
+        }
+    }
+    class fakeReq {
+        body = null
+        constructor(body) {
+            this.body = body;
+        }
+    }
+    
+    for (var i of jsonArray) {
+        var fakeReqInstance = new fakeReq(i);
+        var fakeResInstance = new fakeRes();
+        await fUpdateStatus(fakeReqInstance, fakeResInstance, () => {return});
+        if (fakeResInstance.statusCode != 200) {
+            if (fakeResInstance.responseJson && fakeResInstance.responseJson.message)
+                i.error = fakeResInstance.responseJson.message;
+            fail.push(i);
+        } else {
+            i.response = fakeResInstance.responseJson.message;
+            success.push(i);
+        }
+        
+    }
+    res.status(200);
+    res.json(RES_FORM("Success", {added : success, failed: fail}));
+}
+
 /** Handle upload file first */
 async function fHandleUploadScore(req, res) {
     let success = [];
@@ -219,4 +305,4 @@ async function fHandleUploadScore(req, res) {
     res.status(200);
     res.json(RES_FORM("Success", {added : success, failed: fail}));
 }
-module.exports = {fGetScoresClassByClassId, fAddScoreToScoresTable, checkTeacherOfVNUId, checkTargetAddScoreExist, fGetScoresByVNUId, fHandleUploadScore}
+module.exports = {fHandleUploadStatus, fGetScoresClassByClassId, fAddScoreToScoresTable, checkTeacherOfVNUId, checkTargetAddScoreExist, fGetScoresByVNUId, fHandleUploadScore, fUpdateStatus}

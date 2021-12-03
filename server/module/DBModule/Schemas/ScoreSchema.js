@@ -9,6 +9,7 @@ const ScoreSchema = new Schema({
 })
 const ScoresTableSchema = new Schema({
     user_ref: {type: ObjectId, ref: Configs.DB_SCHEMA.USER, required:true},
-    scores : [{type: [ObjectId], ref: Configs.DB_SCHEMA.SCORE, default: []}] 
+    scores : [{type: [ObjectId], ref: Configs.DB_SCHEMA.SCORE, default: []}],
+    status: [{type: [String], default: []}]
 })
 module.exports = {ScoreSchema, ScoresTableSchema};

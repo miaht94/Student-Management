@@ -24,6 +24,7 @@ const API_PATH = {
     UPLOAD_DSCV : "/api/upload/dscv",
     UPLOAD_DSMH: "/api/upload/dsmh",
     UPLOAD_SV_MH_SCORE : "/api/scores/import",
+    UPLOAD_SV_STATUS: "/api/status/import",
     UPLOAD_FILE : "/api/upload/file",
     ADD_SCORE_BY_VNU_ID: "/api/scores/add",
     GET_SCORES_BY_ID : "/api/scores/:userId",

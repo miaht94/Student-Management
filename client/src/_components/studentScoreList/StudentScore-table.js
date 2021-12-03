@@ -180,7 +180,6 @@ function StudentScoreTable(props){
                 },
               ],
             onFilter: (value, record) => {
-              console.log(value);
               return record.tags.includes(value.toLowerCase())
             },
             render: tags => (

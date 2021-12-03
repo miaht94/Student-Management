@@ -138,7 +138,7 @@ function StudentScoreTable(props){
             title: 'Họ và tên',
             dataIndex: 'name',
             key: 'name',
-            width: 100,
+            width: 130,
             ...getColumnSearchProps('name'),
             render: text => <a>{text}</a>,
         },
@@ -155,33 +155,45 @@ function StudentScoreTable(props){
         {
             title: 'Trạng thái',
             key: 'tags',
-            width: 100,
+            width: 130,
             dataIndex: 'tags',
             filters: [
                 {
+                  text: 'Chưa nộp học phí',
+                  value: 'chưa nộp học phí',
+                },
+                {
+                  text: 'Chưa đủ tín',
+                  value: 'chưa đủ tín',
+                },
+                {
                   text: 'Cảnh cáo',
-                  value: 'Cảnh cáo',
+                  value: 'cảnh cáo',
                 },
                 {
                   text: 'Bình thường',
-                  value: 'Bình thường',
+                  value: 'bình thường',
                 },
                 {
                   text: 'Đuổi học',
-                  value: 'Đuổi học',
+                  value: 'đuổi học',
                 },
               ],
-              onFilter: (value, record) => record.tags.indexOf(value) === 0,
+            onFilter: (value, record) => {
+              return record.tags.includes(value.toLowerCase())
+            },
             render: tags => (
                 <span>
                 {tags.map(tag => {
                     let color = 'red';
-                    if (tag === 'Bình thường') {
+                    if (tag === 'bình thường') {
                         color = 'green';
-                    }else {
-                      if (tag ==='Cảnh cáo') {
-                        color = 'yellow';
-                      }
+                    }
+                    if (tag ==='cảnh cáo') {
+                      color = 'yellow';
+                    }
+                    if (tag ==='chưa nộp học phí' || tag ==='chưa đủ tín' ) {
+                      color = 'orange';
                     }
                     return (
                         <Tag color= {color} key = {tag}>

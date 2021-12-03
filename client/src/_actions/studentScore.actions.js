@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import {useFetchWrapper} from '_helpers';
 import {scoreAtom, pscoreAtom, alertBachAtom} from '_state';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 export{ useStudentScoreAction };
 
@@ -106,7 +107,15 @@ function useStudentScoreAction (param) {
                 CPA = ((totalScore/totalCredit)/10*4).toFixed(2); 
                 var state = (CPA > 2.5) ? ['Bình thường'] : ['Cảnh cáo'];
                 state = (CPA < 1) ? ['Đuổi học'] : state;
-    
+                state = Array.from(state);
+                const status = object.status.map(element => {
+
+                    return element.trim();
+                  });
+                state.push(...status);
+                state = state.map(element => {
+                    return element.toLocaleLowerCase();
+                  });
                 refinedData.push({
                     vnu_id: vnu_id,
                     name: name,

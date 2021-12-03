@@ -37,7 +37,7 @@ function useProfileAction() {
             console.log("No response.");
             return null;
         }   
-        response.json().then(rawjson => { 
+        response.json().then(rawjson => {   
             console.log(rawjson);
             setMyProfile(rawjson);
             console.log('set my profile here');

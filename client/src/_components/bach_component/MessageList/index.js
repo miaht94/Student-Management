@@ -116,7 +116,7 @@ export default function MessageList(props) {
       <div className="message-list">
         <Toolbar
         className="conversation-title-toolbar"
-          title="Conversation Title"
+          title="Trao đổi với sinh viên"
         />
 
         <div  className="message-list-container">{renderMessages()}

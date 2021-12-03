@@ -61,7 +61,7 @@ function ClassPicker(props) {
                         style = {cardStyle} headStyle = {cardHeadStyle}
                         cover={<img alt="example" src={'https://maisienoble.github.io/jig/images/backgrounds/blueish.jpg'} />}
                         hoverable = 'true'>
-                            <p>Sample Card Content 1</p>
+                            <p>Lớp đại học</p>
                         </Card>
                     </Link>
                 </Col>

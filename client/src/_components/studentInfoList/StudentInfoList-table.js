@@ -43,6 +43,7 @@ function StudentInfoTable(props){
           email: 1 + 19021000 + '@vnu.edu.vn',
           vnu_id: 19020000 + 1,
           phone_number: 100000000,
+          location: 'no location' + 1,
           gender: 'male'
         },
       });
@@ -227,16 +228,22 @@ function StudentInfoTable(props){
             key: 'email',
         },
         {
-          title: 'Số điện thoại liên lạc',
+          title: 'Số điện thoại',
           width: 80,
           dataIndex: 'phone_number',
           key: 'phone_number',
         },
         {
+          title: 'Địa chỉ',
+          width: 140,
+          dataIndex: 'location',
+          key: 'location',
+        },
+        {
             title: 'Thao tác',
             key: 'action',
             fixed: "right",
-            width: 100,
+            width: 110,
             render: (text, record) => (
               <Space size="middle">
                 

@@ -30,7 +30,7 @@ function Dashboard() {
     return (
         <div className="p-4" style = {{overflow : "auto"}}>
             <center style =  {{padding : -0.25}}>
-                <Card title="Bảng theo dõi" style={{ width: 1200 , height: 1200 , overflow: 'auto' }}>
+                <Card title="Bảng theo dõi" style={{ width: 1200 , height: 1400 , overflow: 'auto' }}>
                     <Row justify = "center">
                         {/* For Class name renderer */}
                         <Col>

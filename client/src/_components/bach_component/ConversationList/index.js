@@ -62,7 +62,6 @@ export default function ConversationList(props) {
             <ToolbarButton key="add" icon="ion-ios-add-circle-outline" />
           ]}
         />
-        <ConversationSearch />
         {
           conservationsList.map(conversation =>
             <Link to={`/chat/${conversation.vnu_id}`}>

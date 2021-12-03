@@ -69,8 +69,6 @@ function StatisticBoard() {
       //setlevelGPAState(levelPush);
       //setGPAState(refinedData);
       console.log();
-      console.log("levelStatus:" );
-      console.log(levelStatus)
     });
     return (
         <div className="p-4">

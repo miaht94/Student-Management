@@ -17,15 +17,15 @@ function Dashboard() {
 
     const studentScoreAction = useStudentScoreAction();
 
-    useEffect(() =>{
-        console.log("Reconstruct GPADash")
-        async function initDashboard() {
+    // useEffect(() =>{
+    //     console.log("Reconstruct GPADash")
+    //     async function initDashboard() {
             
-        };
+    //     };
 
-        initDashboard();
+    //     initDashboard();
 
-    },[]);
+    // },[]);
 
     return (
         <div className="p-4" style = {{overflow : "auto"}}>
@@ -66,7 +66,7 @@ function Dashboard() {
                             </div>
                         </Col>
                     </Row>
-                    <StatisticBoard>    
+                    <StatisticBoard score = {score}>
                     </StatisticBoard>
                 </Card>
             </center>

@@ -39,6 +39,8 @@ function App() {
     const classWrapper = useClassWrapper();
     const [drawerVisible, setDrawerVisible] = useRecoilState(classPickerVisibleAtom);
     const [loadingVisible, setLoadingVisible] = useRecoilState(loadingVisibleAtom);
+
+    const userData = JSON.parse(localStorage.getItem("userData"));
     
     const userActions = useUserActions();
     const showDrawer = () => {
@@ -60,20 +62,20 @@ function App() {
             <Layout>
                 <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
                     <Row gutter={0}>
-                        <Col className="gutter-row" span={18}>
+                        <Col className="gutter-row" span={20}>
                             <div style={style}>
                                 <Title style={{ padding: '15px 0px 0px 0px', color: 'white' }} level={3}> Student Advisor Web App </Title>
                             </div>
                         </Col>
-                        <Col className="gutter-row" span={5}>
+                        <Col className="gutter-row" span={3}>
                         <div>
-                            <div style={{color: 'white' }}> 
+                            <div style={{color: 'white', "font-size": '18px' }}> 
                                 {ClassNameDisplay()}
                             </div>
                         </div>
                         </Col>
                             {
-                            authWrapper.tokenValue != "" &&
+                            (authWrapper.tokenValue != "" & userData?.role == "teacher") &&
                             <Col className="gutter-row" span={1}>
                             
                             <div style={{'marginLeft': 'auto','marginRight': 'auto' }}>
@@ -86,7 +88,7 @@ function App() {
                     </Row>
                 </Header> 
                 <Layout>
-                    <Nav onLogout = {userActions.logout} auth = {authWrapper.tokenValue} classID = {classWrapper.curClass ? classWrapper.curClass.class_id : ""}/>
+                    <Nav onLogout = {userActions.logout} auth = {authWrapper.tokenValue} userData = {userData} classID = {classWrapper.curClass ? classWrapper.curClass.class_id : ""}/>
                      
                 <Layout>
 
@@ -119,7 +121,7 @@ function Child(props) {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const classWrapper = useClassWrapper();
     const [loaded, setloaded] = useState(false);
-    console.log('hello');
+    // console.log('hello');
     const location  = useLocation()
     // let { path } = match;
     // console.log(path);

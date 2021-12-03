@@ -10,66 +10,60 @@ import { object } from 'yup/lib/locale';
 export { StatisticBoard };
 
 
-function StatisticBoard() {
-//   const [GPAstate, setGPAState] = useRecoilState(dashboardGPAAtom);
-//   const [levelGPAstate, setlevelGPAState] = useRecoilState(dashboardLevelGPAAtom);
-//   const [filterState, setFilterState] = useRecoilState(dashboardFilterGPAAtom);
-//   const resetLevelGPAState = useResetRecoilState(dashboardLevelGPAAtom);
-
+function StatisticBoard(props) {
     const [GPAStatus, setGPAStatus] =  useRecoilState(dashboardGPAStatusAtom);
     const [levelStatus, setlevelStatus] = useRecoilState(dashboardLevelStatusAtom);
-
-    // Data for GPA state setting
     var refinedData = [];
 
     useEffect(() => {
+        console.log("Reconstruct StatisticBoard");
+        async function initStatisticBoard() {
+
+            var tempStatus = {Normal: 0, Warning: 0, Expelling: 0}
+            if (props.score!= null) {
+                props.score.forEach(object => {
+                    var vnu_id = object.user_ref.vnu_id;
+                    var name = object.user_ref.name;
+                    var email = object.user_ref.email;
+                    var scoreObj = object.scores;  
+                    var GPA = 0;
+                    var totalCredit = 0;
+                    var totalScore = 0;
+                    scoreObj.forEach(scoreElement => { 
+                        totalCredit += scoreElement.subject.credits_number;
+                        totalScore += scoreElement.subject.credits_number*scoreElement.score;            
+                    });
+                    GPA = totalScore/totalCredit;
+                    GPA = (GPA/10*4).toFixed(2);
+                    
+                    refinedData.push({
+                        vnu_id: vnu_id,
+                        name: name,
+                        email: email,
+                        gpa: GPA
+                    })
+                    tempStatus.Normal = (GPA<=4.0 && GPA>= 2.5) ? tempStatus.Normal+1 : tempStatus.Normal;
+                    tempStatus.Warning = (GPA<2.5 && GPA>= 1.0) ? tempStatus.Warning+1 : tempStatus.Warning;
+                    tempStatus.Expelling = (GPA<1.0 && GPA>= 0 ) ? tempStatus.Expelling+1 : tempStatus.Expelling;
+                  });
+            }
+            var statusVisualized = [];
+            statusVisualized.push({name: 'Bình thường', BinhThuong: tempStatus.Normal});
+            statusVisualized.push({name: 'Cảnh cáo', CanhCao: tempStatus.Warning});
+            statusVisualized.push({name: 'Đuổi học', DuoiHoc: tempStatus.Expelling});
+      
+            var statusPush = {
+              data: statusVisualized
+            }
+            setlevelStatus(statusPush)
+            setGPAStatus(refinedData)
+        };
+        initStatisticBoard();
       // Normal: Bình thường
       // Warning: Canh cáo
       // Expelling: Đuổi học
-      var tempStatus = {Normal: 0, Warning: 0, Expelling: 0}
-      
-      data.forEach(object => {
-        var vnu_id = object.user_ref.vnu_id;
-        var name = object.user_ref.name;
-        var email = object.user_ref.email;
-        var scoreObj = object.scores;  
-        var GPA = 0;
-        var totalCredit = 0;
-        var totalScore = 0;
-        console.log(vnu_id);
-        scoreObj.forEach(scoreElement => { 
-            totalCredit += scoreElement.subject.credits_number;
-            totalScore += scoreElement.subject.credits_number*scoreElement.score;            
-        });
-        GPA = totalScore/totalCredit;
-        GPA = (GPA/10*4).toFixed(2);
         
-        refinedData.push({
-            vnu_id: vnu_id,
-            name: name,
-            email: email,
-            gpa: GPA
-        })
-
-        console.log(GPA);
-        tempStatus.Normal = (GPA<=4.0 && GPA> 3.2) ? tempStatus.Normal+1 : tempStatus.Normal;
-        tempStatus.Warning = (GPA<=3.2 && GPA> 2.5) ? tempStatus.Warning+1 : tempStatus.Warning;
-        tempStatus.Expelling = (GPA<=2.5 && GPA!= 0 ) ? tempStatus.Expelling+1 : tempStatus.Expelling;
-        });
-      var statusVisualized = [];
-      statusVisualized.push({name: 'Bình thường', BinhThuong: tempStatus.Normal});
-      statusVisualized.push({name: 'Cảnh cáo', CanhCao: tempStatus.Warning});
-      statusVisualized.push({name: 'Đuổi học', DuoiHoc: tempStatus.Expelling});
-
-      var statusPush = {
-        data: statusVisualized
-      }
-      setlevelStatus(statusPush)
-      setGPAStatus(refinedData)
-      //setlevelGPAState(levelPush);
-      //setGPAState(refinedData);
-      console.log();
-    });
+    }, [props.score]);
     return (
         <div className="p-4">
             <Card title = "Thống kê tình hình học tập" style={{width: 960, height: 400,}}>

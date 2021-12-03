@@ -17,16 +17,14 @@ const COLORS = ['#2f77eb', '#2f93eb', '#2fbceb', '#2febcc', '#2feb8d', '#b9eb2f'
 function GPADash(props) {
     const [GPAstate, setGPAState] = useRecoilState(dashboardGPAAtom);
     const [levelGPAstate, setlevelGPAState] = useRecoilState(dashboardLevelGPAAtom);
-    const resetLevelGPAState = useResetRecoilState(dashboardLevelGPAAtom);
-    
     const [filterState, setFilterState] = useState("nofilter");
     var refinedData = [];
     
     useEffect(() =>{
         console.log("Reconstruct GPADash")
         async function initGPADash() {
-            console.log("Score props");
-            console.log(props.score);
+            // console.log("Score props");
+            // console.log(props.score);
 
             var tempLevel = {
                 Aplus: 0, A:0, Bplus: 0, B: 0, Cplus: 0, C: 0, Dplus:0, D:0, F:0 
@@ -92,9 +90,8 @@ function GPADash(props) {
            setGPAState(refinedData);
         };
         initGPADash();
-
-        console.log("LevelGPAState");
-        console.log(levelGPAstate);
+        // console.log("LevelGPAState");
+        // console.log(levelGPAstate);
     },[props.score, filterState]);
     
     
@@ -112,7 +109,7 @@ function GPADash(props) {
                           data={levelGPAstate.data}
                           cx={120}
                           cy={100}
-                          outerRadius={80}
+                          outerRadius={90}
                           fill="#8884d8"
                           dataKey="value"
                         >

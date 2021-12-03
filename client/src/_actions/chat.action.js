@@ -62,7 +62,6 @@ function useChatAction() {
     }
 
     async function addContactToList(obj) {
-        debugger
         let vnu_id = obj.vnu_id
         let form = {contact : null, latest_message : null, latest_sender : null}
         if (obj.message) {

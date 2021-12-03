@@ -46,14 +46,16 @@ function useFetchWrapper() {
             let rawjson = await response.clone().json();
             console.log("Response of request:");
             console.log(rawjson);
-            if ("message" in rawjson) {
-                // console.log("Response of message name:");
-                // console.log(rawjson.message.name);
-                if (rawjson.status === "Error" && (rawjson.message.name === "TokenNotFound" || rawjson.message.name === "UserNotFound")){
-                    console.log(rawjson.status);
-                    setAuth(null);
-                    // localStorage.removeItem('userData');
-                    localStorage.clear();
+            if (url != "http://localhost:3000/api/profile/me"){
+                if ("message" in rawjson) {
+                    // console.log("Response of message name:");
+                    // console.log(rawjson.message.name);
+                    if (rawjson.status === "Error" && (rawjson.message.name === "TokenNotFound" || rawjson.message.name === "UserNotFound")){
+                        console.log(rawjson.status);
+                        setAuth(null);
+                        // localStorage.removeItem('userData');
+                        localStorage.clear();
+                    }
                 }
             }
             return response;

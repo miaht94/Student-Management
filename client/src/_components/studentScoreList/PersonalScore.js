@@ -1,6 +1,5 @@
 
-import React ,{useEffect, useState} from 'react';
-import { useStudentScoreAction } from '_actions';
+import React  from 'react';
 import 'antd/dist/antd.css';
 import { StudentScore } from '_components/studentScoreList'
 

@@ -15,6 +15,13 @@ function StudentScore(props) {
     const [scoreboard, setScoreboard] = useState([]);
     const [personalScore, setPScore] = useState(null);
     const [scoreTotal, setScoreTotal] = useState({});
+    const [semList, setSemList] = useState([{
+        name: 'Kì học không xác định',
+        value: 'Kì học không xác định'
+    }]);
+
+    // const [scoreTotal, setScoreTotal] = useState({});
+
 
     useEffect(() => {
         console.log("Reconstruct SScore")
@@ -31,13 +38,13 @@ function StudentScore(props) {
                 newData = await studentScoreAction.getScoreByID(props.vnu_id);
             }
             let semesters = await studentScoreAction.getAllSemester();
+
             // console.log(semesters);
             setPScore(newData);
             var fetchedScore = newData.scores;
-            
-            
+    
             var convertedScore =[];
-
+            
             var CPA = 0;
             var totalCredit = 0;
             var totalScore = 0;
@@ -61,6 +68,17 @@ function StudentScore(props) {
                     }
                 });
 
+                var semesterList = [];
+                semesters.forEach(semester => {
+                    semesterList.push({
+                        text: semester.semester_name,
+                        value: semester.semester_name
+                    })
+                })
+                setSemList(semesterList);
+                console.log("Semester List");
+                console.log(semList);
+
                 convertedScore.push({
                     subject_name : element.subject.subject_name,
                     subject_code : element.subject.subject_code,
@@ -69,7 +87,6 @@ function StudentScore(props) {
                     scoref : Number.parseFloat(element.score*0.4).toFixed(2),
                     semester_name : convertedSemester.semester_name,
                 })
-                
                 totalCredit += element.subject.credits_number;
                 totalScore += element.subject.credits_number*element.score;
             });
@@ -96,10 +113,9 @@ function StudentScore(props) {
         initScore();
     }, [props.vnu_id]);
 
-
     return (
         <div>
-            <Scoreboard scoreboard={scoreboard} scoreTotal = {scoreTotal} isPersonal={props.isPersonal}></Scoreboard>
+            <Scoreboard scoreboard={scoreboard} scoreTotal ={scoreTotal} semesterList= {semList} isPersonal={props.isPersonal}></Scoreboard>
         </div>
     );
 }

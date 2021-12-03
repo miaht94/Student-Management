@@ -4,7 +4,7 @@ import { Table, Typography, Row, Col, Switch, Button} from 'antd';
 import { Link } from 'react-router-dom';
 import { WechatOutlined, UserOutlined } from '@ant-design/icons';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export { Scoreboard };
 
@@ -14,6 +14,8 @@ function Scoreboard(props) {
     const [scoreType, setScoreType] = useState({
         decimal: true
     });
+
+    const [scoreFilter, setScoreTotal] = useState(null)
 
     function onChange(checked) {
         setScoreType({
@@ -58,6 +60,12 @@ function Scoreboard(props) {
             dataIndex: 'semester_name',
             key: 'semester_name',
             width: 180,
+            filters: props.semesterList,
+            onFilter: (value, record) => {
+                console.log(value);
+                return record.semester_name.includes(value);
+            },
+            filterSearch: true,
         },
     ]
 
@@ -79,7 +87,12 @@ function Scoreboard(props) {
                     <br/>
                     <b>Số tín chỉ:</b> {props.scoreTotal.total_credits}
                     <br/>
-                    <b>Xếp loại:</b> {props.scoreTotal.stt}
+                    <b>Trạng thái:</b> {props.scoreTotal.stt}
+                    <br/>
+                    <br/>
+                    <i>Nhấn nút lọc ở cột <b>Kì học</b> để</i> 
+                    <br/>
+                    <i>xem chi tiết từng kì</i>
                     <br/>
                     {/* <Switch defaultChecked={scoreType.decimal} onChange={onChange} /> */}
                     <br/>
@@ -92,7 +105,41 @@ function Scoreboard(props) {
                 <Table
                 columns={scoreType.decimal === true ? columns.filter(col => col.dataIndex !== 'scoref') : columns.filter(col => col.dataIndex !== 'score')}
                 dataSource={props.scoreboard}
+                summary={pageData => {
+                    let summCredit = 0;
+                    let summScore = 0;
+            
+                    pageData.forEach(({ credits_number, score, scoref }) => {
+                        summCredit += credits_number;
+                        summScore += score*credits_number;
+                    });
+            
+                    return (
+                      <>
+                        <Table.Summary.Row>
+                          <Table.Summary.Cell colSpan={2}><b>Tổng kết</b></Table.Summary.Cell>
+                          <Table.Summary.Cell>
+                            <Text ><b>{summCredit}</b></Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell>
+                            <Text><b>{scoreType.decimal === true ? (summScore/summCredit).toFixed(2) : ((summScore/summCredit)/10*4).toFixed(2)}</b></Text>
+                          </Table.Summary.Cell>
+                          <Table.Summary.Cell/>
+                          {/* <Table.Summary.Cell>
+                            <Text>{totalRepayment}</Text>
+                          </Table.Summary.Cell> */}
+                        </Table.Summary.Row>
+                        {/* <Table.Summary.Row>
+                          <Table.Summary.Cell>Balance</Table.Summary.Cell>
+                          <Table.Summary.Cell colSpan={2}>
+                            <Text type="danger">{totalBorrow - totalRepayment}</Text>
+                          </Table.Summary.Cell>
+                        </Table.Summary.Row> */}
+                      </>
+                    );
+                  }}
                 bordered
+                
                 />
             </Col>
             </Row>

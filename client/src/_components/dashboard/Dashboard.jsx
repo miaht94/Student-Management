@@ -4,8 +4,8 @@ import { dashboardGPAAtom } from '_state';
 import { BachComponent } from '_components/subcomponents';
 
 import { GPADash } from '_components/dashboard';
-
-import { Card, Button } from 'antd';
+import { StatisticBoard } from '_components/dashboard';
+import { Row, Col, Card, Button } from 'antd';
 
 export { Dashboard };
 
@@ -13,14 +13,48 @@ export { Dashboard };
 function Dashboard() {
     
     return (
-        <div className="p-4">
-            <center>
-            <Card title="Bảng theo dõi" style={{ width: 1000 }}>
-                <GPADash>
-                </GPADash>
-            </Card>
+        <div className="p-4" style = {{overflow : "auto"}}>
+            <center style =  {{padding : -0.25}}>
+                <Card title="Bảng theo dõi" style={{ width: 1200 , height: 1200 , overflow: 'auto' }}>
+                    <Row justify = "center">
+                        {/* For Class name renderer */}
+                        <Col>
+                            <div className="p-4">
+                                <Card style={{width: 600, height: 200}}></Card>
+                            </div>
+                        </Col>
+                        {/* For Class student number renderer */}
+                        <Col>
+                            <div className="p-4">
+                                <Card style={{width: 300, height: 200}}></Card>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row justify = 'center'>
+                        <Col>
+                            <GPADash>
+                            </GPADash>
+                        </Col>
+                        <Col>
+                            <div className="p-4">
+                                {/* For Class warning  status renderer */}
+                                <Row>  
+                                    <Card style={{ width: 300, height: 200}}>
+                                    </Card>
+                                </Row>
+                                {/* For tuition fee status */}
+                                <Row>  
+                                    <Card style={{ width: 300, height: 200}}>
+                                    </Card>
+                                </Row>
+
+                            </div>
+                        </Col>
+                    </Row>
+                    <StatisticBoard>    
+                    </StatisticBoard>
+                </Card>
             </center>
-            
         </div>
     )
 }
@@ -145,8 +179,7 @@ const data = [
             }
         ],
         "__v": 2
-    },
-    {
+    },{
         "_id": "618954e38d701d9ce220eff1",
         "user_ref": {
             "_id": "61890aee03ab0fa21bc50233",
@@ -185,5 +218,6 @@ const data = [
             }
         ],
         "__v": 2
-    }
+    },
+
 ]

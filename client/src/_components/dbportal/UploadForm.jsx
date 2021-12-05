@@ -39,6 +39,7 @@ function UploadForm(props) {
   async function handleUpload(){
     console.log(fileList);
     showModal();
+    setLog("Đã bắt đầu upload");
     if (fileList){
       for (const file of fileList) {
         const formData = new FormData();
@@ -66,7 +67,7 @@ function UploadForm(props) {
   };
 
   const cprops = {
-      multiple:true,
+      // multiple:true,
       onRemove: file => {
         setFileList(fileList => {
           const index = fileList.indexOf(file);
@@ -97,7 +98,7 @@ function UploadForm(props) {
           <TextArea rows={10} value = {log} style={{ resize: "none"}} />
         </Modal>
         <Upload {...cprops}>
-          <Button icon={<UploadOutlined />}>Chọn file</Button>
+          <Button icon={<UploadOutlined /> } >Chọn file</Button>
         </Upload>
         <Button
           type="primary"

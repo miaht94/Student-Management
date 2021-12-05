@@ -21,31 +21,34 @@ function StatisticBoard(props) {
 
             var tempStatus = {Normal: 0, Warning: 0, Expelling: 0}
             if (props.score!= null) {
-                props.score.forEach(object => {
-                    var vnu_id = object.user_ref.vnu_id;
-                    var name = object.user_ref.name;
-                    var email = object.user_ref.email;
-                    var scoreObj = object.scores;  
-                    var GPA = 0;
-                    var totalCredit = 0;
-                    var totalScore = 0;
-                    scoreObj.forEach(scoreElement => { 
-                        totalCredit += scoreElement.subject.credits_number;
-                        totalScore += scoreElement.subject.credits_number*scoreElement.score;            
-                    });
-                    GPA = totalScore/totalCredit;
-                    GPA = (GPA/10*4).toFixed(2);
-                    
-                    refinedData.push({
-                        vnu_id: vnu_id,
-                        name: name,
-                        email: email,
-                        gpa: GPA
-                    })
-                    tempStatus.Normal = (GPA<=4.0 && GPA>= 2.5) ? tempStatus.Normal+1 : tempStatus.Normal;
-                    tempStatus.Warning = (GPA<2.5 && GPA>= 1.0) ? tempStatus.Warning+1 : tempStatus.Warning;
-                    tempStatus.Expelling = (GPA<1.0 && GPA>= 0 ) ? tempStatus.Expelling+1 : tempStatus.Expelling;
-                  });
+                if (props.score!= "You are not teacher in this class")  {
+                    props.score.forEach(object => {
+                        var vnu_id = object.user_ref.vnu_id;
+                        var name = object.user_ref.name;
+                        var email = object.user_ref.email;
+                        var scoreObj = object.scores;  
+                        var GPA = 0;
+                        var totalCredit = 0;
+                        var totalScore = 0;
+                        scoreObj.forEach(scoreElement => { 
+                            totalCredit += scoreElement.subject.credits_number;
+                            totalScore += scoreElement.subject.credits_number*scoreElement.score;            
+                        });
+                        GPA = totalScore/totalCredit;
+                        GPA = (GPA/10*4).toFixed(2);
+                        
+                        refinedData.push({
+                            vnu_id: vnu_id,
+                            name: name,
+                            email: email,
+                            gpa: GPA
+                        })
+                        tempStatus.Normal = (GPA<=4.0 && GPA>= 2.5) ? tempStatus.Normal+1 : tempStatus.Normal;
+                        tempStatus.Warning = (GPA<2.5 && GPA>= 1.0) ? tempStatus.Warning+1 : tempStatus.Warning;
+                        tempStatus.Expelling = (GPA<1.0 && GPA>= 0 ) ? tempStatus.Expelling+1 : tempStatus.Expelling;
+                      });
+                }
+               
             }
             var statusVisualized = [];
             statusVisualized.push({name: 'Bình thường', BinhThuong: tempStatus.Normal});

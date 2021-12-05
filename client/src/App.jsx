@@ -63,14 +63,14 @@ function App() {
             <Layout>
                 <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
                     <Row gutter={0}>
-                        <Col className="gutter-row" span={20}>
+                        <Col className="gutter-row" flex="1 1 500px">
                             <div style={style}>
                                 <Title style={{ padding: '15px 0px 0px 0px', color: 'white' }} level={3}> Student Advisor Web App </Title>
                             </div>
                         </Col>
-                        <Col className="gutter-row" span={3}>
+                        <Col className="gutter-row" flex="0 1 300px">
                         <div>
-                            <div style={{color: 'white', "font-size": '18px' }}> 
+                            <div style={{color: 'white'}}> 
                                 {ClassNameDisplay()}
                             </div>
                         </div>

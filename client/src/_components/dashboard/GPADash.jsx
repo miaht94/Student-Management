@@ -29,44 +29,51 @@ function GPADash(props) {
             var tempLevel = {
                 Aplus: 0, A:0, Bplus: 0, B: 0, Cplus: 0, C: 0, Dplus:0, D:0, F:0 
             }
-            if (props.score!=null) {
-                if (props.score.length !=0) {
-                    props.score.forEach(object => {
-                        var vnu_id = object.user_ref.vnu_id;
-                        var name = object.user_ref.name;
-                        var email = object.user_ref.email;
-                        var scoreObj = object.scores;  
-                        var GPA = 0;
-                        var totalCredit = 0;
-                        var totalScore = 0;
-                        scoreObj.forEach(scoreElement => { 
-                            totalCredit += scoreElement.subject.credits_number;
-                            totalScore += scoreElement.subject.credits_number*scoreElement.score;            
-                        });
-                        GPA = totalScore/totalCredit;
-                        GPA = (GPA/10*4).toFixed(2);
-                        
-                        if (filterState == "nofilter" ||  (filterState == "cchv" && GPA < 2.5) || (filterState == "duoihoc" && GPA < 1)) {
-                            refinedData.push({
-                                vnu_id: vnu_id,
-                                name: name,
-                                email: email,
-                                gpa: GPA
-                            })
-    
-                            tempLevel.Aplus = (GPA<=4.0 && GPA>=3.7) ? tempLevel.Aplus + 1 : tempLevel.Aplus;
-                            tempLevel.A = (GPA<3.7 && GPA>3.5) ? tempLevel.A + 1 : tempLevel.A;
-                            tempLevel.Bplus = (GPA<=3.5 && GPA>3.0) ? tempLevel.Bplus + 1 : tempLevel.Bplus;
-                            tempLevel.B = (GPA<=3 && GPA>2.5) ? tempLevel.B + 1 : tempLevel.B;
-                            tempLevel.Cplus = (GPA<=2.5 && GPA>2) ? tempLevel.Cplus + 1 : tempLevel.Cplus;
-                            tempLevel.C = (GPA<=2 && GPA>1.5) ? tempLevel.C + 1 : tempLevel.C;
-                            tempLevel.Dplus =  (GPA<=2 && GPA>1.5) ? tempLevel.Dplus + 1 : tempLevel.Dplus;
-                            tempLevel.D =  (GPA<=1.5 && GPA>=1) ? tempLevel.D + 1 : tempLevel.D;
-                            tempLevel.F = (GPA<1 && GPA>0) ? tempLevel.F + 1 : tempLevel.F;
-    
-                        }
-                        
-                    });
+
+            if (props?.score!=null) {
+                if (props.score.length !== 0) {
+                    console.log("Score for dashboard here");
+                    console.log(props.score);
+                    if (props.score!= "You are not teacher in this class")  {
+                        for (const object of props.score ) {
+                            console.log("timing count");
+                            var vnu_id = object.user_ref.vnu_id;
+                            var name = object.user_ref.name;
+                            var email = object.user_ref.email;
+                            var scoreObj = object.scores;  
+                            var GPA = 0;
+                            var totalCredit = 0;
+                            var totalScore = 0;
+                            scoreObj.forEach(scoreElement => { 
+                                totalCredit += scoreElement.subject.credits_number;
+                                totalScore += scoreElement.subject.credits_number*scoreElement.score;            
+                            });
+                            GPA = totalScore/totalCredit;
+                            GPA = (GPA/10*4).toFixed(2);
+                            
+                            if (filterState == "nofilter" ||  (filterState == "cchv" && GPA < 2.5) || (filterState == "duoihoc" && GPA < 1)) {
+                                refinedData.push({
+                                    vnu_id: vnu_id,
+                                    name: name,
+                                    email: email,
+                                    gpa: GPA
+                                })
+        
+                                tempLevel.Aplus = (GPA<=4.0 && GPA>=3.7) ? tempLevel.Aplus + 1 : tempLevel.Aplus;
+                                tempLevel.A = (GPA<3.7 && GPA>3.5) ? tempLevel.A + 1 : tempLevel.A;
+                                tempLevel.Bplus = (GPA<=3.5 && GPA>3.0) ? tempLevel.Bplus + 1 : tempLevel.Bplus;
+                                tempLevel.B = (GPA<=3 && GPA>2.5) ? tempLevel.B + 1 : tempLevel.B;
+                                tempLevel.Cplus = (GPA<=2.5 && GPA>2) ? tempLevel.Cplus + 1 : tempLevel.Cplus;
+                                tempLevel.C = (GPA<=2 && GPA>1.5) ? tempLevel.C + 1 : tempLevel.C;
+                                tempLevel.Dplus =  (GPA<=2 && GPA>1.5) ? tempLevel.Dplus + 1 : tempLevel.Dplus;
+                                tempLevel.D =  (GPA<=1.5 && GPA>=1) ? tempLevel.D + 1 : tempLevel.D;
+                                tempLevel.F = (GPA<1 && GPA>0) ? tempLevel.F + 1 : tempLevel.F;
+        
+                            }
+                            
+                        };
+                    }
+                    
                 }
                 
             }

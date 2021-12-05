@@ -28,6 +28,7 @@ import {Notification} from './_components/bach_component/Notification/Notificati
 import { socketWrapper } from '_helpers/socket-wrapper';
 import Socket from '_components/bach_component/Socket/socket';
 import LinearProgress from '@mui/material/LinearProgress';
+import { DBPortal } from '_components/dbportal/DBPortal';
 const style = { };
 
 const { Header, Footer, Content } = Layout;
@@ -99,6 +100,7 @@ function App() {
                           <Route path="/account" component={Account} />
                           <PrivateRoute path="/chat" component={Chat} />
                           <PrivateRoute path="/profile" component={Profile} />
+                          <PrivateRoute exact path="/dbportal" component={DBPortal} />
                           <PrivateRoute path="/:classID" component={Child} />
                           <Redirect from="*" to="/" />
                         </Switch>
@@ -135,6 +137,7 @@ function Child(props) {
     return (
     (!classWrapper.curClass && loaded) ? <Redirect from="*" to="/" /> :
         <>
+        
             {(classWrapper.curClass) &&  
                 <>
                     {(userData.role == "teacher") &&

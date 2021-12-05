@@ -5,8 +5,8 @@ const { fAddSemester, fGetSemester, fHandleUploadSemester, fGetAllSemester } = r
 const { handleUploadFile } = require("../middleware/upload-middleware/upload");
 // classRouter.get('/auth/test', validateToken);
 // authRouter.post('/auth/reg', register);
-semesterRouter.post(Configs.API_PATH.ADD_SEMESTER, validateToken, checkIsAdmin, fAddSemester)
+semesterRouter.post(Configs.API_PATH.ADD_SEMESTER, validateToken, fAddSemester)
 semesterRouter.get(Configs.API_PATH.GET_SEMESTER_BY_ID, validateToken, fGetAllSemester)
 semesterRouter.get(Configs.API_PATH.GET_SEMESTER_BY_ID, validateToken, fGetSemester)
-semesterRouter.post(Configs.API_PATH.UPLOAD_SEMESTER, validateToken, checkIsAdmin, handleUploadFile ,fHandleUploadSemester)
+semesterRouter.post(Configs.API_PATH.UPLOAD_SEMESTER, validateToken, handleUploadFile ,fHandleUploadSemester)
 module.exports = semesterRouter;

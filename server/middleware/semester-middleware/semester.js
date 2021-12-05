@@ -86,7 +86,7 @@ async function fHandleUploadSemester(req, res) {
         
     }
     res.status(200);
-    res.json(RES_FORM("Success", {added : success, failed: fail}));
+    res.json(RES_FORM("Success", {registered : success, failed: fail}));
 }
 
 module.exports = {fAddSemester, fGetSemester, fHandleUploadSemester, fGetAllSemester}

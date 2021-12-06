@@ -2,14 +2,14 @@ import { useRecoilState, useSetRecoilState, useResetRecoilState } from 'recoil';
 
 import { history, useFetchWrapper, useAuthWrapper } from '_helpers';
 import { authAtom, usersAtom, userAtom, currentClassAtom } from '_state';
-
+import { alertBachAtom } from '_state';
 export { useUserActions };
 
 function useUserActions () {
     const baseUrl = `${process.env.REACT_APP_API_URL}/users`;
     const fetchWrapper = useFetchWrapper();
     const authWrapper = useAuthWrapper();
-    
+    const [alert, setAlert] = useRecoilState(alertBachAtom)
     const [auth, setAuth] = useRecoilState(authAtom);
     const setUsers = useSetRecoilState(usersAtom);
     const setUser = useSetRecoilState(userAtom);
@@ -33,10 +33,16 @@ function useUserActions () {
         var urlencoded = new URLSearchParams();
         urlencoded.append("username", username);
         urlencoded.append("password", password);
-        let response = await authWrapper.login(urlencoded)
+        let response = {message: ""};
+        try {
+        response = await authWrapper.login(urlencoded)
+        if (response.status == "Error") throw Error("Đăng nhập thất bại") 
         console.log(response);
         const { from } = history.location.state || { from: { pathname: '/' } };
         history.push(from);
+        } catch(e) {
+            setAlert({message: "Lỗi", description: response.message})
+        }
     }
 
     async function logout() {

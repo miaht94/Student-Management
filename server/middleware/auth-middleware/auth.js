@@ -89,7 +89,7 @@ async function login(req, res) {
     let userRef = await global.DBConnection.User.findOne({"vnu_id": rUsername})
     if (!userRef) {
         res.status(400);
-        res.json(Configs.RES_FORM("Error", "Username chưa được đăng ký"));
+        res.json(Configs.RES_FORM("Error", "Username hoặc Password chưa đúng"));
         return;
     }
 
@@ -105,7 +105,7 @@ async function login(req, res) {
             res.json(Configs.RES_FORM("Logged In Success", {"token": newToken}));
         } else {
             res.status(400);
-            res.json(Configs.RES_FORM("Login Error", "Invalid username or password"));
+            res.json(Configs.RES_FORM("Error", "Username hoặc Password chưa đúng"));
         }
     })
 }

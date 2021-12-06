@@ -1,6 +1,6 @@
 const Configs = require('../../configs/Constants');
 const userSchema = require('../../module/DBModule/Schemas/UserSchema');
-
+const hash = require('sha256')
 
 function getProfileById(req, res) {
     if (req.params.profileId == "me") {
@@ -35,6 +35,24 @@ function validateEditProfileArgument(req, res, next) {
 }
 
 async function editProfileById(req, res) {
+    var old_password = req.body.old_password
+    var new_password = req.body.new_password
+    var senderLoginInfor;
+    if (req.body.new_password && req.body.old_password) {
+        senderLoginInfor = await global.DBConnection.LoginInfo.findOne({user_ref : req.senderInstance._id})
+        if (new_password.length < 8) {
+            res.status(400);
+            res.json(Configs.RES_FORM("Error", "Password mới chưa đủ độ dài (8 ký tự)"));
+            return;
+        }
+        if (hash(old_password) != senderLoginInfor.password) {
+            res.status(400);
+            res.json(Configs.RES_FORM("Error", "Password cũ và mới không trùng nhau"));
+            return
+        }
+        senderLoginInfor.password = new_password;
+        await senderLoginInfor.save()
+    }
     if (req.params.profileId == "me"){
         req.params.profileId = req.senderVNUId;
         try {

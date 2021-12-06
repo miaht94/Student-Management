@@ -30,7 +30,7 @@ function useAuthWrapper(param) {
               alertActions.error("Không thể đăng nhập. Vui lòng kiểm tra lại tên và mật khẩu");
             }
             console.log("Token registered in Recoil is: " + auth);
-
+            return rawjson
         }
 
         async function logout(){

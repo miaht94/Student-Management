@@ -111,7 +111,7 @@ function GPADash(props) {
     return (
             <div className="p-4">
                 <Row wrap = 'true'>
-                    <Card title="Trạng thái GPA" style={{ width: 300, height: 400 }}>
+                    <Card title="Trạng thái GPA" style={{ width: 300, height: 440 }}>
                     <PieChart width={800} height={200} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
                         <Pie
                           data={levelGPAstate.data}
@@ -136,11 +136,11 @@ function GPADash(props) {
                             <Option value="duoihoc">{"GPA<1"}</Option>
                         </Select>                        
                     </div>} 
-                    style={{ width: 300, height: 400 }}>
+                    style={{ width: 300, height: 440 }}>
                     <div
                           id="scrollableDiv"
                           style={{
-                            height: 300,
+                            height: 340,
                             overflow: 'auto',
                             padding: '0 0px',
                           }}

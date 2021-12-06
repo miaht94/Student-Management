@@ -1,10 +1,13 @@
 import React ,{useEffect, useState} from 'react';
 import 'antd/dist/antd.css';
-import { Table, Button, Space, Input, Tag, Modal} from 'antd';
+import { Table, Button, Space, Input, Tag, Modal, Row, Col} from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined, InfoCircleTwoTone} from '@ant-design/icons';
 import { StudentScore } from '_components/studentScoreList'
 import {useStudentScoreAction} from '_actions';
+import { useClassWrapper, useFetchWrapper } from '_helpers';
+import { SettingsSystemDaydreamTwoTone } from '@mui/icons-material';
+import { DownloadForm } from '_components/studentScoreList';
 
 
 export { StudentScoreTable };
@@ -12,6 +15,8 @@ export { StudentScoreTable };
 function StudentScoreTable(props){
     var data =  JSON.parse(JSON.stringify(props.data));
     const studentScoreAction = useStudentScoreAction();
+    const fetchWrapper = useFetchWrapper();
+    const classWrapper = useClassWrapper();
 
     data = studentScoreAction.handleData(data);
 
@@ -30,6 +35,17 @@ function StudentScoreTable(props){
         },
       });
 
+    const [downloadPanelVisible, setDownloadPanelVisible] = useState(false);
+
+    const handleDownloadCancel = () => {
+      setDownloadPanelVisible(false);
+    };
+
+    const showDownloadPanel = () => {
+      console.log("button clicked")
+      setDownloadPanelVisible(true);
+      console.log(downloadPanelVisible);
+    };
    
     
     let handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -45,7 +61,23 @@ function StudentScoreTable(props){
         clearFilters();
         setState({ ...state, searchText: '' });
       };
+
+    function save(blob, fileName) {
+        if (window.navigator.msSaveOrOpenBlob) { // For IE:
+            navigator.msSaveBlob(blob, fileName);
+        } else { // For other browsers:
+            var link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+            window.URL.revokeObjectURL(link.href);
+        }
+    }
     
+    async function handleDownload(param){ 
+        var generated = "http://localhost:8081/api/scores/download/" + classWrapper.curClass.class_id + "/20201";
+    }
+      
     let handleShowScoreboard = (record) =>{
       // console.log(record)
         setState({
@@ -272,13 +304,28 @@ function StudentScoreTable(props){
     ]
     return (
         <div>
+            
+            <Row>
+            <Col flex="auto">
             <h2>Bảng điểm sinh viên</h2>
+            </Col>
+            <Col flex="250px">
+            <p align="right">
+              <Button type="primary"
+                onClick = {() => showDownloadPanel()}
+              >Tải bảng điểm</Button>
+            </p> 
+            </Col>
+            </Row>
             <Table
             columns={columns}
             dataSource={data}
             bordered
             scroll={{ x: "calc(700px + 50%)", y: 500 }}
             />
+            <Modal title="Tải bảng điểm" visible={downloadPanelVisible} onCancel={handleDownloadCancel} footer={[]}> 
+              <DownloadForm classId = {classWrapper.curClass.class_id}/>
+            </Modal>
             <Modal
               title="Bảng điểm sinh viên"
               visible={state.visible}

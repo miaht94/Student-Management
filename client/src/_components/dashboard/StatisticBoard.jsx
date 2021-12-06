@@ -69,9 +69,9 @@ function StatisticBoard(props) {
     }, [props.score]);
     return (
         <div className="p-4">
-            <Card title = "Thống kê tình hình học tập" style={{width: 960, height: 400,}}>
+            <Card title = "Thống kê tình hình học tập" style={{width: 960, height: 420,}}>
                 <Row justify="center">
-                    <BarChart   width={640} height={300} 
+                    <BarChart   width={640} height={320} 
                                 data={levelStatus.data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />

@@ -28,7 +28,7 @@ function useAuthWrapper(param) {
               setLoginToken(rawjson.message.token);
               await loadUser();
             } else {
-              alertActions.error("Không thể đăng nhập. Vui lòng kiểm tra lại tên và mật khẩu");
+              setAlert({message: "Thất bại", description: "Sai tên đăng nhập hoặc mật khẩu"});
             }
             console.log("Token registered in Recoil is: " + auth);
             return rawjson

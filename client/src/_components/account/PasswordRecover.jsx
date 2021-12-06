@@ -32,7 +32,7 @@ function PasswordRecover({ history }) {
             <div className="card-body">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
-                        <label>Vui lòng nhập email do quản trị hệ thống cấp với đuôi @vnu.edu.vn</label>
+                        <label>Vui lòng nhập email đã đăng ký với tài khoản của bạn</label>
                         <input name="email" type="text" {...register('email')} className={`form-control ${errors.email ? 'is-invalid' : ''}`} />
                         <div className="invalid-feedback">{errors.username?.message}</div>
                     </div>

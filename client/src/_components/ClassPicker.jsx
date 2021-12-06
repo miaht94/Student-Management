@@ -107,8 +107,8 @@ const CollectionCreateForm = ({ visible, onCreate, onCancel }) => {
         animation={false}
         visible={visible}
         title="Tạo lớp học mới"
-        okText="Create"
-        cancelText="Cancel"
+        okText="Tạo"
+        cancelText="Hủy"
         onCancel={onCancel}
         onOk={() => {
           form

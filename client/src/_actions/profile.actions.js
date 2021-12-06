@@ -70,7 +70,7 @@ function useProfileAction() {
             }
             setAlert({message: "Thành công", description: "Cập nhật thông tin thành công"});
           } else {
-            setAlert({message: "Lỗi", description: "Không thể cập nhật thông tin"});
+            setAlert({message: "Lỗi", description: rawjson.message});
           }
         }); 
     }

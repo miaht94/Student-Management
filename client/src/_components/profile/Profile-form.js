@@ -1,4 +1,4 @@
-import { Layout , Form, Avatar, Input, DatePicker, Button} from 'antd';
+import { Layout , Form, Avatar, Input, DatePicker, Button, Switch } from 'antd';
 import { ConsoleSqlOutlined, UserOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import {useEffect} from 'react';
@@ -8,6 +8,7 @@ import {useRecoilState} from 'recoil';
 
 import { useProfileAction } from '_actions';
 import { alertBachAtom } from '_state';
+import { useState } from 'react';
 
 
 export{ ProfileForm}
@@ -37,7 +38,8 @@ function ProfileForm(props) {
     const profileAction = useProfileAction(); 
     const [form] = Form.useForm();
     const [alert, setAlert] = useRecoilState(alertBachAtom);
-
+    const [passwordSwitch, setPasswordSwitch] = useState(false);
+    const [submitButtonLoading, setSubmitButtonLoading] = useState(false);
     let data = props.data;
     let isTable = props.isTable;
     console.log(data);
@@ -48,6 +50,10 @@ function ProfileForm(props) {
                 data = newData;
             }
         )
+    }
+
+    const onChangePassSwitch = () => {
+        setPasswordSwitch(!passwordSwitch)
     }
 
     useEffect (() => {
@@ -72,21 +78,24 @@ function ProfileForm(props) {
         form.resetFields();
     }     
 
-    const handleSubmit = () => {
-       form.validateFields()
-        .then((values) => {
-        //   form.resetFields();
-          const changedFields =  pickBy(values, identity);
-          if(changedFields.date_of_birth) {
+    const handleSubmit = async () => {
+        try {
+			setSubmitButtonLoading(true)
+            let values = await form.validateFields();
+            const changedFields =  pickBy(values, identity);
+			console.log("CHANGEFIELD")
+			console.log(changedFields);
+          	if(changedFields.date_of_birth) {
                 let timestamp = moment(changedFields.date_of_birth, 'DD/MM/YYYY').format('x');
                 console.log(timestamp);
                 changedFields.date_of_birth = timestamp;
-          }
-          console.log(changedFields);
-          profileAction.handleSubmit(changedFields, data.vnu_id, isTable);
-        }).catch((e) => {
+          	}
+          	console.log(changedFields);
+          	await profileAction.handleSubmit(changedFields, data.vnu_id, isTable);
+			setSubmitButtonLoading(false);
+        } catch (e) {
             setAlert({message: "Lỗi", description: e});
-          });
+        }
     }
 
     return (
@@ -128,12 +137,29 @@ function ProfileForm(props) {
                     <Form.Item label="Địa chỉ" name = "location">
                         <Input defaultValue = {data.location} />
                     </Form.Item>
+                    <Form.Item label="Đổi mật khẩu" name = "password_switch">
+                    <Switch
+                        checked={passwordSwitch}
+                        checkedChildren="Có"
+                        unCheckedChildren="Không"
+                        onChange={onChangePassSwitch}
+                    />
+                    </Form.Item>
+                    {passwordSwitch && <>
+                        <Form.Item label="Mật khẩu cũ" name = "old_password">
+                            <Input.Password defaultValue = {""} />
+                        </Form.Item>
+                        <Form.Item label="Mật khẩu mới" name = "new_password">
+                            <Input.Password defaultValue = {""} />
+                        </Form.Item>
+                    </>}
+                    
                     <Form.Item label=" " colon={false}>
-                        <Button type="primary" htmlType="submit" onClick = {handleSubmit}>
+                        <Button type="primary" htmlType="submit" onClick = {handleSubmit} loading={submitButtonLoading}>
                             Thay đổi
                         </Button>
 
-                        <Button onClick = {cancelEdit} style = {{position : 'relative', left : '40px'}}>
+                        <Button onClick = {cancelEdit} style = {{position : 'relative', left : '40px'}} >
                             Hoàn tác
                         </Button>
                     </Form.Item>

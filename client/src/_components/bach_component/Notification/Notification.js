@@ -14,13 +14,41 @@ import { alertBachAtom } from '_state/alert_bach';
   function Notification() {
     const [notification_, setNoti] = useRecoilState(alertBachAtom);
     const openNotification = (message, description) => {
-      notification.open({
-        message: message,
-        description: description,
-        onClick: () => {
-          console.log('Notification Clicked!');
-        },
-      });
+      if (message.includes('Lỗi') || message.includes('Error') || message.includes('Err'))
+        notification.error({
+          message: message,
+          description: description,
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      else if (message.includes('Thành công') || message.toLowerCase().includes('thanh cong') || message.includes('Success') || description.includes('Thành công') || description.includes('Success') ){
+        notification.success({
+          message: message,
+          description: description,
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      }
+      else if (message.includes('Cảnh báo') || message.toLowerCase().includes('canh bao') || message.includes('Warning') || description.toLowerKey().includes('warning') || description.toLowerKey().includes('canh bao') ){
+        notification.success({
+          message: message,
+          description: description,
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      }
+      else {
+        notification.open({
+          message: message,
+          description: description,
+          onClick: () => {
+            console.log('Notification Clicked!');
+          },
+        });
+      }
     };
     useEffect(() => {
       if (notification_.message || notification_.description)

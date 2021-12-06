@@ -14,7 +14,7 @@ import { alertBachAtom } from '_state/alert_bach';
   function Notification() {
     const [notification_, setNoti] = useRecoilState(alertBachAtom);
     const openNotification = (message, description) => {
-      if (message.includes('Lỗi') || message.includes('Error') || message.includes('Err'))
+      if (message.includes('Lỗi') || message.includes('Thất bại') || message.includes('Error') || message.includes('Err'))
         notification.error({
           message: message,
           description: description,
@@ -31,7 +31,7 @@ import { alertBachAtom } from '_state/alert_bach';
           },
         });
       }
-      else if (message.includes('Cảnh báo') || message.toLowerCase().includes('canh bao') || message.includes('Warning') || description.toLowerKey().includes('warning') || description.toLowerKey().includes('canh bao') ){
+      else if (message.includes('Cảnh báo') || message.toLowerCase().includes('canh bao') || message.includes('Warning') || description.toLowerCase().includes('warning') || description.toLowerCase().includes('canh bao') ){
         notification.success({
           message: message,
           description: description,

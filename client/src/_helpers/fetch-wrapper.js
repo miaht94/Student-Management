@@ -44,12 +44,8 @@ function useFetchWrapper() {
          return async (url, header, body) => {
             let response = await requestor(url, header, body);
             let rawjson = await response.clone().json();
-            console.log("Response of request:");
-            console.log(rawjson);
             if (url != "http://localhost:3000/api/profile/me"){
                 if ("message" in rawjson) {
-                    // console.log("Response of message name:");
-                    // console.log(rawjson.message.name);
                     if (rawjson.status === "Error" && (rawjson.message.name === "TokenNotFound" || rawjson.message.name === "UserNotFound")){
                         console.log(rawjson.status);
                         setAuth(null);

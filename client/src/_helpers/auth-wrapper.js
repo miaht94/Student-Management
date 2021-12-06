@@ -2,13 +2,14 @@ import { authAtom} from '_state';
 import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
 import { useAlertActions ,useProfileAction} from '_actions';
-
+import { alertBachAtom } from '_state';
 export { useAuthWrapper };
 
 function useAuthWrapper(param) {
       // console.log("Login in wrapper called");
       const [auth, setAuth] = useRecoilState(authAtom);
       // const [user, setUser] = useRecoilState(userAtom);
+      const [alert, setAlert] = useRecoilState(alertBachAtom)
       const fetchWrapper = useFetchWrapper();
       const alertActions = useAlertActions();
       const profileAction = useProfileAction();
@@ -103,11 +104,29 @@ function useAuthWrapper(param) {
           }
         }
 
+        async function forgetPassword(params) {
+          console.log(params)
+          var urlencoded = new URLSearchParams();
+          urlencoded.append("email", params.email);
+          let response = {message: ""};
+          try {
+            response = await fetchWrapper.post("http://localhost:3000/api/auth/forget_password", "application/x-www-form-urlencoded", urlencoded);
+            response = await response.json();
+            // console.log(response)
+            if (response.status == "Success") {
+              setAlert({message: "Thành công", description: response.message})
+            } else throw Error("Forget Password fail")
+          } catch (e) {
+            setAlert({message: "Thất bại", description: response.message})
+          }
+        }
+
         return {
           login : login,
           logout : logout,
           tokenValue : auth,
           getUserInfo : getUserInfo,
+          forgetPassword: forgetPassword,
           // user: user,
           // loadUserAtom: loadUserAtom,
           loadLoginToken: loadLoginToken,

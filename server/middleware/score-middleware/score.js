@@ -2,7 +2,12 @@ const { RES_FORM } = require("../../configs/Constants");
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const csv=require('csvtojson/v2')
-
+const { Parser } = require('json2csv');
+const fs = require('fs');
+const path = require('path');
+const { dirname } = require("path");
+var json2xls = require('json2xls');
+const json2csvParser = new Parser();
 /** validated token, body form have targetVNUId */
 async function checkTeacherOfVNUId(req, res, next) {
     let senderInstance = req.senderInstance;
@@ -192,6 +197,81 @@ async function fGetScoresClassByClassId(req, res) {
     }
 }
 
+async function fDownloadScoresClassByClassId(req, res) {
+    var classInstance = req.classInstance;
+    var senderInstance = req.senderInstance;
+    var members = classInstance.class_members;
+    var semesterId = req.body.semesterId;
+    var semester = await global.DBConnection.Semester.findOne({semester_id: semesterId});
+    if (!semester) {
+        res.status(404);
+        res.json(RES_FORM("Error", "Không tìm thấy học kỳ"))
+        return
+    }
+    var _idSemester = semester._id.toHexString();
+    var semester_name = semester.semester_name;
+
+    let scores = await global.DBConnection.ScoresTable.find({user_ref: {$in : members}}).populate({
+        path: "scores",
+        populate: {
+            path: "subject"
+        }
+    }).populate("user_ref");
+    let result = [];
+    let form = {
+        "Mã sinh viên": null,
+        "Họ và tên": null,
+        "Môn học:" : null,
+        "Mã môn học": null,
+        "Số tín chỉ": null,
+        "Điểm": null,
+    }
+    
+    for (var i = 0; i < scores.length; i++) {
+        let scoreboard = scores[i];
+        let sv = scoreboard.user_ref;
+
+        if (!scoreboard.scores) 
+            continue;
+        
+        for (var j=0; j<scoreboard.scores.length; j++) {
+            let score_subject = scoreboard.scores[j];
+
+            if (score_subject.semester_id.toHexString() != _idSemester) {
+                continue;
+            }
+
+            let subject_name = score_subject.subject.subject_name;
+            let subject_code = score_subject.subject.subject_code;
+            let credits_number = score_subject.subject.credits_number;
+            let score = score_subject.score
+            let res = {
+                "Mã sinh viên": sv.vnu_id,
+                "Họ và tên": sv.name,
+                "Môn học:" : subject_name,
+                "Mã môn học": subject_code,
+                "Số tín chỉ": credits_number,
+                "Điểm": score,
+            }
+            result.push(res);
+        }
+    }
+    var xls = json2xls(result)
+    console.log(__dirname)
+    var file_path = path.resolve(__dirname,'..','..') + '/public/data/' + classInstance.class_name.toString().replace(" ", "") + '.xls';
+    fs.writeFileSync(file_path, xls);
+    res.status(200);
+    if (scores) {
+        // res.json(RES_FORM("Success", result));
+        res.xls(classInstance.class_name.toString().replace(" ", "") + ".xls",result)
+        return;
+    }
+    else {
+        res.json(RES_FORM("Success", []));
+        return
+    }
+}
+
 async function fUpdateStatus(req, res) {
     var status = req.body.status;
     status = status.split(",")
@@ -305,4 +385,4 @@ async function fHandleUploadScore(req, res) {
     res.status(200);
     res.json(RES_FORM("Success", {added : success, failed: fail}));
 }
-module.exports = {fHandleUploadStatus, fGetScoresClassByClassId, fAddScoreToScoresTable, checkTeacherOfVNUId, checkTargetAddScoreExist, fGetScoresByVNUId, fHandleUploadScore, fUpdateStatus}
+module.exports = {fDownloadScoresClassByClassId, fHandleUploadStatus, fGetScoresClassByClassId, fAddScoreToScoresTable, checkTeacherOfVNUId, checkTargetAddScoreExist, fGetScoresByVNUId, fHandleUploadScore, fUpdateStatus}

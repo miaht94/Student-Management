@@ -339,7 +339,7 @@ async function fHandleUploadStatus(req, res) {
         
     }
     res.status(200);
-    res.json(RES_FORM("Success", {added : success, failed: fail}));
+    res.json(RES_FORM("Success", {registered : success, failed: fail}));
 }
 
 /** Handle upload file first */
@@ -383,6 +383,6 @@ async function fHandleUploadScore(req, res) {
         
     }
     res.status(200);
-    res.json(RES_FORM("Success", {added : success, failed: fail}));
+    res.json(RES_FORM("Success", {registered : success, failed: fail}));
 }
 module.exports = {fDownloadScoresClassByClassId, fHandleUploadStatus, fGetScoresClassByClassId, fAddScoreToScoresTable, checkTeacherOfVNUId, checkTargetAddScoreExist, fGetScoresByVNUId, fHandleUploadScore, fUpdateStatus}

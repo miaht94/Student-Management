@@ -60,7 +60,7 @@ function useSocketAction() {
     function onNewMessage(message) {
         // debugger
         if (!message.selfSend) {
-            setAlert({message: `Tin nhan moi tu : ${message.from.name}`, description: message.message})
+            setAlert({message: `Tin nhắn mới từ: ${message.from.name}`, description: message.message})
         }
             
         if (message.from.vnu_id == getRecoil(chatWrapper.curChatPersonAtom) || message.to.vnu_id == getRecoil(chatWrapper.curChatPersonAtom)) {

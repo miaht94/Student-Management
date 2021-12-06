@@ -201,7 +201,7 @@ async function fDownloadScoresClassByClassId(req, res) {
     var classInstance = req.classInstance;
     var senderInstance = req.senderInstance;
     var members = classInstance.class_members;
-    var semesterId = req.body.semesterId;
+    var semesterId = req.params.semesterId;
     var semester = await global.DBConnection.Semester.findOne({semester_id: semesterId});
     if (!semester) {
         res.status(404);

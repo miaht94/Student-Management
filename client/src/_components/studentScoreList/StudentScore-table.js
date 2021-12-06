@@ -73,10 +73,6 @@ function StudentScoreTable(props){
             window.URL.revokeObjectURL(link.href);
         }
     }
-    
-    async function handleDownload(param){ 
-        var generated = "http://localhost:8081/api/scores/download/" + classWrapper.curClass.class_id + "/20201";
-    }
       
     let handleShowScoreboard = (record) =>{
       // console.log(record)

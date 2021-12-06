@@ -4,13 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 import { useUserActions, useAlertActions } from '_actions';
-
+import { useAuthWrapper } from '_helpers';
 export { PasswordRecover };
 
 function PasswordRecover({ history }) {
     const userActions = useUserActions();
     const alertActions = useAlertActions();
-
+    const authWrapper = useAuthWrapper();
     // form validation rules 
     const validationSchema = Yup.object().shape({
         email: Yup.string()
@@ -22,12 +22,8 @@ function PasswordRecover({ history }) {
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
 
-    function onSubmit(data) {
-        // return userActions.register(data)
-        //     .then(() => {
-        //         history.push('/account/login');
-        //         alertActions.success('Registration successful');
-        //     })
+    async function onSubmit(data) {
+        await authWrapper.forgetPassword(data)
     }
 
     return (

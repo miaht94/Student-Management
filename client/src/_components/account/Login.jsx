@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import { useUserActions } from '_actions';
+import { useAlertActions, useUserActions } from '_actions';
 import { Redirect } from 'react-router-dom';
 import { authAtom } from '_state';
 import { useRecoilValue } from 'recoil';

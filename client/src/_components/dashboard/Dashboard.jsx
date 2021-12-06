@@ -1,12 +1,15 @@
 import { useRecoilState } from 'recoil';
-import React ,{useEffect } from 'react';
-import { dashboardGPAAtom, studentsAtom, scoreAtom } from '_state';
+import React ,{useEffect, useState } from 'react';
+import { dashboardGPAAtom, studentsAtom, scoreAtom, profileAtom } from '_state';
 import { BachComponent } from '_components/subcomponents';
+import { InfoCircleOutlined} from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 import { GPADash } from '_components/dashboard';
 import { StatisticBoard } from '_components/dashboard';
 import { Row, Col, Card, Button } from 'antd';
 import { useStudentScoreAction } from '_actions';
+import { useClassWrapper } from '_helpers';
 
 export { Dashboard };
 
@@ -14,18 +17,51 @@ export { Dashboard };
 function Dashboard() {
     const [student, setstudent] = useRecoilState(studentsAtom);
     const [score, setScore] = useRecoilState(scoreAtom);
-
+    const classWrapper = useClassWrapper();
     const studentScoreAction = useStudentScoreAction();
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    // const [profile,setProfile] = useRecoilState(profileAtom);
 
-    // useEffect(() =>{
-    //     console.log("Reconstruct GPADash")
-    //     async function initDashboard() {
-            
-    //     };
+    const [dashProperties, setDashProperties] = useState({
+        className: "Không hiển thị được tên lớp",
+        teacherName: "Không hiển thị được tên CVHT",
+        studentCount: 0,
+        studentThieuTinChi: 0,
+        studentThieuHocPhi: 0,
+        classID: ""
+    })
 
-    //     initDashboard();
-
-    // },[]);
+    useEffect(() =>{
+        console.log("Reconstruct GPADash")
+        async function initDashboard() {
+            var classNameTemp = classWrapper.curClass.class_name;
+            var classIDTemp = classWrapper.curClass.class_id;
+            var teacherNameTemp = userData.name;
+            var studentCountTemp = 0;
+            var studentThieuTinChiTemp = 0;
+            var studentThieuHocPhiTemp = 0;
+            if ("length" in student) studentCountTemp = student.length;
+            if (score!= null) {
+                if (score!= "You are not teacher in this class")  {
+                    console.log(score);
+                    score.forEach(object => {
+                        if (object.status.includes("Chưa nộp học phí")) studentThieuHocPhiTemp++;
+                        if (object.status.includes("Chưa đủ tín")) studentThieuTinChiTemp++;
+                    })
+                }
+            }
+            // console.log(student);
+            setDashProperties({
+                className : classNameTemp,
+                teacherName : teacherNameTemp,
+                studentCount : studentCountTemp,
+                studentThieuTinChi: studentThieuTinChiTemp,
+                studentThieuHocPhi: studentThieuHocPhiTemp,
+                classID : classIDTemp
+            });
+        };
+        initDashboard();
+    },[classWrapper.curClass]);
 
     return (
         <div className="p-4" style = {{overflow : "auto"}}>
@@ -35,13 +71,26 @@ function Dashboard() {
                         {/* For Class name renderer */}
                         <Col>
                             <div className="p-4">
-                                <Card style={{width: 600, height: 200}}></Card>
+                                <Card style={{width: 600, height: 220}}>
+                                    <span style={{"font-size": '17px'}}>Lớp hiện tại</span><br/>
+                                    <h3>{dashProperties.className}</h3><br/>
+                                    <span style={{"font-size": '17px'}}>Cố vấn học tập</span>
+                                    <h3>{dashProperties.teacherName}</h3><br/>
+                                </Card>
                             </div>
                         </Col>
                         {/* For Class student number renderer */}
                         <Col>
                             <div className="p-4">
-                                <Card style={{width: 300, height: 200}}></Card>
+                                <Card style={{width: 300, height: 220}}>
+                                    <span style={{"font-size": '17px'}}>Sĩ số lớp</span><br/>
+                                    <span style={{"font-size": '48px', "line-height": 'normal' }}>{dashProperties.studentCount}</span><br/>
+                                    <span style={{"font-size": '27px', "line-height": 'normal' }}> sinh viên</span><br/> <br/>
+                                    <Link to={`/${dashProperties.classID}/studentinfo`}>
+                                        <Button icon={<InfoCircleOutlined />}>Xem danh sách</Button>
+                                    </Link>
+                                    
+                                </Card>
                             </div>
                         </Col>
                     </Row>
@@ -54,12 +103,24 @@ function Dashboard() {
                             <div className="p-4">
                                 {/* For Class warning  status renderer */}
                                 <Row>  
-                                    <Card style={{ width: 300, height: 200}}>
+                                    <Card style={{ width: 300, height: 220}}>
+                                        <span style={{"font-size": '17px'}}>Sinh viên thiếu tín chỉ</span><br/>
+                                        <span style={{"font-size": '48px', "line-height": 'normal' }}>{dashProperties.studentThieuTinChi}</span><br/>
+                                        <span style={{"font-size": '27px', "line-height": 'normal' }}> sinh viên</span><br/> <br/>
+                                        <Link to={`/${dashProperties.classID}/studentscore`}>
+                                        <Button icon={<InfoCircleOutlined />}>Xem tình trạng</Button>
+                                        </Link>
                                     </Card>
                                 </Row>
                                 {/* For tuition fee status */}
                                 <Row>  
-                                    <Card style={{ width: 300, height: 200}}>
+                                    <Card style={{ width: 300, height: 220}}>
+                                        <span style={{"font-size": '17px'}}>Sinh viên thiếu học phí</span><br/>
+                                        <span style={{"font-size": '48px', "line-height": 'normal' }}>{dashProperties.studentThieuHocPhi}</span><br/>
+                                        <span style={{"font-size": '27px', "line-height": 'normal' }}> sinh viên</span><br/> <br/>
+                                        <Link to={`/${dashProperties.classID}/studentscore`}>
+                                        <Button icon={<InfoCircleOutlined />}>Xem tình trạng</Button>
+                                        </Link>
                                     </Card>
                                 </Row>
 

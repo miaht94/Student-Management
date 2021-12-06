@@ -28,6 +28,7 @@ import {Notification} from './_components/bach_component/Notification/Notificati
 import { socketWrapper } from '_helpers/socket-wrapper';
 import Socket from '_components/bach_component/Socket/socket';
 import LinearProgress from '@mui/material/LinearProgress';
+import { DBPortal } from '_components/dbportal/DBPortal';
 const style = { };
 
 const { Header, Footer, Content } = Layout;
@@ -62,14 +63,14 @@ function App() {
             <Layout>
                 <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
                     <Row gutter={0}>
-                        <Col className="gutter-row" span={20}>
+                        <Col className="gutter-row" flex="1 1 500px">
                             <div style={style}>
                                 <Title style={{ padding: '15px 0px 0px 0px', color: 'white' }} level={3}> Student Advisor Web App </Title>
                             </div>
                         </Col>
-                        <Col className="gutter-row" span={3}>
+                        <Col className="gutter-row" flex="0 1 300px">
                         <div>
-                            <div style={{color: 'white', "font-size": '18px' }}> 
+                            <div style={{color: 'white'}}> 
                                 {ClassNameDisplay()}
                             </div>
                         </div>
@@ -99,6 +100,7 @@ function App() {
                           <Route path="/account" component={Account} />
                           <PrivateRoute path="/chat" component={Chat} />
                           <PrivateRoute path="/profile" component={Profile} />
+                          <PrivateRoute exact path="/dbportal" component={DBPortal} />
                           <PrivateRoute path="/:classID" component={Child} />
                           <Redirect from="*" to="/" />
                         </Switch>
@@ -135,6 +137,7 @@ function Child(props) {
     return (
     (!classWrapper.curClass && loaded) ? <Redirect from="*" to="/" /> :
         <>
+        
             {(classWrapper.curClass) &&  
                 <>
                     {(userData.role == "teacher") &&

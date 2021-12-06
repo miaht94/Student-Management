@@ -159,7 +159,7 @@ async function fAddMembersToClass(req, res) {
     };
     await req.classInstance.populate("class_members");
     res.status(200)
-    res.json(Configs.RES_FORM("Success", {members: req.classInstance.class_members, added : added, failed: notFound}))
+    res.json(Configs.RES_FORM("Success", {members: req.classInstance.class_members, registered : added, failed: notFound}))
 }
 
 async function fGetCurClasses(req, res) {

@@ -79,13 +79,13 @@ function useStudentInfoAction (param) {
                 getStudentList(currentClass);
                 var description;
                 var message = 'Thành công';
-                description = `Thêm các thành viên :${rawjson.message.added} thành công ! Không thể các thành viên :${rawjson.message.failed}`
-                if (rawjson.message.added.length === 0) {
+                description = `Thêm các thành viên :${rawjson.message.registered} thành công ! Không thể các thành viên :${rawjson.message.failed}`
+                if (rawjson.message.registered.length === 0) {
                     description = `Không thể các thành viên :${rawjson.message.failed}` ;
                     message = "Thất bại";
                 }
                 if (rawjson.message.failed.length === 0){
-                    description = `Thêm các thành viên :${rawjson.message.added} thành công !`;
+                    description = `Thêm các thành viên :${rawjson.message.registered} thành công !`;
                     } 
                 setAlert({message: message, description: description});
             }

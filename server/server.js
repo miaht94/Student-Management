@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser')
 var router = express.Router();
 var fileUpload = require('express-fileupload')
 var tempFileDir = "/public/data";
+var json2xls = require('json2xls');
 if (process.platform == "darwin") {
   tempFileDir = "." + tempFileDir
 }
@@ -14,6 +15,7 @@ app.use(fileUpload({
   createParentPath: true,
   debug: true
 }));
+app.use(json2xls.middleware)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(cookieParser());

@@ -17,7 +17,8 @@ function useFetchWrapper() {
         get: request('GET'),
         post: request('POST'),
         put: request('PUT'),
-        delete: request('DELETE')
+        delete: request('DELETE'),
+        requestFile: requestFile('GET')
     };
 
     function request(method) {
@@ -44,12 +45,8 @@ function useFetchWrapper() {
          return async (url, header, body) => {
             let response = await requestor(url, header, body);
             let rawjson = await response.clone().json();
-            console.log("Response of request:");
-            console.log(rawjson);
             if (url != "http://localhost:3000/api/profile/me"){
                 if ("message" in rawjson) {
-                    // console.log("Response of message name:");
-                    // console.log(rawjson.message.name);
                     if (rawjson.status === "Error" && (rawjson.message.name === "TokenNotFound" || rawjson.message.name === "UserNotFound")){
                         console.log(rawjson.status);
                         setAuth(null);
@@ -62,8 +59,32 @@ function useFetchWrapper() {
         }
     }
 
-     
+    function requestFile(method) {
 
+        async function requestor(url, header, body) {
+            var myHeaders = new Headers();
+            if (header) myHeaders.append("Content-Type", header);
+            const requestOptions = {
+                method: method,
+                mode: "no-cors",
+                headers: myHeaders,
+                redirect: 'follow'
+            };
+            if(method == 'DELETE'){
+                requestOptions.mode = 'cors';
+            }
+            if (body) {
+                requestOptions.headers['Content-Type'] = header;
+                requestOptions.body = body;
+            }
+            return await fetch(url, requestOptions);
+        }
+     
+         return async (url, header, body) => {
+            let response = await requestor(url, header, body);
+            return response;
+        }
+    }
     // function loginrequest(method){
     //     console.log("Test Login request");
     // }

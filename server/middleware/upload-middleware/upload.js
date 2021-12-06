@@ -155,6 +155,6 @@ async function fHandleUploadDSMH(req, res) {
         else success.push(i);
     }
     res.status(200);
-    res.json(RES_FORM("Success", {added_subject : success, failed : fail}));
+    res.json(RES_FORM("Success", {registered : success, failed : fail}));
 };
 module.exports = {fHandleUploadFile, fHandleUploadDSCV, fHandleUploadDSMH, fHandleUploadDSSV, handleUploadFile}

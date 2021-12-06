@@ -6,7 +6,7 @@ const scoreAtom = atom({
     key: {
         name: 'score'
     },
-    default: null
+    default: []
 });
 
 const pscoreAtom = atom({

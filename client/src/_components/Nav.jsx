@@ -17,7 +17,8 @@ import {
   UserOutlined,
   DashboardOutlined,
   TableOutlined,
-  LoginOutlined
+  LoginOutlined,
+  UploadOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -35,12 +36,13 @@ function Nav(props) {
     const classWrapper = useClassWrapper();
     const auth = props.auth;
     const onLogout = props.onLogout;
-    const userData = JSON.parse(localStorage.getItem("userData"));
+    var userData = JSON.parse(localStorage.getItem("userData"));
     // only show nav when logged in
 
     useEffect(()=> {
 		console.log(location.pathname)
       console.log("NAV constructing ", classID);
+      userData = JSON.parse(localStorage.getItem("userData"));
     }, [])
 
 	
@@ -73,6 +75,7 @@ function Nav(props) {
                 <Link to="/"></Link>
               </Menu.Item>
             }
+
             {(classWrapper.curClass) &&
               <>
 
@@ -103,6 +106,7 @@ function Nav(props) {
                   <Link to={`/${classWrapper.curClass.class_id}/studentscore`}></Link>
                 </Menu.Item>
               }
+
               {(userData.role == "student") &&
                 <Menu.Item key={`/personalscore`}>
                   <UserOutlined />
@@ -112,6 +116,15 @@ function Nav(props) {
               }
               </>
             }
+            <>
+              {(userData?.role === "teacher") &&
+                <Menu.Item key={`/dbportal`}>
+                  <UploadOutlined />
+                  <span>Quản lý CSDL</span>
+                  <Link to={`/dbportal`}></Link>
+                </Menu.Item>}
+            </>
+            
             <Menu.Item key="/chat">
               <MessageOutlined />
               <span>Tin nhắn</span>

@@ -39,6 +39,7 @@ function useClassActions () {
     }
 
     async function getCurrentClass(cls){
+        
         return JSON.parse(localStorage.getItem('currentClass'));
     }
 }

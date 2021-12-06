@@ -5,6 +5,7 @@ import { authAtom } from '_state';
 import { useAuthWrapper, useClassWrapper } from '_helpers';
 import { classPickerVisibleAtom } from '_state';
 import {Redirect} from 'react-router-dom';
+import {Button} from 'antd';
 export { Home };
 
 function Home() {
@@ -13,6 +14,12 @@ function Home() {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const [studentFirstClassLoaded, setStudentFirstClassLoaded] = useState(false);
     const classWrapper = useClassWrapper();
+
+    const onClick = () => {
+        classWrapper.getClassList();
+        setDrawerVisible(true);
+    };
+
     useEffect(() => {
         
         async function loadFirstClassForStudent(){
@@ -33,8 +40,18 @@ function Home() {
                 <>
                     <div className="p-4">
                         <div className="container">
-                            <h1>Xin chào!</h1>
-                            <p>{ClassNameDisplay()}</p>
+                            <h3>Chào mừng đến với Phần mềm Quản lý Sinh viên - Cố vấn học tập!</h3>
+                            <br/>
+                            <p>Vui lòng chọn lớp để bắt đầu.</p>
+                            <Button type="primary" onClick = {onClick}>Chọn lớp</Button>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <b>Phần mềm Quản lý Sinh viên - Cố vấn học tập</b><br/>
+                            <b>Bài tập lớn môn Lập trình ứng dụng Web</b><br/>
+                            <b>Thực hiện bởi:</b> {" Trần Xuân Bách, Đặng Thế Hoàng Anh, Nguyễn Việt Anh, Hoàng Hữu Bách, Nguyễn Bá Anh Tuấn"}
+                            
+                            <br/>
                         </div>
                     </div>
                 </>

@@ -131,9 +131,17 @@ function ProfileForm(props) {
                     <Form.Item label="Email" name = "email">
                         <Input defaultValue = {data.email} />
                     </Form.Item>
-                    <Form.Item label="Số điện thoại" name = "phone_number">
+                    <Form.Item label="Số điện thoại cá nhân" name = "phone_number">
                         <Input defaultValue = {data.phone_number} />
                     </Form.Item>
+                    {   (data.role=='student') &&
+                        <>
+                        <Form.Item label="Số điện thoại phụ huynh" name = "parent_number">
+                        <Input defaultValue = {data.parent_number} />
+                        </Form.Item>
+                        </>
+                    }
+                    
                     <Form.Item label="Địa chỉ" name = "location">
                         <Input defaultValue = {data.location} />
                     </Form.Item>

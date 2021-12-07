@@ -234,6 +234,12 @@ function StudentInfoTable(props){
           key: 'phone_number',
         },
         {
+          title: 'Số điện thoại phụ huyinh',
+          width: 80,
+          dataIndex: 'parent_number',
+          key: 'parent_number',
+        },
+        {
           title: 'Địa chỉ',
           width: 140,
           dataIndex: 'location',

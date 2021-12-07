@@ -15,7 +15,8 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import Button from '@mui/material/Button';
 import NewPost from '_components/bach_component/Post/NewPost';
 import { useFeedActions } from '_actions/feed.actions';
-import { Modal } from 'antd';
+import { Modal, Row, Col } from 'antd';
+import './Feed.css'
 export { Feed };
 
 function Feed() {
@@ -85,8 +86,11 @@ function Feed() {
         {(loaded) && <>
             <NewPost onSendPost={feedAction.sendPost}/>
             <div style={{paddingRight:"300px", paddingLeft:"230px"}}>
-                {renderPosts}
+                {renderPosts}                
             </div>
+            {renderPosts.length == 0 && 
+
+            <h1 className='NoPost'>Hiện chưa có bài đăng nào cả</h1>}
         </>
         }
         <Modal title="Đã thích" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>

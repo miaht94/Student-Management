@@ -9,7 +9,7 @@ import useChatWrapper from '_helpers/chat-wrapper';
 import {useParams} from 'react-router-dom';
 import { useAuthWrapper } from '_helpers';
 import './MessageList.css';
-
+import axios from 'axios';
 export default function MessageList(props) {
   let {vnu_id} = useParams();
   const [fetchDone, setFetchDone] = useState(false);
@@ -18,6 +18,7 @@ export default function MessageList(props) {
   const chatAction = useChatAction();
   const chatWrapper = useChatWrapper();
   const NOT_MY_USER_ID = vnu_id
+  let [targetName, setTargetName] = useState('');
   useEffect(() => {
 
     setIsHidden(true);
@@ -29,9 +30,19 @@ export default function MessageList(props) {
       });
     })
     
-    
+    async function getTargetName(vnu_id) {
+      debugger
+      if (vnu_id) {
+        let res = await axios.get('http://localhost:3000/api/profile/' + vnu_id)
+        res = res.data;
+        debugger
+        setTargetName(res.name);
+    }
+    }
+    getTargetName(vnu_id)
   },[vnu_id])
   useEffect(() => {
+    
     return () => {
       chatWrapper.setCurChatPerson(null);
     }
@@ -116,7 +127,7 @@ export default function MessageList(props) {
       <div className="message-list">
         <Toolbar
         className="conversation-title-toolbar"
-          title="Trao đổi với sinh viên"
+          title={"Trao đổi với " + targetName}
         />
 
         <div  className="message-list-container">{renderMessages()}

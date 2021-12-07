@@ -28,7 +28,7 @@ const { TextArea } = Input;
         setLoading(true);
         setDisableInput(true);
         handleSendPost(postContent, handleClose);
-        setNotification({message:"Thanh cong", description:"Da dang bai thanh cong"})
+        setNotification({message:"Thành công", description:"Đã đăng bài thành công"})
     }
 
     const handleClickOpen = () => {

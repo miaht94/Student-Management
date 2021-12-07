@@ -1,0 +1,11 @@
+.NoPost {
+    color: rgba(129, 125, 125, 0.87);
+
+    height: 100%;
+    display: flex;
+    align-items: center;
+  justify-content: center;
+}
+.NoPostRow {
+    height: 100%;
+}

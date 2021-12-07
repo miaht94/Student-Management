@@ -54,6 +54,7 @@ const Comment = (props) => {
 	</>)
 }
 const Post = ({ postInstance, onSendComment, liked, onLikePost, showListLiked}) => {
+	const userData = JSON.parse(localStorage.getItem("userData"));
     const itemData = [];
 	const post = postInstance;
 	const likedList = postInstance.liked;
@@ -155,7 +156,7 @@ const Post = ({ postInstance, onSendComment, liked, onLikePost, showListLiked}) 
 				<Grid item xs={11.9}>
 					<Grid container className="commentCtn">
 						<Grid item xs={1} className="avatarCommentInput">
-							<Avatar {... stringAvatar("You")} className="commentAvatar" />
+							<Avatar {... stringAvatar(userData.name ? userData.name : "You")} className="commentAvatar" />
 						</Grid>
 						<Grid item xs={10.9} className="inputCommentCtn">
 							<Grid item xs={12} className="inputComment" placeholder={"Viết bình luận"} contentEditable={true} onKeyPress={onKeyPressNewComment} ref={textInput}></Grid>

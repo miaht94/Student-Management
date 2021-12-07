@@ -67,7 +67,7 @@ const { TextArea } = Input;
            
             <Grid item xs={2}>
             <LoadingButton variant="contained" onClick={onSend} endIcon={<SendIcon />} loading={loading} loadingPosition="end">
-                    Send
+                    Đăng
             </LoadingButton>
             </Grid>
         </Grid>

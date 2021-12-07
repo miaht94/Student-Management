@@ -7,6 +7,7 @@ import {useStudentScoreAction} from '_actions';
 import { Card} from 'antd';
 
 import { Button, Row, List, Select } from 'antd';
+import { useFetchWrapper } from '_helpers';
 
 const { Option } = Select;
 
@@ -18,25 +19,43 @@ function GPADash(props) {
     const [GPAstate, setGPAState] = useRecoilState(dashboardGPAAtom);
     const [levelGPAstate, setlevelGPAState] = useRecoilState(dashboardLevelGPAAtom);
     const [filterState, setFilterState] = useState("nofilter");
+    const [semFilterState, setSemFilterState] = useState("nofilter");
+    const [semesterData, setSemesterData] = useState([]);
     var refinedData = [];
+    const fetchWrapper = useFetchWrapper();
     
     useEffect(() =>{
         console.log("Reconstruct GPADash")
-        async function initGPADash() {
-            // console.log("Score props");
-            // console.log(props.score);
 
+        async function getSemesterData(){
+            var tempSem = [];
+            let response = await fetchWrapper.get("http://localhost:3000/api/semesters/all", null, null);
+            response = await response.json();
+            console.log(response);
+            if (response?.status === "Success"){
+                for (const object of response.message ) {
+                    tempSem.push({
+                        label: object.semester_name,
+                        value: object._id
+                    })
+                }
+                setSemesterData(tempSem);
+            }
+        }
+
+        async function initGPADash() {
+
+            await getSemesterData();
             var tempLevel = {
                 Aplus: 0, A:0, Bplus: 0, B: 0, Cplus: 0, C: 0, Dplus:0, D:0, F:0 
             }
-
+            
             if (props?.score!=null) {
                 if (props.score.length !== 0) {
                     console.log("Score for dashboard here");
                     console.log(props.score);
                     if (props.score!= "You are not teacher in this class")  {
                         for (const object of props.score ) {
-                            console.log("timing count");
                             var vnu_id = object.user_ref.vnu_id;
                             var name = object.user_ref.name;
                             var email = object.user_ref.email;
@@ -45,13 +64,22 @@ function GPADash(props) {
                             var totalCredit = 0;
                             var totalScore = 0;
                             scoreObj.forEach(scoreElement => { 
-                                totalCredit += scoreElement.subject.credits_number;
-                                totalScore += scoreElement.subject.credits_number*scoreElement.score;            
+                                if (semFilterState == "nofilter" ) {
+                                    totalCredit += scoreElement.subject.credits_number;
+                                    totalScore += scoreElement.subject.credits_number*scoreElement.score;
+                                }
+                                else {
+                                    if (scoreElement.semester_id == semFilterState) {
+                                        totalCredit += scoreElement.subject.credits_number;
+                                        totalScore += scoreElement.subject.credits_number*scoreElement.score;
+                                    }
+                                }  
                             });
                             GPA = totalScore/totalCredit;
                             GPA = (GPA/10*4).toFixed(2);
                             
-                            if (filterState == "nofilter" ||  (filterState == "cchv" && GPA < 2.5) || (filterState == "duoihoc" && GPA < 1)) {
+                            
+                            if (GPA != "NaN" && (filterState == "nofilter" ||  (filterState == "cchv" && GPA < 2.5) || (filterState == "duoihoc" && GPA < 1))) {
                                 refinedData.push({
                                     vnu_id: vnu_id,
                                     name: name,
@@ -70,6 +98,7 @@ function GPADash(props) {
                                 tempLevel.F = (GPA<1 && GPA>0) ? tempLevel.F + 1 : tempLevel.F;
         
                             }
+                            console.log(refinedData);
                             
                         };
                     }
@@ -100,12 +129,16 @@ function GPADash(props) {
         initGPADash();
         // console.log("LevelGPAState");
         // console.log(levelGPAstate);
-    },[props.score, filterState]);
+    },[props.score, filterState, semFilterState]);
     
     
     function handleFilterChange(value) {
         setFilterState(value);
         console.log(filterState);
+    }
+    function handleSemFilterChange(value) {
+        setSemFilterState(value);
+        console.log(semFilterState);
     }
 
     return (
@@ -126,16 +159,31 @@ function GPADash(props) {
                           ))}
                         </Pie>
                         <Tooltip />
-                    </PieChart>                                         
-                    </Card>
-                    <Card title="Lọc theo GPA" 
-                    extra={<div> 
-                        <Select defaultValue={filterState} style={{ width: 120 }} onChange={handleFilterChange} >
+                    </PieChart>
+                    <b>Lọc theo GPA</b>
+                    <br/>
+                    <Select defaultValue={filterState} style={{ width: 180 }} onChange={handleFilterChange} >
+                            <Option value="nofilter">Tất cả GPA</Option>
+                            <Option value="cchv">{"GPA<2.5"}</Option>
+                            <Option value="duoihoc">{"GPA<1"}</Option>
+                    </Select> <br/><br/>
+                    <b>Lọc theo kì</b>
+                    <br/>
+                    <Select defaultValue={semFilterState} style={{ width: 180 }} onChange={handleSemFilterChange} >
+                        <Option value="nofilter">Tất cả các kì</Option>
+                            {semesterData.map(({ label, value }) => (
+                                <option key={value} value={value}>
+                                    { label}
+                                </option>
+                            ))}
+                    </Select>   
+                    {/* <Select defaultValue={filterState} style={{ width: 120 }} data = {[{id}]}onChange={handleFilterChange} >
                             <Option value="nofilter">Không</Option>
                             <Option value="cchv">{"GPA<2.5"}</Option>
                             <Option value="duoihoc">{"GPA<1"}</Option>
-                        </Select>                        
-                    </div>} 
+                    </Select>                                       */}
+                    </Card>
+                    <Card title="Danh sách sinh viên" 
                     style={{ width: 300, height: 440 }}>
                     <div
                           id="scrollableDiv"

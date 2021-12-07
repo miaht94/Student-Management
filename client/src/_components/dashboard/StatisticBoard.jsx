@@ -1,11 +1,12 @@
 import { useRecoilState, atom, useResetRecoilState } from 'recoil';
-import React ,{useEffect } from 'react';
+import React ,{useEffect , useState} from 'react';
 import { dashboardGPAAtom, dashboardLevelGPAAtom, dashboardFilterGPAAtom, dashboardGPAStatusAtom, dashboardLevelStatusAtom } from '_state';
 import { Card} from 'antd';
 import {BarChart, Legend, XAxis, YAxis, CartesianGrid, Tooltip, Bar, ResponsiveContainer} from 'recharts'
 import { Button, Row, List, Select } from 'antd';
 import { object } from 'yup/lib/locale';
-
+import { useFetchWrapper } from '_helpers';
+const { Option } = Select;
 
 export { StatisticBoard };
 
@@ -13,12 +14,31 @@ export { StatisticBoard };
 function StatisticBoard(props) {
     const [GPAStatus, setGPAStatus] =  useRecoilState(dashboardGPAStatusAtom);
     const [levelStatus, setlevelStatus] = useRecoilState(dashboardLevelStatusAtom);
+    const [semFilterState, setSemFilterState] = useState("nofilter");
+    const [semesterData, setSemesterData] = useState([]);
+    const fetchWrapper = useFetchWrapper();
     var refinedData = [];
 
     useEffect(() => {
         console.log("Reconstruct StatisticBoard");
-        async function initStatisticBoard() {
+        async function getSemesterData(){
+            var tempSem = [];
+            let response = await fetchWrapper.get("http://localhost:3000/api/semesters/all", null, null);
+            response = await response.json();
+            console.log(response);
+            if (response?.status === "Success"){
+                for (const object of response.message ) {
+                    tempSem.push({
+                        label: object.semester_name,
+                        value: object._id
+                    })
+                }
+                setSemesterData(tempSem);
+            }
+        }     
 
+        async function initStatisticBoard() {
+            await getSemesterData();
             var tempStatus = {Normal: 0, Warning: 0, Expelling: 0}
             if (props.score!= null) {
                 if (props.score!= "You are not teacher in this class")  {
@@ -31,8 +51,16 @@ function StatisticBoard(props) {
                         var totalCredit = 0;
                         var totalScore = 0;
                         scoreObj.forEach(scoreElement => { 
-                            totalCredit += scoreElement.subject.credits_number;
-                            totalScore += scoreElement.subject.credits_number*scoreElement.score;            
+                            if (semFilterState == "nofilter" ) {
+                                totalCredit += scoreElement.subject.credits_number;
+                                totalScore += scoreElement.subject.credits_number*scoreElement.score;
+                            }
+                            else {
+                                if (scoreElement.semester_id == semFilterState) {
+                                    totalCredit += scoreElement.subject.credits_number;
+                                    totalScore += scoreElement.subject.credits_number*scoreElement.score;
+                                }
+                            }      
                         });
                         GPA = totalScore/totalCredit;
                         GPA = (GPA/10*4).toFixed(2);
@@ -66,10 +94,24 @@ function StatisticBoard(props) {
       // Warning: Canh cáo
       // Expelling: Đuổi học
         
-    }, [props.score]);
+    }, [props.score, semFilterState]);
+
+    function handleSemFilterChange(value) {
+        setSemFilterState(value);
+        console.log(semFilterState);
+    }
+
     return (
         <div className="p-4">
-            <Card title = "Thống kê tình hình học tập" style={{width: 960, height: 420,}}>
+            <Card title = "Thống kê tình hình học tập" style={{width: 960, height: 460,}}>
+                <Select defaultValue={semFilterState} style={{ width: 180 }} onChange={handleSemFilterChange} >
+                        <Option value="nofilter">Tất cả các kì</Option>
+                            {semesterData.map(({ label, value }) => (
+                                <option key={value} value={value}>
+                                    { label}
+                                </option>
+                            ))}
+                </Select>
                 <Row justify="center">
                     <BarChart   width={640} height={360} 
                                 data={levelStatus.data}>

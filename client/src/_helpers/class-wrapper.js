@@ -74,9 +74,18 @@ function useClassWrapper(param) {
 
     } 
 
+    async function getCurrentClassTeacherInfo() {
+      if (curClass) {
+        let response = await fetchWrapper.get(`http://localhost:3000/api/classes/${curClass.class_id}?teacher=true`, null, null);
+        response = await response.json();
+        return response;
+      }
+    }
+
     return {
         classes : classes,
         curClass,
+        getCurrentClassTeacherInfo:getCurrentClassTeacherInfo,
         getClassList: getClassList,
         createClass: createClass,
         chooseClass: chooseClass,

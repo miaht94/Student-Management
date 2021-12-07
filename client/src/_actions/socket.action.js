@@ -42,7 +42,7 @@ function useSocketAction() {
         // console.log("new comment bro");
     }
     function onUpdatePost(newPost) {
-        debugger
+        // debugger
         var feedPageState = getRecoil(feedPageAtom);
         feedPageState = JSON.parse(JSON.stringify(feedPageState))
         var postId = newPost._id;

@@ -74,7 +74,7 @@ function useChatAction() {
             
             let res = await fetcher.get(Configs.HOST_NAME + Configs.API_PATH.PROFILE_BY_ID.replace(":profileId", vnu_id));
             if (!res.ok) {
-                debugger
+                // debugger
                 setAlert({message: "Loi", description: "Link khong hop le"})
                 return;
             }

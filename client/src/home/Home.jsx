@@ -174,7 +174,7 @@ function Home() {
             }
             {(studentFirstClassLoaded && classWrapper.curClass) &&
                 <>
-                    <Redirect from="*" to={`/${classWrapper.curClass.class_id}/feed`} />
+                    <Redirect from="*" to={`/stuhome`} />
                 </>
             }
             
@@ -188,10 +188,4 @@ function Home() {
                 </>
             }
         </>)
-}
-function ClassNameDisplay(){
-   if (localStorage.getItem('currentClass')) {
-            return "Lớp hiện tại: " + JSON.parse(localStorage.getItem('currentClass')).class_name;
-        }
-    return "Vui lòng chọn lớp để bắt đầu";  
 }

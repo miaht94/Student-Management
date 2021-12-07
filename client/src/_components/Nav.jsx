@@ -74,23 +74,40 @@ function Nav(props) {
                 <span>Trang chủ</span>
                 <Link to="/"></Link>
               </Menu.Item>
+              
             }
 
             {(classWrapper.curClass) &&
               <>
-              {
+              {(userData.role == "teacher") &&
+              
                 <Menu.Item key={`/${classWrapper.curClass.class_id}/`}>
                   <HomeOutlined />
                   <span>Trang chủ</span>
                   <Link to={`/${classWrapper.curClass.class_id}/`}></Link>
                 </Menu.Item>
               }
+              {(userData.role == "student") &&
+              <Menu.Item key={`/stuhome`}>
+                <HomeOutlined />
+                <span>Trang chủ</span>
+                <Link to={`/stuhome`}></Link>
+              </Menu.Item>
+              }
+              
               {(userData.role == "teacher") &&
+              <>
                 <Menu.Item key={`/${classWrapper.curClass.class_id}/dashboard`}>
                   <DashboardOutlined />
                   <span>Dashboard</span>
                   <Link to={`/${classWrapper.curClass.class_id}/dashboard`}></Link>
                 </Menu.Item>
+                <Menu.Item key="/chat">
+                <MessageOutlined />
+                <span>Tin nhắn</span>
+                <Link to="/chat"></Link>
+              </Menu.Item>
+              </>
               }
                <Menu.Item key={`/${classWrapper.curClass.class_id}/feed`}>
                   <BellOutlined />
@@ -131,11 +148,7 @@ function Nav(props) {
                 </Menu.Item>}
             </>
             
-            <Menu.Item key="/chat">
-              <MessageOutlined />
-              <span>Tin nhắn</span>
-              <Link to="/chat"></Link>
-            </Menu.Item>
+            
             <Menu.Item key="/profile">
               <UserOutlined />
               <span>Hồ sơ cá nhân</span>

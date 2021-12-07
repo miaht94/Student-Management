@@ -27,7 +27,7 @@ function useFeedActions() {
     async function sendComment(commentContent, postId) {
         var urlencoded = new URLSearchParams();
         urlencoded.append("content", commentContent);
-        debugger
+        // debugger
         let response = await fetcher.post(Configs.HOST_NAME + Configs.API_PATH.COMMENT_TO_POST.replace(":classId", classWrapper.curClass.class_id).replace(":postId", postId), "application/x-www-form-urlencoded", urlencoded);
         response = await response.json();
         if (response.status != "Success") {

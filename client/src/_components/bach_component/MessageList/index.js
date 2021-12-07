@@ -31,11 +31,11 @@ export default function MessageList(props) {
     })
     
     async function getTargetName(vnu_id) {
-      debugger
+      // debugger
       if (vnu_id) {
         let res = await axios.get('http://localhost:3000/api/profile/' + vnu_id)
         res = res.data;
-        debugger
+        // debugger
         setTargetName(res.name);
     }
     }

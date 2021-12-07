@@ -29,6 +29,7 @@ import { socketWrapper } from '_helpers/socket-wrapper';
 import Socket from '_components/bach_component/Socket/socket';
 import LinearProgress from '@mui/material/LinearProgress';
 import { DBPortal } from '_components/dbportal/DBPortal';
+import { StuHome } from 'home/StuHome';
 const style = { };
 
 const { Header, Footer, Content } = Layout;
@@ -158,6 +159,7 @@ function Child(props) {
                             <PrivateRoute exact path="/" component={Home} />
                             {/* <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
                             <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} /> */}
+                            <PrivateRoute exact path="/stuhome" component={StuHome} />
                             <PrivateRoute exact path="/:classID/feed" component={Feed} />
                             <PrivateRoute path="/personalscore" component={PersonalScore}/>
                             <Redirect from="*" to={`/${classWrapper.curClass.class_id}/feed`} />

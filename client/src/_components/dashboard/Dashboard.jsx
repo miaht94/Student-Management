@@ -71,7 +71,7 @@ function Dashboard() {
                         {/* For Class name renderer */}
                         <Col>
                             <div className="p-4">
-                                <Card style={{width: 600, height: 220}}>
+                                <Card style={{width: 600, height: 220}} hoverable>
                                     <span style={{"font-size": '17px'}}>Lớp hiện tại</span><br/>
                                     <h3>{dashProperties.className}</h3><br/>
                                     <span style={{"font-size": '17px'}}>Cố vấn học tập</span>
@@ -82,7 +82,7 @@ function Dashboard() {
                         {/* For Class student number renderer */}
                         <Col>
                             <div className="p-4">
-                                <Card style={{width: 300, height: 220}}>
+                                <Card style={{width: 300, height: 220}} hoverable>
                                     <span style={{"font-size": '17px'}}>Sĩ số lớp</span><br/>
                                     <span style={{"font-size": '48px', "line-height": 'normal' }}>{dashProperties.studentCount}</span><br/>
                                     <span style={{"font-size": '27px', "line-height": 'normal' }}> sinh viên</span><br/> <br/>
@@ -103,7 +103,7 @@ function Dashboard() {
                             <div className="p-4">
                                 {/* For Class warning  status renderer */}
                                 <Row>  
-                                    <Card style={{ width: 300, height: 220}}>
+                                    <Card style={{ width: 300, height: 220}} hoverable>
                                         <span style={{"font-size": '17px'}}>Sinh viên thiếu tín chỉ</span><br/>
                                         <span style={{"font-size": '48px', "line-height": 'normal' }}>{dashProperties.studentThieuTinChi}</span><br/>
                                         <span style={{"font-size": '27px', "line-height": 'normal' }}> sinh viên</span><br/> <br/>
@@ -114,7 +114,7 @@ function Dashboard() {
                                 </Row>
                                 {/* For tuition fee status */}
                                 <Row>  
-                                    <Card style={{ width: 300, height: 220}}>
+                                    <Card style={{ width: 300, height: 220}} hoverable>
                                         <span style={{"font-size": '17px'}}>Sinh viên thiếu học phí</span><br/>
                                         <span style={{"font-size": '48px', "line-height": 'normal' }}>{dashProperties.studentThieuHocPhi}</span><br/>
                                         <span style={{"font-size": '27px', "line-height": 'normal' }}> sinh viên</span><br/> <br/>

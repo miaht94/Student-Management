@@ -27,14 +27,17 @@ function Login(props) {
     // get functions to build form with useForm() hook
     const { register, handleSubmit, formState } = useForm(formOptions);
     const { errors, isSubmitting } = formState;
+
     useEffect(() => {
-        
         async function loadUser(){
             await authWrapper.loadUser();
             setLoginDone(true);
         }
         if (auth)
             loadUser();
+        else {
+            userActions.logout();
+        }
     }, [auth])
     return (loginDone ? 
             // logged in 

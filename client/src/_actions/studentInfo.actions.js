@@ -81,11 +81,11 @@ function useStudentInfoAction (param) {
                 var message = 'Thành công';
                 description = `Thêm các thành viên :${rawjson.message.registered} thành công ! Không thể các thành viên :${rawjson.message.failed}`
                 if (rawjson.message.registered.length === 0) {
-                    description = `Không thể các thành viên :${rawjson.message.failed}` ;
+                    description = `Không thể thêm thành viên` ;
                     message = "Thất bại";
                 }
                 if (rawjson.message.failed.length === 0){
-                    description = `Thêm các thành viên :${rawjson.message.registered} thành công !`;
+                    description = `Thêm thành viên thành công !`;
                     } 
                 setAlert({message: message, description: description});
             }

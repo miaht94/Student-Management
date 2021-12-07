@@ -10,6 +10,9 @@ import { useProfileAction } from '_actions';
 import { alertBachAtom } from '_state';
 import { useState } from 'react';
 
+import locale from 'antd/es/date-picker/locale/vi_VN';
+import { ConfigProvider } from 'antd';
+
 
 export{ ProfileForm}
 
@@ -40,6 +43,7 @@ function ProfileForm(props) {
     const [alert, setAlert] = useRecoilState(alertBachAtom);
     const [passwordSwitch, setPasswordSwitch] = useState(false);
     const [submitButtonLoading, setSubmitButtonLoading] = useState(false);
+    const userData = JSON.parse(localStorage.getItem("userData"));
     let data = props.data;
     let isTable = props.isTable;
     console.log(data);
@@ -122,11 +126,19 @@ function ProfileForm(props) {
                     <Form.Item label="Họ và tên" name = "name">
                         <Input defaultValue = {data.name} />
                     </Form.Item>
+                    
                     <Form.Item label="VNU ID" name = "vnu_id">
-                        <Input disabled defaultValue = {data.vnu_id} />
+                        {(userData.role=='student') &&
+                            <Input disabled defaultValue = {data.vnu_id} />
+                        }
+                        {(userData.role=='teacher') &&
+                            <>
+                            <Input defaultValue = {data.vnu_id} />
+                            </>
+                        }
                     </Form.Item>
                     <Form.Item label="Ngày sinh" name = "date_of_birth">
-                        <DatePicker defaultValue={moment(formatDate(data.date_of_birth), dateFormat)} format={dateFormat} />
+                        <DatePicker placeholder="Chọn ngày" defaultValue={moment(formatDate(data.date_of_birth), dateFormat)} format={dateFormat} />
                     </Form.Item>
                     <Form.Item label="Email" name = "email">
                         <Input defaultValue = {data.email} />

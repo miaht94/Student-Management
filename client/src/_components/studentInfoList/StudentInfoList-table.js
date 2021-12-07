@@ -311,6 +311,7 @@ function StudentInfoTable(props){
               visible={state.visible}
               onCancel= {handleCloseModal}
               footer={[]}
+              width="800px"
             >
               <StudentProfile Id = {state.currentRow._id}/>
             </Modal>

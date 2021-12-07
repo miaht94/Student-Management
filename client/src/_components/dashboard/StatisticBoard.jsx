@@ -71,13 +71,13 @@ function StatisticBoard(props) {
         <div className="p-4">
             <Card title = "Thống kê tình hình học tập" style={{width: 960, height: 420,}}>
                 <Row justify="center">
-                    <BarChart   width={640} height={320} 
+                    <BarChart   width={640} height={360} 
                                 data={levelStatus.data}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
-                        <Legend />
+                        <Legend height={48}/>
                         {/* Phần này t chưa thử điều chỉnh param của bar,
                         m cứ load data bằng cái atom vào cho t đã rồi t làm tiếp */}
                         {/* <Bar dataKey="pv" fill="#8884d8" />

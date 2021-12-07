@@ -112,7 +112,7 @@ function ProfileForm(props) {
                 >
                     <Avatar
                         style={avatarStyle}
-                        src = {"https://vn.portal-pokemon.com/play/resources/pokedex/img/pm/70a91d7bed9893ec5e1bff2f44c52178a41f74e0.png"}
+                        src = {"https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png"}
                         icon={<UserOutlined />}
                     />
                     <br/>

@@ -117,7 +117,7 @@ function ProfileForm(props) {
                     />
                     <br/>
                     <Form.Item label="Vai trò" name = "role">
-                        {data.role == 'teacher' ? "Giáo viên" : "Sinh viên" }
+                        {data.role == 'teacher' ? "Cố vấn học tập" : "Sinh viên" }
                     </Form.Item>   
                     <Form.Item label="Họ và tên" name = "name">
                         <Input defaultValue = {data.name} />

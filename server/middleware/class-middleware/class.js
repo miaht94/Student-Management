@@ -153,9 +153,9 @@ async function fAddMembersToClass(req, res) {
     var notFound = [];
     for ([key, value] of Object.entries(check)) {
         if (!value)
-            notFound.push(key);
+            notFound.push({email: key, error: "Email không tồn tại trong hệ thống hoặc đã được thêm rồi"});
         else 
-            added.push(key);
+            added.push({email: key});
     };
     await req.classInstance.populate("class_members");
     res.status(200)

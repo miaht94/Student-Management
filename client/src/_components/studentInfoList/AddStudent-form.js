@@ -7,7 +7,18 @@ import { UploadForm } from '_components/dbportal/UploadForm';
 import { useClassWrapper } from '_helpers';
 
 export {AddStudentForm} 
-
+var upload_form = [
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+    },
+    {
+        title: 'Lỗi',
+        dataIndex: 'error',
+        key: 'error',
+    },
+]
 function AddStudentForm(props) {
 
     const [form] = Form.useForm();
@@ -67,7 +78,7 @@ function AddStudentForm(props) {
         <h6> Tải file danh sách </h6>
         <i>Thêm sinh viên vào lớp bằng file danh sách email.</i><br/>
         <i>Sinh viên được thêm vào lớp phải có tài khoản VNU được cấp bởi admin của hệ thống.</i><br/><br/>
-        <UploadForm formurl={classWrapper.curClass != null ? "http://localhost:3000/api/classes/" + classWrapper.curClass.class_id + "/members/import/" : ""}/> 
+        <UploadForm columns={upload_form} formurl={classWrapper.curClass != null ? "http://localhost:3000/api/classes/" + classWrapper.curClass.class_id + "/members/import/" : ""}/> 
         <br/><br/>
         </div>
         

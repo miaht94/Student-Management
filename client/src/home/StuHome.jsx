@@ -93,7 +93,7 @@ function StuHome() {
 
                             {(classWrapper.curClass) &&
                                 <>
-                                    <h4>Tiện ích theo dõi</h4>
+                                    <h4>Cố vấn học tập & theo dõi điểm</h4>
                                     <Row>
                                         <Col flex='520px'>
                                             <Card hoverable style={{ width: 500, height: 520 }}>

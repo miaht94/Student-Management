@@ -69,16 +69,16 @@ function App() {
                                 <Title style={{ padding: '15px 0px 0px 0px', color: 'white' }} level={3}> Student Advisor Web App </Title>
                             </div>
                         </Col>
-                        <Col className="gutter-row" flex="0 1 300px">
+                        <Col style={{width:"250px"}} span='auto'>
                         <div>
-                            <div style={{color: 'white'}}> 
-                                {ClassNameDisplay()}
+                            <div style={{color: 'white', fontSize: '16px', textAlign: 'right', marginRight:'50px'}}> 
+                                <b>{ClassNameDisplay() + "    "} </b>
                             </div>
                         </div>
                         </Col>
                             {
                             (authWrapper.tokenValue != "" & userData?.role == "teacher") &&
-                            <Col className="gutter-row" span={1}>
+                            <Col span='auto' >
                             
                             <div style={{'marginLeft': 'auto','marginRight': 'auto' }}>
                                 <Button type="primary" style={{'marginLeft': 'auto','marginRight': 'auto' }} onClick={showDrawer}>
@@ -87,6 +87,7 @@ function App() {
                             </div>
                             </Col>
                             }
+                            
                     </Row>
                 </Header> 
                 <Layout>
@@ -185,7 +186,7 @@ function ClassNameDisplay(){
     const classWrapper = useClassWrapper();
     if (auth) {
         if (classWrapper.curClass) {
-            return "Lớp hiện tại: " + classWrapper.curClass.class_name;
+            return classWrapper.curClass.class_name;
         }
         return "Chưa chọn lớp";
     }    

@@ -78,7 +78,13 @@ function Nav(props) {
 
             {(classWrapper.curClass) &&
               <>
-
+              {
+                <Menu.Item key={`/${classWrapper.curClass.class_id}/`}>
+                  <HomeOutlined />
+                  <span>Trang chủ</span>
+                  <Link to={`/${classWrapper.curClass.class_id}/`}></Link>
+                </Menu.Item>
+              }
               {(userData.role == "teacher") &&
                 <Menu.Item key={`/${classWrapper.curClass.class_id}/dashboard`}>
                   <DashboardOutlined />
@@ -87,8 +93,8 @@ function Nav(props) {
                 </Menu.Item>
               }
                <Menu.Item key={`/${classWrapper.curClass.class_id}/feed`}>
-                  <TableOutlined />
-                  <span>Bảng tin</span>
+                  <BellOutlined />
+                  <span>Diễn đàn</span>
                   <Link to={`/${classWrapper.curClass.class_id}/feed`}></Link>
                 </Menu.Item>
               {(userData.role == "teacher") &&

@@ -56,7 +56,7 @@ function ClassPicker(props) {
                         classWrapper.chooseClass(input[i]);
                     }}>
                 <Col>
-                    <Link to={"/" + input[i].class_id} onClick={onDrawerClose}>
+                    <Link to={"/" + input[i].class_id + "/"} onClick={onDrawerClose}>
                         <Card title = {input[i].class_name} 
                         style = {cardStyle} headStyle = {cardHeadStyle}
                         cover={<img alt="example" src={'https://maisienoble.github.io/jig/images/backgrounds/blueish.jpg'} />}

@@ -143,6 +143,7 @@ function Child(props) {
                     {(userData.role == "teacher") &&
                         <>
                             <Switch>
+                            <PrivateRoute exact path="/:classID/" component={Home} />
                             <PrivateRoute exact path="/:classID/dashboard" component={Dashboard} />
                             <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
                             <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} />
@@ -154,6 +155,7 @@ function Child(props) {
                     {(userData.role == "student") &&
                         <>
                             <Switch>
+                            <PrivateRoute exact path="/" component={Home} />
                             {/* <PrivateRoute exact path="/:classID/studentinfo" component={StudentInfoList} />
                             <PrivateRoute exact path="/:classID/studentscore" component={StudentScoreList} /> */}
                             <PrivateRoute exact path="/:classID/feed" component={Feed} />

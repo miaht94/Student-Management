@@ -58,7 +58,7 @@ function Home() {
                 <>
                     <div className="p-4">
                         <div className="container">
-                            <h3>Chào mừng đến với Phần mềm Quản lý Sinh viên - Cố vấn học tập!</h3>
+                            <h3>Chào mừng đến với Ứng dụng Quản lý Sinh viên - Cố vấn học tập!</h3>
                             <br/>
                             <Row>
                             <Col flex='520px'>
@@ -93,13 +93,13 @@ function Home() {
 
                             {(classWrapper.curClass) &&
                                 <>
-                                    <h4>Tiện ích theo dõi</h4>
+                                    <h4>Tiện ích liên lạc </h4>
                                     <Row>
                                     <Col flex='260px'>
-                                        <Link to={`/${classWrapper.curClass.class_id}/dashboard`}>
+                                        <Link to={`/${classWrapper.curClass.class_id}/studentinfo`}>
                                         <Card hoverable style={{ width: 240 }}>
-                                            <DashboardTwoTone twoToneColor="#206cc9"style={{ fontSize: '30px', display: 'inline-block', verticalAlign: 'middle' }}/>
-                                            <br/><br/><h4>Bảng theo dõi</h4>
+                                            <InfoCircleTwoTone twoToneColor="#206cc9"style={{ fontSize: '30px', display: 'inline-block', verticalAlign: 'middle' }}/>
+                                            <br/><br/><h4>Thông tin liên hệ</h4>
                                         </Card></Link>
                                     </Col>
                                     <Col flex='260px'>
@@ -118,15 +118,16 @@ function Home() {
                                     </Col>
                                     </Row>
                                     <br/><br/>
-                                    <h4>Thống kê sinh viên lớp {classWrapper.curClass.class_name}</h4>
+                                    <h4>Tiện ích theo dõi & thống kê</h4>
                                     <Row>
                                     <Col flex='260px'>
-                                        <Link to={`/${classWrapper.curClass.class_id}/studentinfo`}>
+                                        <Link to={`/${classWrapper.curClass.class_id}/dashboard`}>
                                         <Card hoverable style={{ width: 240 }}>
-                                            <InfoCircleTwoTone twoToneColor="#52c41a"style={{ fontSize: '30px', display: 'inline-block', verticalAlign: 'middle' }}/>
-                                            <br/><br/><h4>Thông tin liên hệ</h4>
+                                            <DashboardTwoTone twoToneColor="#52c41a"style={{ fontSize: '30px', display: 'inline-block', verticalAlign: 'middle' }}/>
+                                            <br/><br/><h4>Bảng theo dõi</h4>
                                         </Card></Link>
                                     </Col>
+                                    
                                     <Col flex='260px'>
                                         <Link to={`/${classWrapper.curClass.class_id}/studentscore`}>
                                         <Card hoverable style={{ width: 240 }}>
@@ -148,7 +149,7 @@ function Home() {
 
                             
                             <br/>
-                            <b>Phần mềm Quản lý Sinh viên - Cố vấn học tập</b><br/>
+                            <b>Website Quản lý Sinh viên - Cố vấn học tập</b><br/>
                             <b>Bài tập lớn môn Lập trình ứng dụng Web</b><br/>
                             <b>Thực hiện bởi:</b> {" Trần Xuân Bách, Đặng Thế Hoàng Anh, Nguyễn Việt Anh, Hoàng Hữu Bách, Nguyễn Bá Anh Tuấn"}
                             

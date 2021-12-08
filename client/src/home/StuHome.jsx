@@ -56,7 +56,7 @@ function StuHome() {
                 <>
                     <div className="p-4">
                         <div className="container">
-                            <h3>Chào mừng đến với Phần mềm Quản lý Sinh viên - Cố vấn học tập!</h3>
+                            <h3>Chào mừng đến với Ứng dụng Quản lý Sinh viên - Cố vấn học tập!</h3>
                             <br/>
                             <Row>
                             <Col flex='520px'>
@@ -149,7 +149,7 @@ function StuHome() {
 
                             
                             <br/>
-                            <b>Phần mềm Quản lý Sinh viên - Cố vấn học tập</b><br/>
+                            <b>Ứng dụng Quản lý Sinh viên - Cố vấn học tập</b><br/>
                             <b>Bài tập lớn môn Lập trình ứng dụng Web</b><br/>
                             <b>Thực hiện bởi:</b> {" Trần Xuân Bách, Đặng Thế Hoàng Anh, Nguyễn Việt Anh, Hoàng Hữu Bách, Nguyễn Bá Anh Tuấn"}
                             

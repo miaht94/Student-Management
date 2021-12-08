@@ -57,7 +57,6 @@ Web App làm nhiệm vụ quản lý các sinh viên thuộc phạm vi quản l�
 **Ngôn ngữ**: JavaScript, HTML, CSS
 
 
-
 ## Cài đặt
 
 ### 1. Tải mã nguồn từ repo này

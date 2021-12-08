@@ -45,10 +45,15 @@ Web App làm nhiệm vụ quản lý các sinh viên thuộc phạm vi quản l�
 
 
 ## Công nghệ
+
 **Kiến trúc:** Client - Server Web Application
+
 **Front-end:** Node.js, React.js, Recoil, Ant Design, Rechart (visualize dữ liệu)
+
 **Back-end:** Node.js, MongoDB (database)
+
 **Giao thức sử dụng:** HTTP Request + Axios, WebSocket
+
 **Ngôn ngữ**: JavaScript, HTML, CSS
 
 

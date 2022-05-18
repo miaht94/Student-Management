@@ -29,7 +29,7 @@ function useFetchWrapper() {
             if (header) myHeaders.append("Content-Type", header);
             const requestOptions = {
                 method: method,
-                mode: "no-cors",
+                mode: "cors",
                 headers: myHeaders,
                 redirect: 'follow'
             };

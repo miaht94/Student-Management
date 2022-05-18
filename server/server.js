@@ -7,7 +7,7 @@ var router = express.Router();
 var fileUpload = require('express-fileupload')
 var tempFileDir = "/public/data";
 app.use('*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://stu.koyomiku39.moe:3000");
+  res.header("Access-Control-Allow-Origin", '*');
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Credentials', true);

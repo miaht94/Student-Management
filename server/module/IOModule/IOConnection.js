@@ -15,7 +15,7 @@ class IOConnection {
         this.notifyUpdatePost = notifyUpdatePost.bind(this);
         this.io = io(server, {
             cors: {
-                origin: "http://localhost:3000",
+                origin: "http://stu.koyomiku39.moe:3000",
                 methods: ["GET", "POST"]
               }
         });

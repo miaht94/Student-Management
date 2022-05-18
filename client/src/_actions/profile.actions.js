@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {useFetchWrapper} from '_helpers';
 import { profileAtom , currentClassAtom, alertBachAtom} from '_state';
 import { useAlertActions , useStudentInfoAction} from '_actions';
+import {HOST_NAME} from '_helpers'
 
 
 export {useProfileAction} 
@@ -19,7 +20,7 @@ function useProfileAction() {
 
     async function getProfileById(Id) {
         console.log("get profile by id");
-        const response = await fetchWrapper.get(`http://localhost:3000/api/profile/${Id}`, null, null);
+        const response = await fetchWrapper.get(HOST_NAME + `/api/profile/${Id}`, null, null);
         if (response == null) {
             console.log("No response.");
             return null;
@@ -32,7 +33,7 @@ function useProfileAction() {
 
     async function getMyProfile() {
         console.log("get my profile");
-        const response = await fetchWrapper.get(`http://localhost:3000/api/profile/me`, null, null);
+        const response = await fetchWrapper.get(HOST_NAME + `/api/profile/me`, null, null);
         if (response == null) {
             console.log("No response.");
             return null;
@@ -57,7 +58,7 @@ function useProfileAction() {
             urlencoded.append(key,val);
             }
         )
-        const response = await fetchWrapper.post(`http://localhost:3000/api/profile/edit/${Id}`, "application/x-www-form-urlencoded", urlencoded);
+        const response = await fetchWrapper.post(HOST_NAME + `/api/profile/edit/${Id}`, "application/x-www-form-urlencoded", urlencoded);
         if (response == null) {
           console.log("No response");
         }

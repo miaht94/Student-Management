@@ -3,6 +3,8 @@ import { useFetchWrapper } from '_helpers';
 import { useAlertActions, useStudentInfoAction, useStudentScoreAction } from '_actions';
 import { classesAtom } from '_state';
 import {currentClassAtom} from '_state'
+import {HOST_NAME} from '_helpers'
+
 export { useClassWrapper };
 
 function useClassWrapper(param) {
@@ -14,7 +16,7 @@ function useClassWrapper(param) {
     const [curClass, setCurClass_] = useRecoilState(currentClassAtom);
     async function getClassList(){
         console.log("Get class list wrapper called.");
-        const response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
+        const response = await fetchWrapper.get(HOST_NAME + `/api/classes/me`, null, null);
         if (response == null) {
             console.log("No response.");
         }
@@ -27,7 +29,7 @@ function useClassWrapper(param) {
         var urlencoded = new URLSearchParams();
         urlencoded.append("class_name", param);
         console.log("Create class wrapper called");
-          const response = await fetchWrapper.post("http://localhost:3000/api/classes/create", "application/x-www-form-urlencoded", urlencoded);
+          const response = await fetchWrapper.post(HOST_NAME + `/api/classes/create`, "application/x-www-form-urlencoded", urlencoded);
           if (response == null) {
             console.log("No response");
           }
@@ -57,7 +59,7 @@ function useClassWrapper(param) {
   }
 
     async function chooseClassById(classId) {
-      let response = await fetchWrapper.get("http://localhost:3000/api/classes/me", null, null);
+      let response = await fetchWrapper.get(HOST_NAME + `/api/classes/me`, null, null);
       response = await response.json();
       response = response.message
       console.log(response)
@@ -76,7 +78,7 @@ function useClassWrapper(param) {
 
     async function getCurrentClassTeacherInfo() {
       if (curClass) {
-        let response = await fetchWrapper.get(`http://localhost:3000/api/classes/${curClass.class_id}?teacher=true`, null, null);
+        let response = await fetchWrapper.get(HOST_NAME + `/api/classes/${curClass.class_id}?teacher=true`, null, null);
         response = await response.json();
         return response;
       }

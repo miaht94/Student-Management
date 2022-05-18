@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { useFetchWrapper } from '_helpers';
 import { useAlertActions ,useProfileAction} from '_actions';
 import { alertBachAtom } from '_state';
+import {HOST_NAME} from '_helpers'
 export { useAuthWrapper };
 
 function useAuthWrapper(param) {
@@ -16,7 +17,7 @@ function useAuthWrapper(param) {
 
       async function login(param){
           console.log("Login in wrapper called");
-          const response = await fetchWrapper.post("http://localhost:3000/auth/login", "application/x-www-form-urlencoded", param);
+          const response = await fetchWrapper.post(HOST_NAME + `/auth/login`, "application/x-www-form-urlencoded", param);
           if (response == null) {
             console.log("No response");
           }
@@ -57,7 +58,7 @@ function useAuthWrapper(param) {
         }
 
         async function loadUser(){
-          const response = await fetchWrapper.get("http://localhost:3000/api/profile/me", null, null);
+          const response = await fetchWrapper.get(HOST_NAME + `/api/profile/me`, null, null);
           if (response == null) {
             console.log("No response.");
           }
@@ -110,7 +111,7 @@ function useAuthWrapper(param) {
           urlencoded.append("email", params.email);
           let response = {message: ""};
           try {
-            response = await fetchWrapper.post("http://localhost:3000/api/auth/forget_password", "application/x-www-form-urlencoded", urlencoded);
+            response = await fetchWrapper.post(HOST_NAME + `/api/auth/forget_password`, "application/x-www-form-urlencoded", urlencoded);
             response = await response.json();
             // console.log(response)
             if (response.status == "Success") {

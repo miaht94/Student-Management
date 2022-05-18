@@ -2,6 +2,8 @@ import { useRecoilState } from 'recoil';
 import React ,{useEffect } from 'react';
 import { UploadForm } from './UploadForm';
 import { Row, Col } from 'antd';
+import {HOST_NAME} from '_helpers'
+
 
 export { DBPortal };
 
@@ -203,19 +205,19 @@ function DBPortal() {
             <Col flex="300px">
                 <h4> Danh sách CVHT </h4>
                 <i> Tải danh sách tài khoản và thông tin Cố vấn học tập lên hệ thống. </i>
-                <br/><br/> <UploadForm columns={upload_form_teacher} formurl="http://localhost:3000/api/upload/dscv"/> <br/>
+                <br/><br/> <UploadForm columns={upload_form_teacher} formurl={HOST_NAME + `/api/upload/dscv`}/> <br/>
             </Col>
             <Col flex="300px">
                 <h4> Danh sách sinh viên </h4>
                 <i> Tải danh sách tài khoản và thông tin sinh viên lên hệ thống.</i>
-                <br/><br/> <UploadForm columns={upload_form_student} formurl="http://localhost:3000/api/upload/dssv"/> <br/>
+                <br/><br/> <UploadForm columns={upload_form_student} formurl={HOST_NAME + `/api/upload/dssv`}/> <br/>
                 <i><b>Lưu ý:</b> Các sinh viên sẽ chưa được thêm lớp. Yêu cầu CVHT tạo lớp và thêm tại bảng Thông tin SV. </i>
                 <br/>
             </Col>
             <Col flex="300px">
                 <h4> Danh sách môn học </h4>
                 <i> Tải danh sách môn học lên hệ thống.</i>
-                <br/><br/><UploadForm columns={upload_form_subject} formurl="http://localhost:3000/api/upload/dsmh"/>
+                <br/><br/><UploadForm columns={upload_form_subject} formurl={HOST_NAME + `/api/upload/dsmh`}/>
             </Col>
             <Col flex="auto"></Col>
             </Row>
@@ -226,17 +228,17 @@ function DBPortal() {
             <Col flex="300px">
                 <h4> Danh sách kì học </h4>
                 <i> Tải danh sách kì học lên hệ thống.</i>
-                <br/><br/> <UploadForm columns={upload_form_semester} formurl="http://localhost:3000/api/semesters/upload"/>
+                <br/><br/> <UploadForm columns={upload_form_semester} formurl={HOST_NAME + `/api/semesters/upload`}/>
             </Col>
             <Col flex="300px">
                 <h4> Cập nhật bảng điểm </h4>
                 <i> Tải danh sách bảng điểm của sinh viên lên hệ thống.</i>
-                <br/><br/><UploadForm columns={upload_score_student} formurl="http://localhost:3000/api/scores/import"/>
+                <br/><br/><UploadForm columns={upload_score_student} formurl={HOST_NAME + `/api/scores/import`}/>
             </Col>
             <Col flex="300px">
                 <h4> Cập nhật tình trạng </h4>
                 <i> Tải danh sách tình trạng sinh viên lên hệ thống.</i>
-                <br/><br/><UploadForm columns={upload_form_status} formurl="http://localhost:3000/api/status/import"/>
+                <br/><br/><UploadForm columns={upload_form_status} formurl={HOST_NAME + `/api/status/import`}/>
             </Col>
             <Col flex="auto"></Col>
             </Row>

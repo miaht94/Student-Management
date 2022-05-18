@@ -3,6 +3,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 import {useFetchWrapper} from '_helpers';
 import {studentsAtom, currentClassAtom, alertBachAtom} from '_state';
+import {HOST_NAME} from '_helpers'
 
 export{ useStudentInfoAction };
 
@@ -14,7 +15,7 @@ function useStudentInfoAction (param) {
 
     async function getStudentList(Class){
         console.log("get student list called from studentInfo-action");
-        const response = await fetchWrapper.get(`http://localhost:3000/api/classes/${Class.class_id}/members/infors`, null, null);
+        const response = await fetchWrapper.get(HOST_NAME + `/api/classes/${Class.class_id}/members/infors`, null, null);
         if (response == null) {
             console.log("No response.");
             return null;
@@ -37,7 +38,7 @@ function useStudentInfoAction (param) {
         console.log('from delete Student ',Id);
         var urlencoded = new URLSearchParams();
         urlencoded.append("members", `["${Id}"]`); 
-        const response = await fetchWrapper.delete(`http://localhost:3000/api/classes/${currentClass.class_id}/members/delete`, "application/x-www-form-urlencoded", urlencoded);
+        const response = await fetchWrapper.delete(HOST_NAME + `/api/classes/${currentClass.class_id}/members/delete`, "application/x-www-form-urlencoded", urlencoded);
         if (response == null) {
             console.log("No response.");
             setAlert({message: "Lỗi", description: "Không thể xóa thành viên !"});
@@ -68,7 +69,7 @@ function useStudentInfoAction (param) {
         var urlencoded = new URLSearchParams();
         urlencoded.append("members",`[${convertedEmails}]`);
         console.log(urlencoded);
-        const response = await fetchWrapper.post(`http://localhost:3000/api/classes/${currentClass.class_id}/members/add`, "application/x-www-form-urlencoded", urlencoded);
+        const response = await fetchWrapper.post(HOST_NAME + `/api/classes/${currentClass.class_id}/members/add`, "application/x-www-form-urlencoded", urlencoded);
         if (response == null) {
             console.log("No response.");
             setAlert({message: "Lỗi", description: "Không thể thêm thành viên !"});

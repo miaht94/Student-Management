@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { history } from '_helpers';
 import { authAtom } from '_state';
 import { useAlertActions } from '_actions';
+import {HOST_NAME} from '_helpers'
 
 export { useFetchWrapper };
 
@@ -45,7 +46,7 @@ function useFetchWrapper() {
          return async (url, header, body) => {
             let response = await requestor(url, header, body);
             let rawjson = await response.clone().json();
-            if (url != "http://localhost:3000/api/profile/me"){
+            if (url != HOST_NAME + `/api/profile/me`){
                 if ("message" in rawjson) {
                     if (rawjson.status === "Error" && (rawjson.message.name === "TokenNotFound" || rawjson.message.name === "UserNotFound")){
                         console.log(rawjson.status);

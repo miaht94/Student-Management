@@ -29,5 +29,6 @@ const API_PATH = {
     PUBLIC_DATA: "/public/data/:filename",
     LIKE_POST: "/api/classes/:classId/feed/:postId/likes/toogle",
 };
-const HOST_NAME = "http://localhost:3000";
-export {API_PATH, HOST_NAME};
+const HOST_NAME = "http://stu.koyomiku39.moe:8081";
+const WS_HOST_NAME = "http://stu.koyomiku39.moe:5000";
+export {API_PATH, HOST_NAME, WS_HOST_NAME};

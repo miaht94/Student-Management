@@ -6,6 +6,8 @@ import {BarChart, Legend, XAxis, YAxis, CartesianGrid, Tooltip, Bar, ResponsiveC
 import { Button, Row, List, Select } from 'antd';
 import { object } from 'yup/lib/locale';
 import { useFetchWrapper } from '_helpers';
+import {HOST_NAME} from '_helpers'
+
 const { Option } = Select;
 
 export { StatisticBoard };
@@ -23,7 +25,7 @@ function StatisticBoard(props) {
         console.log("Reconstruct StatisticBoard");
         async function getSemesterData(){
             var tempSem = [];
-            let response = await fetchWrapper.get("http://localhost:3000/api/semesters/all", null, null);
+            let response = await fetchWrapper.get(HOST_NAME + `/api/semesters/all`, null, null);
             response = await response.json();
             console.log(response);
             if (response?.status === "Success"){

@@ -2,9 +2,11 @@ import { useRecoilState } from "recoil";
 import { io } from "socket.io-client";
 import { useFeedPageWrapper } from "./feed_page_wrapper";
 import { socketAtom } from "_state/socket";
+import { WS_HOST_NAME } from "_helpers";
+
 function useSocketWrapper() {
     function initConnection(token) {
-        socketWrapper.socket = io("http://localhost:5000", {
+        socketWrapper.socket = io(WS_HOST_NAME, {
                 reconnectionDelayMax: 10000,
                 auth: {
                     token: token
@@ -38,7 +40,7 @@ class socketWrapper {
         if (!token) return;
         console.log("Initiating socket connection")
         if (!socketWrapper.initiated) {
-            socketWrapper.socket = io("http://localhost:5000", {
+            socketWrapper.socket = io(WS_HOST_NAME, {
                 reconnectionDelayMax: 10000,
                 auth: {
                     token: token

@@ -10,6 +10,8 @@ import {useParams} from 'react-router-dom';
 import { useAuthWrapper } from '_helpers';
 import './MessageList.css';
 import axios from 'axios';
+import {HOST_NAME} from '_helpers'
+
 export default function MessageList(props) {
   let {vnu_id} = useParams();
   const [fetchDone, setFetchDone] = useState(false);
@@ -33,7 +35,7 @@ export default function MessageList(props) {
     async function getTargetName(vnu_id) {
       // debugger
       if (vnu_id) {
-        let res = await axios.get('http://localhost:3000/api/profile/' + vnu_id)
+        let res = await axios.get(HOST_NAME + `/api/profile/` + vnu_id)
         res = res.data;
         // debugger
         setTargetName(res.name);

@@ -31,7 +31,8 @@ function useFetchWrapper() {
                 method: method,
                 mode: "cors",
                 headers: myHeaders,
-                redirect: 'follow'
+                redirect: 'follow',
+                credentials: 'include'
             };
             if(method == 'DELETE'){
                 requestOptions.mode = 'cors';

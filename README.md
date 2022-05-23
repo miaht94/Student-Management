@@ -12,6 +12,8 @@
 
 Web App làm nhiệm vụ quản lý các sinh viên thuộc phạm vi quản lý của cố vấn học tập.
 
+![Pic](https://raw.githubusercontent.com/miaht94/Student-Management/main/Screenshot/screenshot.png)
+
 
 ## Tính năng
 ### Tổng quan

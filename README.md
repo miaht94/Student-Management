@@ -144,7 +144,7 @@ subjects.csv        | Danh sách môn học             | Quản lý CSDL/Danh s
    Front-end, UI/UX, State, Data Processing, Tables & Filters, Profile, Refinements 
 
 
-- **Hoàng Hữu Bách** (@HoangBach1219)
+- **Hoàng Hữu Bách** (@h2bach)
 
    Front-end, UI/UX, Data Visualization, Refinements
 

@@ -146,15 +146,7 @@ subjects.csv        | Danh sách môn học             | Quản lý CSDL/Danh s
 
 - **Hoàng Hữu Bách** (@h2bach)
 
-   Front-end, UI/UX, Data Visualization, Refinements
-
-
-- **Nguyễn Bá Anh Tuấn** (@tsunaa1337)
-
-   Front-end, UI/UX, Components, React Router, Sample Data, Testing
-
-   
-      
+   Front-end, UI/UX, Data Visualization, Refinements      
 
 
 **Lớp:** INT3306 22 - Phát triển ứng dụng Web
